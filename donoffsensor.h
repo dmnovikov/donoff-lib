@@ -197,7 +197,7 @@ class DSensor: public DBase {
       }
     };
 
-    int virtual sensor_notify_loop(int low_level=-128, int high_level=-128){
+    int virtual sensor_check_state(int low_level=-128, int high_level=-128){
       int state_flg=0;
 
       if(!is_started() || sens.val==NOT_READY_VAL || fake_val(sens.val) ){

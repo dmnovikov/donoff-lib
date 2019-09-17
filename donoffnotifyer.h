@@ -31,38 +31,12 @@ public:
     init_ok = 1;
   };
 
-  /*
-    int virtual notify_loop(){
-      if (que_not->count()==0) return 0;
-      int what_to_not=que_not->peek();
-
-      switch(what_to_not){
-        case NOTIFY_ON: 
-          if(send_notify_on()) que_not->pop();
-          break;
-
-       default:
-          break;
-      }
-
-    };
-*/
 
   int notify_on(DRelay *_r, String _reasonStr)
   {
     if (_s->notifyer && _s->notifyer_onoff && is_connected())
     {
       send_notify(_r->get_name() + " on", "turn on, reason=" + _reasonStr);
-      return 1;
-    }
-    return 0;
-  };
-
-  int notify_on(String relayStr, String _reasonStr)
-  {
-    if (_s->notifyer && _s->notifyer_onoff && is_connected())
-    {
-      send_notify(relayStr + " on", "turn on, reason=" + _reasonStr);
       return 1;
     }
     return 0;
@@ -78,15 +52,6 @@ public:
     return 0;
   };
 
-  int notify_off(String relayStr, String _reasonStr)
-  {
-    if (_s->notifyer && _s->notifyer_onoff && is_connected())
-    {
-      send_notify(relayStr + " off", "turn on, reason=" + _reasonStr);
-      return 1;
-    }
-    return 0;
-  };
 
   int notify_sensor_state(sensor_state *state)
   {

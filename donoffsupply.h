@@ -145,7 +145,10 @@ class DSupply: public DBase {
         //300 ms loop
         aofs_loop();
         pub_wanted_loop();
-        if(_s->notifyer) notify_relay_sesnors_loop();
+        if(_s->notifyer){
+           notify_sesnors_loop();
+           notify_relay_hours_loop();
+        } 
         //
         if (mycounter > 25) mycounter = 0;
         mytimer = millis();
@@ -160,7 +163,7 @@ class DSupply: public DBase {
 
     };
 
-    int notify_relay_sesnors_loop(){
+    int notify_sesnors_loop(){
       
       if (que_sensor_states->count()==0) return 0;
       //debug("QUE_SENS", String(que_sensor_states->count()) );
@@ -170,6 +173,9 @@ class DSupply: public DBase {
          notifyer->notify_sensor_state(&state);
       }
       
+    };
+
+     int notify_relay_hours_loop(){
       if(RELAY1 && r1->is_on()){
         if(r1->get_hours_working()>_s->hours_on_notify && r1->is_notifyed_h()==0){
           if(notifyer->notify_working_hours(r1)) r1->set_notifyed_h(1) ;
@@ -319,7 +325,7 @@ class DSupply: public DBase {
 
       if (sens_num == 1) {
         if (DS1820_INT) ds_in->sensor_loop();
-        if (DS1820_INT && _s->notifyer && NOTIFYER) ds_in->sensor_notify_loop(-128, ALARM_TEMP1_MAX*100);
+        if (DS1820_INT && _s->notifyer && NOTIFYER) ds_in->sensor_check_state(-128, ALARM_TEMP1_MAX*100);
         return 1;
 
       }
@@ -333,7 +339,7 @@ class DSupply: public DBase {
           //old format (celsius), new format celsius*100
           if(abs(_s->temp_low_level_notify)<100) low_level=_s->temp_low_level_notify*100;
           if(abs(_s->temp_high_level_notify)<100) high_level=_s->temp_high_level_notify*100;
-          ds_out->sensor_notify_loop(low_level,high_level);
+          ds_out->sensor_check_state(low_level,high_level);
         }
         return 1;
       }
@@ -403,7 +409,7 @@ class DSupply: public DBase {
             pub->publish_relay_on(_r, reasonStr);
             pub->log_relay_on(_r,reasonStr);
             pub->publish_ontime(_r);
-            notifyer->notify_on(r1->get_nameStr(), reasonStr);
+            notifyer->notify_on(_r, reasonStr);
             sync_blink_mode();
 
       } 
@@ -416,7 +422,7 @@ class DSupply: public DBase {
         pub->publish_relay_off(_r, reasonStr);
         pub->log_relay_off(_r,reasonStr);
         pub->publish_ontime(_r);
-        notifyer->notify_off(r1->get_nameStr(), reasonStr);
+        notifyer->notify_off(_r, reasonStr);
         sync_blink_mode();
       } 
     };
