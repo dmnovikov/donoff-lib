@@ -3,7 +3,17 @@
 
 #include <donoffrelay.h>
 #include <donoffdisplay.h>
-#include <donoffpublisher_blynk.h>
+
+// #define D_MQTT
+
+#ifdef D_BLYNK
+  #include <donoffpublisher_blynk.h>
+#endif
+
+#ifdef D_MQTT
+  #include <donoffpublisher_mqtt.h>
+#endif
+
 #include <Queue.h>
 #include <donoffbutton.h>
 #include <donoffnotifyer.h>
@@ -78,7 +88,7 @@ class DSupply: public DBase {
       notifyer = _notifyer;
       que_wanted=_q;
       que_sensor_states = new Queue<sensor_state>(10);
-      debug("SUPPLYINIT", "SUPPLY INIT");
+      debug("SUPPLY_INIT", "** Start SUPPLY INIT");
 
       if (DDISPLAY) {
         D = new DDisplay();
@@ -86,34 +96,38 @@ class DSupply: public DBase {
       }
       if (RELAY1) {
         numrelays++;
-        debug("SUPPLYINIT", "R1 INIT");
+        debug("SUPPLY_INIT", "R1 INIT");
         r1 = new DRelay(_s);
         r1->init(RELAY1_PIN, "r1", String(RELAY1_ONOFF_CHANNEL), String(RELAY1_ONTIME_CHANNEL), String(RELAY1_DOWNTIME_CHANNEL));
         //debug("SUPPLYINIT", "r1name="+r1->get_nameStr());
       }
       if (RELAY2) {
         numrelays++;
+        debug("SUPPLY_INIT", "R2 INIT");
         r2 = new DRelay(_s);
         r2->init(RELAY2_PIN, "r2", String(RELAY2_ONOFF_CHANNEL));
       }
 
       if (DS1820_INT) {
+        debug("SUPPLY_INIT", "DS_IN INIT");
         ds_in = new DigitalDS1820Sensor(_s, IN_WIRE_BUS);
         ds_in->init("DS_IN", DS_IN_CHANNEL, DS1820_NOT_FILTERED,que_sensor_states);
       }
 
       if (DS1820_OUT) {
+        debug("SUPPLY_INIT", "DS_OUT INIT");
         ds_out = new DigitalDS1820Sensor(_s, OUT_WIRE_BUS);
         ds_out->init("DS_OUT", DS_OUT_CHANNEL, DS1820_FILTERED,que_sensor_states);
       }
 
       if (DBUTTON) {
+        debug("SUPPLY_INIT", "DBUTTOM INIT");
         b1 = new DButton(_s);
       }
 
       
       
-      
+      debug("SUPPLY_INIT", "** Finish SUPPLY INIT");
       mytimer = millis();
       init_ok = 1;
 
@@ -185,9 +199,11 @@ class DSupply: public DBase {
     };
 
     int pub_wanted_loop(){
+      //debug("SUPPLY_QUEUE", "Loop queue wanted");
 
       if (que_wanted->count()==0) return 0;
 
+      debug("SUPPLY_QUEUE", "WANTED EVENT DETECTED");
       pub_events what_to_want=que_wanted->pop();
 
       if(what_to_want==PUBLISHER_WANT_SAVE){
@@ -356,6 +372,7 @@ class DSupply: public DBase {
       if (DS1820_OUT && pub->is_connected()) pub->publish_sensor(ds_out);
 
       if (RELAY1 && pub->is_connected()) {
+        debug("SERVICE_LOOP", "Public Rrelay1 info");
         pub->publish_uptime(r1);
         pub->publish_ontime(r1);
         pub->publish_downtime(r1);
@@ -405,7 +422,7 @@ class DSupply: public DBase {
     int relay_on(DRelay* _r, String reasonStr) {
       if(_r->is_off()){
           _r->turn_on();
-            debug("RELAY_ON", r1->get_nameStr());
+            debug("SUPPLY_RELAY_ON", r1->get_nameStr());
             pub->publish_relay_on(_r, reasonStr);
             pub->log_relay_on(_r,reasonStr);
             pub->publish_ontime(_r);
@@ -418,7 +435,7 @@ class DSupply: public DBase {
     int relay_off(DRelay* _r, String reasonStr) {
       if(_r->is_on()){
         _r->turn_off();
-        debug("RELAY_OFF", _r->get_nameStr());
+        debug("SUPPLY_RELAY_OFF", _r->get_nameStr());
         pub->publish_relay_off(_r, reasonStr);
         pub->log_relay_off(_r,reasonStr);
         pub->publish_ontime(_r);

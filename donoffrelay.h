@@ -39,7 +39,7 @@ class DRelay: public DBase {
       channel_downtime_str=_ch_down_timeStr;
       init_ok=1;
       //debug("INITR1","name="+nameStr);
-      debug("RELAY", String(RELAY1_PIN));
+      //debug("RELAY", "PIN:"+String(RELAY1_PIN));
     };
 
     int is_notifyed_h(){
@@ -63,8 +63,9 @@ class DRelay: public DBase {
     };
 
     String get_downtime_str(){
+        
         if(start_ms==0) return get_time_str(millis()-stop_ms);
-        return "OFF";
+        return "00:00:00";
     };
 
     bool is_on() {

@@ -106,6 +106,7 @@ public:
             }
             
             if (inS == D_R1_1) {
+              debug("QUEUE_WANTED", "Push R1_1");
               que_wanted->push(PUBLISHER_WANT_R1_ON);
               
             }

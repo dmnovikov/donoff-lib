@@ -10,19 +10,6 @@
 
 #define BLYNK_TERMINAL_PIN 0
 
-const char INFO_CHANNEL[] = "29";
-const char LOG_CHANNEL[] = "34";
-const char UPTIME_CHANNEL[] = "19";
-
-
-const char RELAY1_ONOFF_CHANNEL[] = "6";
-const char RELAY1_ONTIME_CHANNEL[] = "12";
-const char RELAY1_DOWNTIME_CHANNEL[] = "13";
-const char DS_IN_CHANNEL[] = "11";
-const char DS_OUT_CHANNEL[] = "8";
-
-const char RELAY2_ONOFF_CHANNEL[] = "36";
-
 
 class DPublisherBlynk: public DPublisher {
   protected:

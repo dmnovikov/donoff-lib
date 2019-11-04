@@ -60,7 +60,7 @@ class DSensor: public DBase {
   public:
     DSensor(WMSettings * __s): DBase(__s) {};
 
-    long virtual get_long_from_sensor() {};
+    long virtual get_long_from_sensor(){};
 
     int virtual req_sensor() {};
 

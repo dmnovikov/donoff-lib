@@ -6,6 +6,46 @@
 
 #define MAX_QUEUE_WANTED 12
 
+#define D_MQTT
+
+#ifdef D_MQTT
+const char INFO_CHANNEL[] = "/out/info";
+const char LOG_CHANNEL[] = "/out/log";
+const char UPTIME_CHANNEL[] = "/out/time_up";
+
+const char RELAY1_ONOFF_CHANNEL[] = "/out/b1";
+const char RELAY1_ONTIME_CHANNEL[] = "/out/time_comm";
+const char RELAY1_DOWNTIME_CHANNEL[] = "/out/time_down";
+const char DS_IN_CHANNEL[] = "/out/temp_in";
+const char DS_OUT_CHANNEL[] = "/out/temp_out";
+
+const char RELAY2_ONOFF_CHANNEL[] = "/out/b1";
+const char PARAMS_CHANNEL[]="/in/params";
+
+const char TOPIC_SENDMAIL[] = "/sys/sendmail";
+
+#endif
+
+
+
+#ifdef D_BLYNK
+
+const char INFO_CHANNEL[] = "29";
+const char LOG_CHANNEL[] = "34";
+const char UPTIME_CHANNEL[] = "19";
+
+
+const char RELAY1_ONOFF_CHANNEL[] = "6";
+const char RELAY1_ONTIME_CHANNEL[] = "12";
+const char RELAY1_DOWNTIME_CHANNEL[] = "13";
+const char DS_IN_CHANNEL[] = "11";
+const char DS_OUT_CHANNEL[] = "8";
+
+const char RELAY2_ONOFF_CHANNEL[] = "36";
+
+#endif
+
+
 enum pub_events { 
  PUBLISHER_WANT_SAVE,
  PUBLISHER_WANT_R1_ON,
@@ -70,7 +110,7 @@ enum sensor_states {
 
 //************************** PINS **********************************************
 
-#define PINS_SET_V2
+#define PINS_SET_V1
 
 #ifdef PINS_SET_V1
     #define BUTTON_PIN   0      //d3
