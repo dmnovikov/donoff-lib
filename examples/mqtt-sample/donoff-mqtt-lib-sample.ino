@@ -1,6 +1,6 @@
 
 
-#define DS1820_OUT 0
+#define DS1820_OUT 1
 //#define DDISPLAY 0 //oled shield 
 
 //#define CREDS_FILE

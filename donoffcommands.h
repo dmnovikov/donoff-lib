@@ -1,98 +1,97 @@
 #ifndef dcommands_h
 #define dcommands_h
 
-static char* C_AUTO_STOP_SEC="aofs";  
-static char* C_AUTO_STOP_SEC2="a2ofs";  
-static char* C_AUTO_STOP_SEC2T="aofs2";
+const char* C_AUTO_STOP_SEC="aofs";  
+const char* C_AUTO_STOP_SEC2="a2ofs";  
+const char* C_AUTO_STOP_SEC2T="aofs2";
 
-static char* C_LIGHT_SCHEME_NUM="lschm";
-static char* C_LIGHT_SCHEME_NUM2="l2schm";
-static char* C_LIGHT_SCHEME_NUM2T="lschm2";
+const char* C_LIGHT_SCHEME_NUM="lschm";
+const char* C_LIGHT_SCHEME_NUM2="l2schm";
+const char* C_LIGHT_SCHEME_NUM2T="lschm2";
 
-static char* C_CHECK_CURRENT="ccheck";
-static char* C_ON_START="strton";
-static char* C_AUTO_STOP_HOURS="aofh";
+const char* C_CHECK_CURRENT="ccheck";
+const char* C_ON_START="strton";
+const char* C_AUTO_STOP_HOURS="aofh";
 
-static char* C_ONOFF_SCHEME1="onoffschm1";
-static char* C_ONOFF_SCHEME2="onoffschm2";
+const char* C_ONOFF_SCHEME1="onoffschm1";
+const char* C_ONOFF_SCHEME2="onoffschm2";
 
-static char* C_ANALOG_LEVEL1="alevel1";
-static char* C_ANALOG_LEVEL2="alevel2";
-static char* C_CUSTOM_LEVEL1="clevel1";
-static char* C_CUSTOM_LEVEL2="clevel2";
-
-
-static char* C_NOTIFYER="notifyer";
-static char* C_NOTIFY_ONOFF="notifyonoff";
-static char* C_NOTIFY_HOURS_ONOFF="notifyhours"; 
-
-static char* C_LOW_NOTIFY_LEVEL="ltempnot";
-static char* C_HIGH_NOTIFY_LEVEL="htempnot";
-
-static char* C_ANALOG1_NOTIFY_LEVEL="anotify1"; 
-static char* C_ANALOG2_NOTIFY_LEVEL="anotify2";
-static char* C_CUSTOM1_NOTIFY_LEVEL="cnotify1"; 
-static char* C_CUSTOM2_NOTIFY_LEVEL="cnotify2";
-static char* C_CUSTOM3_NOTIFY_LEVEL="cnotify3"; 
-static char* C_CUSTOM4_NOTIFY_LEVEL="cnotify4";
+const char* C_ANALOG_LEVEL1="alevel1";
+const char* C_ANALOG_LEVEL2="alevel2";
+const char* C_CUSTOM_LEVEL1="clevel1";
+const char* C_CUSTOM_LEVEL2="clevel2";
 
 
-static char* C_DTEMP_LEVEL="dtempl";
-static char* C_NTEMP_LEVEL="ntempl";
-static char* C_CTEMP_LEVEL="ctempl";
-static char* C_LDELTA="tdelta";
+const char* C_NOTIFYER="notifyer";
+const char* C_NOTIFY_ONOFF="notifyonoff";
+const char* C_NOTIFY_HOURS_ONOFF="notifyhours"; 
 
-static char* C_EMAIL="email";
+const char* C_LOW_NOTIFY_LEVEL="ltempnot";
+const char* C_HIGH_NOTIFY_LEVEL="htempnot";
 
-static char* C_HOTTER="hotter";
-static char* C_COOLER="cooler";
-
-static char* C_TARIFF="tariff";
-static char* C_ONOFF1_VAL="onoffv1";
-static char* C_ONOFF1_MATRIX="onoffm";
-static char* C_ONOFF2_VAL="onoffv2";
-static char* C_ONOFF2_MATRIX="onoffm2";
-
-static char* C_ONOFF1_10="bbschm1";
-static char* C_ONOFF2_10="bbschm2";
+const char* C_ANALOG1_NOTIFY_LEVEL="anotify1"; 
+const char* C_ANALOG2_NOTIFY_LEVEL="anotify2";
+const char* C_CUSTOM1_NOTIFY_LEVEL="cnotify1"; 
+const char* C_CUSTOM2_NOTIFY_LEVEL="cnotify2";
+const char* C_CUSTOM3_NOTIFY_LEVEL="cnotify3"; 
+const char* C_CUSTOM4_NOTIFY_LEVEL="cnotify4";
 
 
-static char* C_R1="r1";
-static char* C_R2="r2";
-static char* C_TEST_B="testbool";
-static char* C_TEST_I="testint";
-static char* I_START_MS1="startms1";
-static char* I_STOP_MS1="startms1";
+const char* C_DTEMP_LEVEL="dtempl";
+const char* C_NTEMP_LEVEL="ntempl";
+const char* C_CTEMP_LEVEL="ctempl";
+const char* C_LDELTA="tdelta";
 
-static char* I_TEMP_LEVELS="tlevels";
-static char* I_HOTTER_INFO="hot";
-static char* I_IS_SYNCED="synced";
-static char* I_TIME="time";
-static char* I_CUSTOM_SCHEME1="cschm1";
-static char* I_CUSTOM_SCHEME2="cschm2";
-static char* I_BSCHM="bschm";
-static char* I_NET="net";
-static char* I_SENDALIVE="sendalive";
+const char* C_EMAIL="email";
 
-static char* D_ZERO_PWR_AMOUNT="zeropwramount";
-static char* D_ZERO_ALARM="zeroalarm";
-static char* D_RESET_HOUR1="resethour1";
-static char* D_RESET_HOUR2="resethour2";
-static char* D_CLEAR="clear";
-static char* D_RESET="reset";
-static char* D_SAVE="save";
-static char* D_DEFAULT="setdefault";
-static char* D_NOTIFY_DEF="zeronotify";
-static char* D_ZERO_HLEVELS="zerohours";
+const char* C_HOTTER="hotter";
+const char* C_COOLER="cooler";
+
+const char* C_TARIFF="tariff";
+const char* C_ONOFF1_VAL="onoffv1";
+const char* C_ONOFF1_MATRIX="onoffm";
+const char* C_ONOFF2_VAL="onoffv2";
+const char* C_ONOFF2_MATRIX="onoffm2";
+
+const char* C_ONOFF1_10="bbschm1";
+const char* C_ONOFF2_10="bbschm2";
+
+const char* C_TEST_B="testbool";
+const char* C_TEST_I="testint";
+
+const char* C_TIME_ZONE="tz";
 
 
-static char* D_R1_1="r11";
-static char* D_R1_0="r10";
-static char* D_R2_1="r21";
-static char* D_R2_0="r20";
+const char* I_TEMP_LEVELS="tlevels"; 
+const char* I_TEMP_LEVELS_ALIAS="tls";
+const char* I_HOTTER_INFO="hot";
+const char* I_IS_SYNCED="synced";
+const char* I_TIME="time";
+const char* I_CUSTOM_SCHEME1="cschm1";
+const char* I_CUSTOM_SCHEME2="cschm2";
+const char* I_BSCHM="bschm";
+const char* I_NET="net";
+const char* I_SENDALIVE="sendalive";
 
-static char* I_RELAY1="r1";
-static char* I_RELAY2="r2";
+const char* D_ZERO_PWR_AMOUNT="zeropwramount";
+const char* D_ZERO_ALARM="zeroalarm";
+const char* D_RESET_HOUR1="resethour1";
+const char* D_RESET_HOUR2="resethour2";
+const char* D_CLEAR="clear";
+const char* D_RESET="reset";
+const char* D_SAVE="save";
+const char* D_DEFAULT="setdefault";
+const char* D_NOTIFY_DEF="zeronotify";
+const char* D_ZERO_HLEVELS="zerohours";
+
+
+const char* D_R1_1="r11";
+const char* D_R1_0="r10";
+const char* D_R2_1="r21";
+const char* D_R2_0="r20";
+
+const char* I_RELAY1="r1";
+const char* I_RELAY2="r2";
 
 #endif
 

@@ -14,6 +14,7 @@ protected:
   ulong last_connect_attempt;
   PubSubClient* _c;
   int not_configured=0;
+  int time_synced=0;
 
 public:
   DPublisherMQTT(WMSettings *__s, PubSubClient *__c) : DPublisher(__s){
@@ -22,6 +23,7 @@ public:
 
   int init(Queue<pub_events> *_q){
     DPublisher::init(_q);
+      sync_time();
       try_connect();
       init_ok = 1;
     };
@@ -52,9 +54,27 @@ public:
         return 0;
     };
 
-    int virtual time_synced()
+    int virtual sync_time(int forced=0){
+        if(forced==0 && time_synced==1) return 0;
+
+        time_t t;
+
+        configTime(_s->time_zone * 3600, 0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
+        t = time(NULL);
+        setTime(t);
+        if(year(t)==1970){ //default date
+          debug("TIMESYNC", "FAIL TO SYNC TIME :(");
+          time_synced=0;
+        }else{
+          debug("TIMESYNC", "TIME SYNCED:"+String(hour())+":"+String(minute())+":"+String(year()));
+          time_synced=1;
+        }
+    };
+
+    int virtual is_time_synced()
     {
-      return 1;
+
+      return time_synced;
     };
 
     int virtual try_connect(){
@@ -70,10 +90,15 @@ public:
         debug("PUBLISHER", "Server=" + String(_s->mqttServer) + "| User:" + String(_s->mqttUser) + "| Pass:" + String(_s->mqttPass) + "| port=" + String(_s->mqttPort));
         //if (client.connect(clientId.c_str(),"xvjlwxhs","_k7d9m2yt0hn")) {
         if (_c->connect(clientId.c_str(), _s->mqttUser, _s->mqttPass)){
-          debug("PUBLISHER", "CONNECTED");
+          debug("PUBLISHER", "MQTT CONNECTED");
+          subscribe_all();
+        }else{
+          debug("PUBLISHER", "MQTT FAILED TO CONNECT");
         }
-        last_connect_attempt = millis();
-        subscribe_all();
+        
+        
+        
+        
     };
 
     String form_full_topic(const char* short_topic){
@@ -98,24 +123,30 @@ public:
     };
 
     int reconnect(){
-        if (!is_connected() && millis() - last_connect_attempt > reconnect_period * 1000) 
-        {
-          try_connect();
+        if(millis() - last_connect_attempt > reconnect_period * 1000){
+          if (!is_connected()){
+            try_connect();
+          }
+          if(!is_time_synced()){
+            sync_time();
+          }
+
+          last_connect_attempt = millis();
+
         }
-
-
+      
     };
 
     void callback(char* topic, byte* payload, unsigned int length){
-        debug("CALLBACK", String(topic)+"::"+String((char*)payload));
+        //debug("CALLBACK", String(topic)+"::"+String((char*)payload));
         char message[100];
-        String inS;
+        String inS="";
         for (int i = 0; i < length; i++)
         {
-          message[i] = (char)payload[i];
+          inS = inS + (char)payload[i];
         }
-        inS = String(message);
-        inS=inS.substring(0, length);
+        //inS = String(message);
+        //inS=inS.substring(0, length);
         String topic_params_full = form_full_topic(PARAMS_CHANNEL);
         if (String(topic) == topic_params_full) {
           debug("CALLBACK_PARAMS", "Params incoming msg is detected-->"+inS);
@@ -132,13 +163,6 @@ public:
       debug("PUBLISH_SH_INFO","TOPIC="+sht);
       _c->publish(form_full_topic(INFO_CHANNEL).c_str(), (shStr+"="+_valStr).c_str());
 
-    };
-
-    int virtual publish_sh_err()
-    {
-      if (!is_connected())
-        return 0;    
-      publish_to_info_topic("E: sh param not recognized");
     };
 
     int virtual publish_to_info_topic(String _valStr)
@@ -158,9 +182,9 @@ public:
 
     };
 
-    int virtual publish_sensor(DSensor * _sensor)
-    {
-      
+    int virtual publish_sensor(DSensor * _sensor){
+       if (!is_connected()) return 0;   
+      _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
     };
 
     int virtual publish_relay_state(DRelay * _r)
@@ -170,42 +194,6 @@ public:
         _c->publish(form_full_topic(_r->get_onoff_channel_str()).c_str(), "1");
       if (_r->is_off())
          _c->publish(form_full_topic(_r->get_onoff_channel_str()).c_str(), "0");
-    };
-
-    int virtual publish_relay_on(DRelay * _r, String reason = "")
-    {
-      if (!is_connected())
-        return 0;
-      
-    };
-
-    int virtual log_relay_on(DRelay * _r, String reason = "")
-    {
-      if (!is_connected())
-        return 0;
-
-      debug("LOG_RELAY", "Publish on");
-      //debug(_r->get_nameStr(), "on"+reason);
-      if (reason == "")
-        publish_to_log_topic("L:" + _r->get_nameStr() + ":ON");
-      else
-        publish_to_log_topic("L:" + _r->get_nameStr() + ":ON, " + reason);
-    };
-
-    int virtual publish_relay_off(DRelay * _r, String reason = "")
-    {
-      if (!is_connected())
-        return 0;
-      
-    };
-
-    int virtual log_relay_off(DRelay * _r, String reason = "")
-    {
-      if (!is_connected()) return 0;
-      if (reason == "")
-        publish_to_log_topic("L:" + _r->get_nameStr() + ":OFF");
-      else
-        publish_to_log_topic("L:" + _r->get_nameStr() + ":OFF, " + reason);
     };
 
     int virtual publish_uptime(DRelay * _r)

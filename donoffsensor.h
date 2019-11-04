@@ -114,17 +114,17 @@ class DSensor: public DBase {
 
         if (millis() - start_request_ms < REQUEST_CIRCLE ) {
           //wait for sensor will be ready
-          debug(nameStr, "Wait for sensor after asking");
+          //debug(nameStr, "Wait for sensor after asking");
           return 0;
         }
       }
 
       if (NEED_FILTERED) {
-        debug(nameStr, "Lets calculate filtered");
+        //debug(nameStr, "Lets calculate filtered");
         calculate_filtered();
         start_request_ms = 0;
       } else {
-        debug(nameStr, "Lets calculate");
+        //debug(nameStr, "Lets calculate");
         calculate_value();
         start_request_ms = 0;
       }
@@ -180,7 +180,7 @@ class DSensor: public DBase {
     int virtual calculate_filtered() {
       long fl_v = get_long_from_sensor();
       sens.v[gather_counter] = fl_v;
-      debug(nameStr, "get values, sensor=" + String(fl_v) + "; counter=" + String(gather_counter) + "; sens=" + String(sens.v[0]) + ":" + String(sens.v[1]) + ":" + String(sens.v[2]));
+      //debug(nameStr, "get values, sensor=" + String(fl_v) + "; counter=" + String(gather_counter) + "; sens=" + String(sens.v[0]) + ":" + String(sens.v[1]) + ":" + String(sens.v[2]));
       gather_counter++;
 
       if (gather_counter == 3) {

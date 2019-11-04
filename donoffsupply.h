@@ -57,14 +57,12 @@ class DSupply: public DBase {
     String reasonStr = "";
     uint8_t  blink_loop = 0;
     uint current_blink_type = 0;
-    //DRelay* relays[2];
 
     int numrelays = 0;
     int init_ok = 0;
     int mycounter = 0;
     ulong mytimer = 0;
-    int time_synced = 0;
-
+    
  protected:
     Queue<pub_events>* que_wanted;
     Queue<sensor_state> * que_sensor_states;
@@ -172,7 +170,14 @@ class DSupply: public DBase {
 
       if (DBUTTON) {
         int result = b1->button_loop(); //return button status
-        if (result == SHORT_PRESS) relay_toggle(r1, "hardware"); //if SHORT_PRESS, TOGGLE
+        if (result == SHORT_PRESS){
+           debug("SUPPLY_DBUTTON", "Toggle relay");
+           if(_s->hotter==1) _s->hotter=0;
+           if(_s->cooler==1) _s->cooler=0;
+           if(_s->lscheme_num>0) _s->lscheme_num=0;
+           if(_s->autostop_sec>0) _s->autostop_sec=0;
+           relay_toggle(r1, "hardware"); //if SHORT_PRESS, TOGGLE
+        }
       }
 
     };
@@ -213,31 +218,39 @@ class DSupply: public DBase {
         pub->publish_to_info_topic("N: saved");
       }
        
-      if(RELAY1 && what_to_want==PUBLISHER_WANT_R1_ON) {
-        relay_on(r1,"from publisher");
+      if(what_to_want==PUBLISHER_WANT_R1_ON) {
+        if(RELAY1) relay_on(r1,"from publisher");
       }
+
+      if(what_to_want==PUBLISHER_WANT_R1_OFF) {
+        if(RELAY1) relay_off(r1,"from publisher");
+      }
+
       if(RELAY1 && what_to_want==PUBLISHER_WANT_R1_OFF_LSCHM0) {
         relay_off(r1,"lschm=0");
       }
-      if(RELAY1 && what_to_want==PUBLISHER_WANT_R2_OFF_LSCHM0) {
+
+      if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_OFF_LSCHM0) {
         relay_off(r2,"lschm=0");
       }
-      if(RELAY1 && what_to_want==PUBLISHER_WANT_R1_OFF) {
-        relay_off(r1,"from publisher");
-      }
+     
        if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_ON) {
         relay_on(r2,"from publisher");
       }
+
       if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_OFF) {
         relay_off(r2,"from publisher");
       }
+      
       if(what_to_want==PUBLISHER_WANT_RESET) {
         pub->publish_to_info_topic("I: OK, LET'S RESET");
         ESP.reset();
       }
+
       if(RELAY1 && what_to_want==PUBLISHER_WANT_RESET_HOUR_R1) {
         r1->reset_lschm_hour();
       }
+
       if(RELAY2 && what_to_want==PUBLISHER_WANT_RESET_HOUR_R2) {
         r2->reset_lschm_hour();
       }
@@ -252,9 +265,24 @@ class DSupply: public DBase {
         pub->publish_to_info_topic("I: lschm last hour is reseted");
       }
       
-      if(RELAY1 && what_to_want==PUBLISHER_WANT_SH_R1) {
-        if(r1->is_on()) pub->publish_to_info_topic("I:R1=ON");
-        else pub->publish_to_info_topic("I:R1=OFF");
+      if(what_to_want==PUBLISHER_WANT_SH_R1) {
+        if(RELAY1){
+            if(r1->is_on()) pub->publish_to_info_topic("I:R1=ON");
+            else pub->publish_to_info_topic("I:R1=OFF");
+        }else{
+           pub->publish_to_info_topic("I:R1=DISABLED");
+        
+        }
+      }
+
+      if(what_to_want==PUBLISHER_WANT_SH_R2) {
+
+        if(RELAY2){
+            if(r2->is_on()) pub->publish_to_info_topic("I:R2=ON");
+            else pub->publish_to_info_topic("I:R2=OFF");
+        }else{
+           pub->publish_to_info_topic("I:R2=DISABLED");
+        }
         
       }
       
@@ -311,7 +339,7 @@ class DSupply: public DBase {
 
 
     int reconnect_loop() {
-      if (!pub->is_connected()) {
+      if (!pub->is_connected() || !pub->is_time_synced()) {
         pub->reconnect();
       }
     };
@@ -340,14 +368,20 @@ class DSupply: public DBase {
       //debug("SENSOR_LOOP", "sensors loop DSUPPLY->"+String(sens_num));
 
       if (sens_num == 1) {
-        if (DS1820_INT) ds_in->sensor_loop();
+        if (DS1820_INT){
+          ds_in->sensor_loop();
+          debug("DS_IN", ds_in->get_val_Str());
+        } 
         if (DS1820_INT && _s->notifyer && NOTIFYER) ds_in->sensor_check_state(-128, ALARM_TEMP1_MAX*100);
         return 1;
 
       }
 
       if (sens_num == 2) {
-        if (DS1820_OUT) ds_out->sensor_loop();
+        if (DS1820_OUT){
+           ds_out->sensor_loop();
+           debug("DS_OUT", ds_out->get_val_Str());
+        }
         
         if (DS1820_OUT && _s->notifyer && NOTIFYER){
           long low_level=_s->temp_low_level_notify;
@@ -363,7 +397,9 @@ class DSupply: public DBase {
 
     int virtual service_loop() {
 
-      debug("SHEDULER", "service loop");
+      debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + " ,t_sync=" + String(pub->is_time_synced())+ 
+           ", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected()) 
+       );
 
       if (RELAY1) sync_blink_mode();
 
@@ -372,11 +408,11 @@ class DSupply: public DBase {
       if (DS1820_OUT && pub->is_connected()) pub->publish_sensor(ds_out);
 
       if (RELAY1 && pub->is_connected()) {
-        debug("SERVICE_LOOP", "Public Rrelay1 info");
+        //debug("SERVICE_LOOP", "Public Rrelay1 info");
         pub->publish_uptime(r1);
         pub->publish_ontime(r1);
         pub->publish_downtime(r1);
-        pub->publish_relay(r1);
+        pub->publish_relay_state(r1);
       }
 
     };
@@ -540,7 +576,7 @@ class DSupply: public DBase {
 
 
     int is_day(int _schm_num) {
-      if (!pub->time_synced()) return -1;
+      if (!pub->is_time_synced()) return -1;
       if (_schm_num < 0 || _schm_num > 100) return -1;
       int h = hour();
       if (_schm_num == 99) return _s->custom_scheme1[h];

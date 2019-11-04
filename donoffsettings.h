@@ -45,6 +45,10 @@ const char RELAY2_ONOFF_CHANNEL[] = "36";
 
 #endif
 
+#define NTP_SERVER_1 "0.ru.pool.ntp.org"
+#define NTP_SERVER_2 "pool.ntp.org"
+#define NTP_SERVER_3 "time.nist.gov"
+
 
 enum pub_events { 
  PUBLISHER_WANT_SAVE,
@@ -59,7 +63,8 @@ enum pub_events {
  PUBLISHER_WANT_R2_OFF_LSCHM0,
  PUBLISHER_WANT_RESET_HOUR_R1_M,
  PUBLISHER_WANT_RESET_HOUR_R2_M,
- PUBLISHER_WANT_SH_R1
+ PUBLISHER_WANT_SH_R1,
+ PUBLISHER_WANT_SH_R2
 };
 
 enum sensor_states {

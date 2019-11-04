@@ -58,25 +58,62 @@ public:
     
     int virtual publish_sensor(DSensor* _sensor){};
 
-    int virtual publish_relay(DRelay * _r){};    
+    int virtual publish_relay_state(DRelay * _r)=0;    
+
     int virtual publish_relay_on(DRelay * _r,String reason=""){};
     int virtual publish_relay_off(DRelay * _r,String reason=""){};
 
-    int virtual log_relay_on(DRelay * _r,String reason=""){};
-    int virtual log_relay_off(DRelay * _r,String reason=""){};
+    int virtual publish_uptime(DRelay * _r)=0;
+    int virtual publish_ontime(DRelay * _r)=0;
+    int virtual publish_downtime(DRelay * _r)=0;
 
-    int virtual publish_uptime(DRelay * _r){};
-    int virtual publish_ontime(DRelay * _r){};
-    int virtual publish_downtime(DRelay * _r){};
+    int virtual publish_to_log_topic(String _valStr)=0;
 
     
 
-    int virtual is_connected(){};
-    int virtual time_synced(){};
+    int virtual is_connected()=0;
+    int virtual is_time_synced()=0;
 
-    int virtual reconnect(){};
+    int virtual reconnect()=0;
+
+
+    int virtual publish_sh_err(){
+      if (!is_connected())
+        return 0;    
+      publish_to_info_topic("E: sh param not recognized");
+    };
+
+    int virtual log_relay_on(DRelay * _r, String reason = "")
+    {
+      if (!is_connected())
+        return 0;
+
+      debug("LOG_RELAY", "Publish on");
+      //debug(_r->get_nameStr(), "on"+reason);
+      if (reason == "")
+        publish_to_log_topic("L:" + _r->get_nameStr() + ":ON");
+      else
+        publish_to_log_topic("L:" + _r->get_nameStr() + ":ON, " + reason);
+    };
+
+    int virtual log_relay_off(DRelay * _r, String reason = "")
+    {
+      if (!is_connected()) return 0;
+      if (reason == "")
+        publish_to_log_topic("L:" + _r->get_nameStr() + ":OFF");
+      else
+        publish_to_log_topic("L:" + _r->get_nameStr() + ":OFF, " + reason);
+    };
 
     int recognize_incoming_str(String _incomingStr) {
+      bool autosave=0;
+      int index_c=_incomingStr.indexOf(";");
+      if (index_c != -1) {
+        autosave=1;
+        _incomingStr=_incomingStr.substring(0,_incomingStr.length()-1);
+      }
+
+      debug("PUBLISH_RECOGNIZE", "IncomingString"+incomingStr+", autosave:" + String(autosave));
       int  index_val = _incomingStr.indexOf("=");
       if (index_val == -1) is_val_present = 0; else is_val_present = 1;
       is_sh_present = _incomingStr.startsWith("sh ");
@@ -87,6 +124,7 @@ public:
         valStr = _incomingStr.substring(index_val + 1, _incomingStr.length());
         set_parameters_loop();
         //debug("RECOGNIZE", "command=" + cmdStr + "; value=" + valStr);
+        if(autosave) que_wanted->push(PUBLISHER_WANT_SAVE);
       }
       else if (is_sh_present) {
         shStr = _incomingStr.substring(3, _incomingStr.length());
@@ -266,6 +304,12 @@ public:
         return 1;
       }
 
+      if (shStr == C_TIME_ZONE) {
+        publish_sh_to_info_topic( shStr, String(_s->time_zone));
+        return 1;
+      }
+
+
       if (shStr == C_EMAIL) {
         Serial.println("***** SH EMAIL");
         publish_sh_to_info_topic( shStr, String(_s->email_notify));
@@ -316,13 +360,24 @@ public:
         }
       }
 
-      if (shStr == I_TEMP_LEVELS) {
+      if (shStr == I_TEMP_LEVELS || shStr == I_TEMP_LEVELS_ALIAS) {
         String outS = "C=" + String(_s->critical_temp_level) + ",D=" + String(_s->day_temp_level) + ",N=" + String(_s->night_temp_level) + " dT=" + String(_s->level_delta);
         publish_to_info_topic(outS);
         return 1;
       }
+
       if (shStr == I_RELAY1) {
          que_wanted->push(PUBLISHER_WANT_SH_R1);
+         return 1;
+      }
+
+      if (shStr == I_RELAY2) {
+         que_wanted->push(PUBLISHER_WANT_SH_R2);
+         return 1;
+      }
+
+      if (shStr == I_TIME) {
+         publish_to_info_topic("I:S="+String(is_time_synced())+",T="+String(hour())+":"+String(minute())+":"+String(year()));
          return 1;
       }
       
@@ -383,6 +438,7 @@ public:
             /*supply.r1.reset_lschm_hour();
               supply.relay1_off("hotter=0");
             */
+            que_wanted->push(PUBLISHER_WANT_R1_OFF);
           }
           return 2;
         }
@@ -404,6 +460,7 @@ public:
               supply.r1.reset_lschm_hour();
               supply.relay1_off("cooler=0");
             */
+            que_wanted->push(PUBLISHER_WANT_R1_OFF);
           }
           return 2;
         }
@@ -501,6 +558,11 @@ public:
 
       if (cmdStr == C_CTEMP_LEVEL) {
         set_settings_val_int( cmdStr, valStr, (int*) &_s->critical_temp_level, MIN_TEMP_LEVEL, MAX_TEMP_LEVEL);
+        return 1;
+      }
+
+      if (cmdStr == C_TIME_ZONE) {
+        set_settings_val_int( cmdStr, valStr, (int*) &_s->time_zone, -12, 14);
         return 1;
       }
 
@@ -634,11 +696,10 @@ public:
 
     };
 
-    int virtual publish_sh_to_info_topic(String shStr, String _valStr) {};
+    int virtual publish_sh_to_info_topic(String shStr, String _valStr) =0;
 
-    int virtual publish_sh_err() {};
 
-    int virtual publish_to_info_topic(String _valStr) {};
+    int virtual publish_to_info_topic(String _valStr) =0;
 
     int virtual clear_info_channel(){publish_to_info_topic("                          ");};
 

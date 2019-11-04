@@ -48,7 +48,7 @@ class DPublisherBlynk: public DPublisher {
       return 0;
     };
 
-    int virtual time_synced(){
+    int virtual is_time_synced(){
       if(once_connected) return 1;
       return 0;
     };
@@ -69,15 +69,6 @@ class DPublisherBlynk: public DPublisher {
       Blynk.virtualWrite(String(INFO_CHANNEL).toInt(), outS);
       terminal.println(outS);
       terminal.flush();
-    };
-
-    int virtual publish_sh_err() {
-      if (!is_connected()) return 0;
-      String outS = "E: sh param not recognezed";
-      Blynk.virtualWrite(String(INFO_CHANNEL).toInt(), outS);
-      terminal.println(outS);
-      terminal.flush();
-
     };
 
     int virtual publish_to_info_topic(String _valStr) {
@@ -111,12 +102,12 @@ class DPublisherBlynk: public DPublisher {
     };
 
 
-    int virtual log_relay_on(DRelay * _r, String reason = "") {
-      if (!is_connected()) return 0;
-      //debug(_r->get_nameStr(), "on"+reason);
-      if (reason == "")  publish_to_log_topic("L:"+_r->get_nameStr() + ":ON");
-      else publish_to_log_topic("L:"+_r->get_nameStr() + ":ON, " + reason);
-    };
+    // int virtual log_relay_on(DRelay * _r, String reason = "") {
+    //   if (!is_connected()) return 0;
+    //   //debug(_r->get_nameStr(), "on"+reason);
+    //   if (reason == "")  publish_to_log_topic("L:"+_r->get_nameStr() + ":ON");
+    //   else publish_to_log_topic("L:"+_r->get_nameStr() + ":ON, " + reason);
+    // };
 
     int virtual publish_relay_off(DRelay * _r, String reason = "") {
       if (!is_connected()) return 0;
@@ -126,11 +117,11 @@ class DPublisherBlynk: public DPublisher {
       //else publish_to_info_topic("L:"+_r->get_nameStr() + ":OFF, " + reason);
     };
 
-     int virtual log_relay_off(DRelay * _r, String reason = "") {
-      if (!is_connected()) return 0;
-      if (reason == "")  publish_to_log_topic("L:"+_r->get_nameStr() + ":OFF");
-      else publish_to_log_topic("L:"+_r->get_nameStr() + ":OFF, " + reason);
-    };
+    //  int virtual log_relay_off(DRelay * _r, String reason = "") {
+    //   if (!is_connected()) return 0;
+    //   if (reason == "")  publish_to_log_topic("L:"+_r->get_nameStr() + ":OFF");
+    //   else publish_to_log_topic("L:"+_r->get_nameStr() + ":OFF, " + reason);
+    // };
 
     int virtual publish_uptime(DRelay * _r) {
       if (!is_connected()) return 0;
