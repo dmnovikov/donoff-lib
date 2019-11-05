@@ -2,6 +2,9 @@
 #define donoffsensords1820_h
 
 #include <donoffsensor.h>
+
+#include <OneWire.h>
+#include <Wire.h>
 #include <DallasTemperature.h>
 
 

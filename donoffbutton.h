@@ -1,7 +1,7 @@
 #ifndef donoffbutton_h
 #define donoffbutton_h
 
-//#include <JC_Button.h> 
+#include <Bounce2.h>
 
 //#include <donoffrelay.h>
 //#include <donoffdisplay.h>
@@ -20,8 +20,8 @@ class DButton: public DBase {
     ulong start_bt = 0;
     const int short_press_delay = 2000;
     const int long_press_delay = 4000;
-    bool b_state=HIGH;
-    bool p_state=HIGH;
+    // bool b_state=HIGH;
+    // bool p_state=HIGH;
 
 
   public:
@@ -36,7 +36,7 @@ class DButton: public DBase {
 
     int button_loop() {
       
-      b_state=debouncer.update();
+      // b_state=debouncer.update();
 
       if ( debouncer.fell()) {
          debug("BUTTON", "DETECT:from high to low");

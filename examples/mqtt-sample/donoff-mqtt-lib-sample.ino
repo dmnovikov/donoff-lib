@@ -3,27 +3,25 @@
 #define DS1820_OUT 1
 //#define DDISPLAY 0 //oled shield 
 
-//#define CREDS_FILE
+#define CREDS_FILE
 
 #ifdef CREDS_FILE
   #include "credentials_mqtt.h"
 #else
-  char mqtt_user[] = "lab240"; // blynk token
-  char mqtt_server[]="mqtt.lab240.ru";
-  char dev_id[]="mqt1";
-  char ssid[] = "dmn3";       // wifi shield
-  char pass[] = "6788766788";    // wifi passwd
-  char mqtt_pass[] = "240240";    // mqtt passwd
+  char mqtt_user[] = "*****"; // blynk token
+  char mqtt_server[]="**************";
+  char dev_id[]="****";
+  char ssid[] = "***";       // wifi shield
+  char pass[] = "***********";    // wifi passwd
+  char mqtt_pass[] = "******";    // mqtt passwd
 #endif
 
 #include <ESP8266WiFi.h>
 #include <TimeLib.h>
-#include <Bounce2.h>
+
 #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
 #include <EEPROM.h>
-#include <DallasTemperature.h>
-#include <OneWire.h>
-#include <Wire.h>
+
 #include <Ticker.h>
 //#include <SimpleTimer.h>
 #include <donoffsettings.h>
