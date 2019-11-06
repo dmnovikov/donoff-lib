@@ -36,6 +36,21 @@ class DBase {
         return get_time_str(millis());
     };
 
+int virtual save(){
+     EEPROM.begin(MEM_SIZE);
+     EEPROM.put(0, *_s);
+     EEPROM.end();     
+};
+int load(){
+    EEPROM.begin(MEM_SIZE);
+    EEPROM.get(0, *_s);
+    EEPROM.end();
+}
+
+int virtual reset(){
+  ESP.reset();
+}
+
 
 };
 

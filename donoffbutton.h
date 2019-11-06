@@ -7,9 +7,10 @@
 //#include <donoffdisplay.h>
 //#include <donoffpublisher.h>
 
-#define BUTTON_MIN_DELAY 50
-#define BUTTON_DELAY 50
+#define BUTTON_MIN_DELAY 25
+//#define BUTTON_DELAY 50
 #define SHORT_PRESS 1
+#define CONFIG_PRESS 2
 
 class DButton: public DBase {
   private:
@@ -18,10 +19,11 @@ class DButton: public DBase {
     //Button myBtn;   
     int init_ok = 0;
     ulong start_bt = 0;
-    const int short_press_delay = 2000;
-    const int long_press_delay = 4000;
+    const int SHORT_PRESS_DELAY = 1000;
+    const int CONFIG_PRESS_DELAY = 2000;
+     const int RESET_PRESS_DELAY = 6000;
     // bool b_state=HIGH;
-    // bool p_state=HIGH;
+    bool b_state;
 
 
   public:
@@ -29,15 +31,18 @@ class DButton: public DBase {
 
     int init() {
       pinMode(BUTTON_PIN, INPUT);
-      debouncer.attach(BUTTON_PIN,INPUT_PULLUP);
-      debouncer.interval(5);
+      debouncer.attach(BUTTON_PIN, INPUT_PULLUP);
+      debouncer.interval(25);
       init_ok = 1;
     };
 
     int button_loop() {
       
-      // b_state=debouncer.update();
-
+      
+      if (!init_ok) return 0;
+      
+      // debug("DBUTTON_LOOP", "LOOP");
+      b_state=debouncer.update();
       if ( debouncer.fell()) {
          debug("BUTTON", "DETECT:from high to low");
 
@@ -54,13 +59,19 @@ class DButton: public DBase {
         if (duration < BUTTON_MIN_DELAY) {
           debug("BUTTON", "FAIL PRESS, DO NOTHING");
           return 0;
-        } else if (duration >= BUTTON_DELAY && duration < short_press_delay) {
+        } else if (duration >= BUTTON_MIN_DELAY && duration < SHORT_PRESS_DELAY) {
           debug("BUTTON", "--->short press - toggle relay");
           return SHORT_PRESS;
 
-        } else if (duration >= long_press_delay) {
-          //config here
+        } else if (duration >= SHORT_PRESS_DELAY && duration < CONFIG_PRESS_DELAY) {
+           debug("BUTTON", "--->long press - config");
+           return CONFIG_PRESS;
+
+        }else if (duration >=  RESET_PRESS_DELAY) {
+           debug("BUTTON", "--->long press - reset");
+           reset();
         }
+
 
       }
     

@@ -1,5 +1,6 @@
 
 #define BLYNK_HEARTBEAT 300
+#define DCONFIG 0 // disable WiFiManager config
 
 #define DS1820_OUT 0
 //#define DDISPLAY 0 //oled shield 

@@ -4,5 +4,9 @@
 			"path": "/home/dmn/Arduino/libraries"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"new": "cpp"
+		}
+	}
 }

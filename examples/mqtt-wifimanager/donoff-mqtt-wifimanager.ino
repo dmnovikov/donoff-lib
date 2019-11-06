@@ -1,24 +1,7 @@
-
 /* ********** Config supply *******************/
 #define DS1820_OUT 1
 //#define DDISPLAY 0 //oled shield 
-
-#define DCONFIG 0 // disable WiFiManager config
-/***********************************************/
-
-
-#define CREDS_FILE
-
-#ifdef CREDS_FILE
-  #include "credentials_mqtt.h"
-#else
-  char mqtt_user[] = "*****"; // blynk token
-  char mqtt_server[]="**************";
-  char dev_id[]="****";
-  char ssid[] = "***";       // wifi shield
-  char pass[] = "***********";    // wifi passwd
-  char mqtt_pass[] = "******";    // mqtt passwd
-#endif
+/*********************************************/
 
 #include <ESP8266WiFi.h>
 #include <TimeLib.h>
@@ -72,13 +55,14 @@ void callback(char* topic, byte* payload, unsigned int length){
 void setup()
 {
   Serial.begin(9600);
-
-  EEPROM.begin(512);
-  EEPROM.get(0, settings);
-  EEPROM.end();
+  
+  supply.load();
+  // EEPROM.begin(512);
+  // EEPROM.get(0, settings);
+  // EEPROM.end();
 
 #ifdef PINS_SET_V1
-  Wire.begin(D7, D6);
+  Wire.begin(13, 12); //d6 d7
 #endif 
  
   delay(2000);
@@ -91,13 +75,6 @@ void setup()
     settings = defaults;
   }
 
-  strcpy(settings.dev_id, dev_id);
-  strcpy(settings.mqttUser, mqtt_user);
-  strcpy(settings.mqttPass, mqtt_pass);
-  strcpy(settings.mqttServer, mqtt_server);
-
-
-  
   pinMode(SONOFF_LED, OUTPUT);
   
   ticker.attach(0.25,tick);
@@ -105,35 +82,35 @@ void setup()
   
   supply.set_blink(BL_CONNECTING);
 
-  WiFi.persistent(false);
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, pass);
-  
-  Serial.println("Connecting Wifi:" + String(ssid));
-  int attempts = 0;
-  while (WiFi.status() != WL_CONNECTED && attempts < 20) {
-    delay(500);
-    Serial.print(".");
-    attempts++;
+  /* try to connect to wifi*/
+  Serial.println("Connecting Wifi...");
+
+  if (WiFi.SSID()) {
+    Serial.printf("We have saved SSID: %s\n", WiFi.SSID().c_str());
+    //trying to fix connection in progress hanging
+    WiFi.begin();
+    int c = 0;
+    while (WiFi.status() != WL_CONNECTED && c < 20) {
+      delay(500);
+      Serial.print(".");
+      c++;
+    }
+  } else {
+    Serial.println("No saved SSID, GO OFFLINE");
   }
-   if (WiFi.status() == WL_CONNECTED) {
+  
+ if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WIFI_CONNECTED");
   }else{
     Serial.println("WIFI_NOT_CONNECTED");
   }
 
-
   client.setCallback(callback);
-  
-  //Serial.println("mqtt init");
   pubmqtt.init(&que_wanted);
-  //Serial.println("notufyer init");
   notifyer.init(&pubmqtt);
 
-  //Serial.println("supply init");
   supply.init(&notifyer, &pubmqtt, &que_wanted);
 
-  
 }
 
 
@@ -143,7 +120,6 @@ void loop()
 {
 
 if (client.connected()) client.loop();
-
 supply.supply_loop();
 
 

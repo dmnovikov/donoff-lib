@@ -267,12 +267,13 @@ typedef struct {
 //#define EEPROM_SALT 1205
 //#define EEPROM_SALT 1206
 
+#define MEM_SIZE 512
 
 typedef struct {
   
   // ** from web config
   int   salt = EEPROM_SALT;
-  char  mqttServer[22]  = "";
+  char  mqttServer[22]  = "mqtt.lab240.ru";
   char  mqttUser[12] = "";
   char  mqttPass[22]    = "";
   char  mqttPort[6]="1883";

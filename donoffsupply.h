@@ -3,6 +3,8 @@
 
 #include <donoffrelay.h>
 #include <donoffdisplay.h>
+#include <donoffconfig.h>
+#include <donoffbutton.h>
 
 // #define D_MQTT
 
@@ -47,6 +49,10 @@
     #define NOTIFYER 0
 #endif
 
+#if !defined(DCONFIG)
+    #define DCONFIG 1
+#endif
+
 
 #define DS1820_NOT_FILTERED 0
 #define DS1820_FILTERED 1
@@ -75,6 +81,7 @@ class DSupply: public DBase {
     DPublisher* pub;
     DButton *b1;
     DNotifyer *notifyer;
+    DConfig *conf;
 
 
   public:
@@ -121,10 +128,15 @@ class DSupply: public DBase {
       if (DBUTTON) {
         debug("SUPPLY_INIT", "DBUTTOM INIT");
         b1 = new DButton(_s);
+        b1->init();
       }
 
-      
-      
+      if(DCONFIG){
+        debug("SUPPLY_INIT", "CONFIG INIT");
+        conf = new DConfig(_s);
+        conf->init();
+      }
+
       debug("SUPPLY_INIT", "** Finish SUPPLY INIT");
       mytimer = millis();
       init_ok = 1;
@@ -169,6 +181,7 @@ class DSupply: public DBase {
 
 
       if (DBUTTON) {
+        // debug("SUPPLY_LOOP", "Button loop");
         int result = b1->button_loop(); //return button status
         if (result == SHORT_PRESS){
            debug("SUPPLY_DBUTTON", "Toggle relay");
@@ -177,6 +190,21 @@ class DSupply: public DBase {
            if(_s->lscheme_num>0) _s->lscheme_num=0;
            if(_s->autostop_sec>0) _s->autostop_sec=0;
            relay_toggle(r1, "hardware"); //if SHORT_PRESS, TOGGLE
+        }
+
+        if (result == CONFIG_PRESS){
+          //  debug("SUPPLY_DBUTTON", "Enter Config Mode...");
+          //  WiFiManager wifiManager;
+          //  if (!wifiManager.startConfigPortal("OnDemandAP")) {
+          //       Serial.println("failed to connect and hit timeout");
+          //       delay(3000);
+          //       //reset and try again, or maybe put it to deep sleep
+          //       ESP.reset();
+          //       delay(5000);
+          //   }
+          set_blink(BL_CONNECTING);
+          conf->config();
+
         }
       }
 
@@ -212,9 +240,7 @@ class DSupply: public DBase {
       pub_events what_to_want=que_wanted->pop();
 
       if(what_to_want==PUBLISHER_WANT_SAVE){
-        EEPROM.begin(512);
-        EEPROM.put(0, *_s);
-        EEPROM.end();     
+        save();
         pub->publish_to_info_topic("N: saved");
       }
        
@@ -398,7 +424,7 @@ class DSupply: public DBase {
     int virtual service_loop() {
 
       debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + " ,t_sync=" + String(pub->is_time_synced())+ 
-           ", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected()) 
+           ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected()) 
        );
 
       if (RELAY1) sync_blink_mode();
