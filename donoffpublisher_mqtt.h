@@ -196,10 +196,10 @@ public:
          _c->publish(form_full_topic(_r->get_onoff_channel_str()).c_str(), "0");
     };
 
-    int virtual publish_uptime(DRelay * _r)
+    int virtual publish_uptime()
     {
       if (!is_connected()) return 0;
-      _c->publish(form_full_topic(UPTIME_CHANNEL).c_str(), _r->get_uptime_str().c_str());
+      _c->publish(form_full_topic(UPTIME_CHANNEL).c_str(), get_time_str(millis()).c_str());
 
     };
 

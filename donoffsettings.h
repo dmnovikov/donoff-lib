@@ -23,6 +23,7 @@ const char RELAY2_ONOFF_CHANNEL[] = "/out/b1";
 const char PARAMS_CHANNEL[]="/in/params";
 
 const char TOPIC_SENDMAIL[] = "/sys/sendmail";
+const char SCT013_OUT_CHANNEL[]="/out/sct013_1";
 
 #endif
 

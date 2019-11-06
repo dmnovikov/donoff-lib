@@ -63,7 +63,7 @@ public:
     int virtual publish_relay_on(DRelay * _r,String reason=""){};
     int virtual publish_relay_off(DRelay * _r,String reason=""){};
 
-    int virtual publish_uptime(DRelay * _r)=0;
+    int virtual publish_uptime()=0;
     int virtual publish_ontime(DRelay * _r)=0;
     int virtual publish_downtime(DRelay * _r)=0;
 

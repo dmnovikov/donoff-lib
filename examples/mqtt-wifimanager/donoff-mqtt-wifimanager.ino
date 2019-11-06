@@ -1,5 +1,9 @@
 /* ********** Config supply *******************/
-#define DS1820_OUT 1
+#define RELAY1 0
+#define RELAY2 0
+#define DS1820_INT 1
+#define DS1820_OUT 0
+#define SCT013_1 1
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
 
@@ -57,10 +61,7 @@ void setup()
   Serial.begin(9600);
   
   supply.load();
-  // EEPROM.begin(512);
-  // EEPROM.get(0, settings);
-  // EEPROM.end();
-
+ 
 #ifdef PINS_SET_V1
   Wire.begin(13, 12); //d6 d7
 #endif 
@@ -85,19 +86,18 @@ void setup()
   /* try to connect to wifi*/
   Serial.println("Connecting Wifi...");
 
-  if (WiFi.SSID()) {
-    Serial.printf("We have saved SSID: %s\n", WiFi.SSID().c_str());
-    //trying to fix connection in progress hanging
-    WiFi.begin();
+  WiFi.persistent(false);
+  WiFi.mode(WIFI_STA);
+ 
+  WiFi.begin();
+ 
     int c = 0;
     while (WiFi.status() != WL_CONNECTED && c < 20) {
       delay(500);
       Serial.print(".");
       c++;
     }
-  } else {
-    Serial.println("No saved SSID, GO OFFLINE");
-  }
+  
   
  if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WIFI_CONNECTED");

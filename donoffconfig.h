@@ -32,7 +32,7 @@ class DConfig: public DBase{
         
 
     int init() {
-        p1= new WiFiManagerParameter("mqtt-server", "mqtt server (ip or name)", _s->mqttServer, 22);
+        p1= new WiFiManagerParameter("mqtt-server", "mqtt server", _s->mqttServer, 22);
         p2= new WiFiManagerParameter("mqtt-user", "mqtt user", _s->mqttUser, 12);
         p3= new WiFiManagerParameter("mqtt-pass", "mqtt passw", _s->mqttPass, 22);
         p4= new WiFiManagerParameter("mqtt-port", "mqtt port", _s->mqttPort, 6);
@@ -46,9 +46,20 @@ class DConfig: public DBase{
         wm.addParameter(p5);
         wm.addParameter(p6);
 
-        wm.setTimeout(120);
+        //wm.setTimeout(120);
         
         init_ok = 1;
+    };
+
+    int config2(){
+       if (!wm.startConfigPortal("OnDemandAP")) {
+            Serial.println("failed to connect and hit timeout");
+            delay(3000);
+            //reset and try again, or maybe put it to deep sleep
+
+            ESP.reset();
+            delay(5000);
+        }
     };
 
     int config(){
@@ -60,6 +71,8 @@ class DConfig: public DBase{
             ESP.reset();
             delay(5000);
         }
+
+        debug("CONFIG", "FINISH CONFIG");
 
         if(String(p1->getValue()) != ""){
             strcpy(_s->mqttServer,p1->getValue());

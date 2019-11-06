@@ -20,6 +20,7 @@
 #include <donoffbutton.h>
 #include <donoffnotifyer.h>
 #include <donoffsensor_ds1820.h>
+#include <donoffsensor_sct013.h>
 
 #if !defined (RELAY1)
     #define RELAY1 1
@@ -53,6 +54,10 @@
     #define DCONFIG 1
 #endif
 
+#if !defined(SCT013_1)
+    #define SCT013_1 0
+#endif
+
 
 #define DS1820_NOT_FILTERED 0
 #define DS1820_FILTERED 1
@@ -77,6 +82,7 @@ class DSupply: public DBase {
     DRelay* r2;
     DigitalDS1820Sensor* ds_in;
     DigitalDS1820Sensor* ds_out;
+    SCT013Sensor* sct013_1;
     DDisplay* D;
     DPublisher* pub;
     DButton *b1;
@@ -125,6 +131,12 @@ class DSupply: public DBase {
         ds_out->init("DS_OUT", DS_OUT_CHANNEL, DS1820_FILTERED,que_sensor_states);
       }
 
+      if (SCT013_1) {
+        debug("SUPPLY_INIT", "SCT013_1 INIT");
+        sct013_1 = new SCT013Sensor(_s);
+        sct013_1->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states);
+      }
+
       if (DBUTTON) {
         debug("SUPPLY_INIT", "DBUTTOM INIT");
         b1 = new DButton(_s);
@@ -147,15 +159,34 @@ class DSupply: public DBase {
 
       if ((millis() - mytimer) >= 300 ) {
         //6 sec loop
-        if (mycounter == 0) reconnect_loop();
+        if (mycounter == 0) {
+          //debug("SUPPLY_LOOP", "Reconnect loop");
+          reconnect_loop();
+        }
 
-        if (mycounter == 1) display_loop();
-        if (mycounter == 2) sync_blink_mode();
+        if (mycounter == 1) {
+          //debug("SUPPLY_LOOP", "Display loop");
+          display_loop();
+        }
+        if (mycounter == 2) {
+          //debug("SUPPLY_LOOP", "Sync loop");
+          sync_blink_mode();
+        }
 
 
-        if (mycounter == 5)  sensors_loop(1);
-        if (mycounter == 6)  sensors_loop(2);
-        if (mycounter == 7)  sensors_loop(3);
+        if (mycounter == 5)  {
+          //debug("SUPPLY_LOOP", "Sensor loop #1");
+          sensors_loop(1);
+        }
+        if (mycounter == 6) {
+          //debug("SUPPLY_LOOP", "Sensor loop #2");
+          sensors_loop(2);
+        } 
+        if (mycounter == 7){
+           //debug("SUPPLY_LOOP", "Sensor loop #3");
+           sensors_loop(3);
+        } 
+        
         if (mycounter == 8)  sensors_loop(4);
         if (mycounter == 9)  sensors_loop(5);
         if (mycounter == 10) sensors_loop(6);
@@ -165,14 +196,19 @@ class DSupply: public DBase {
         if (mycounter == 16) hotter_cooler_loop();
         if (mycounter == 17) lschm_loop();
         if (mycounter == 18) aofh_loop();
+
+        if (mycounter==20){
+          if(_s->notifyer){
+            //debug("SUPPLY_LOOP", "Notify loop");
+            notify_sesnors_loop();
+            notify_relay_hours_loop();
+          } 
+        }
         mycounter++;
         //300 ms loop
         aofs_loop();
         pub_wanted_loop();
-        if(_s->notifyer){
-           notify_sesnors_loop();
-           notify_relay_hours_loop();
-        } 
+       
         //
         if (mycounter > 25) mycounter = 0;
         mytimer = millis();
@@ -189,11 +225,11 @@ class DSupply: public DBase {
            if(_s->cooler==1) _s->cooler=0;
            if(_s->lscheme_num>0) _s->lscheme_num=0;
            if(_s->autostop_sec>0) _s->autostop_sec=0;
-           relay_toggle(r1, "hardware"); //if SHORT_PRESS, TOGGLE
+           if(RELAY1) relay_toggle(r1, "hardware"); //if SHORT_PRESS, TOGGLE
         }
 
         if (result == CONFIG_PRESS){
-          //  debug("SUPPLY_DBUTTON", "Enter Config Mode...");
+           debug("SUPPLY_DBUTTON", "Enter Config Mode...");
           //  WiFiManager wifiManager;
           //  if (!wifiManager.startConfigPortal("OnDemandAP")) {
           //       Serial.println("failed to connect and hit timeout");
@@ -419,6 +455,14 @@ class DSupply: public DBase {
         }
         return 1;
       }
+
+      if (sens_num == 3) {
+        if (sct013_1){
+           sct013_1->sensor_loop();
+           debug("SCT013_OUT", sct013_1->get_val_Str());
+        } 
+        return 1;
+      }
     };
 
     int virtual service_loop() {
@@ -432,10 +476,13 @@ class DSupply: public DBase {
       // publish temp sensors
       if (DS1820_INT && pub->is_connected()) pub->publish_sensor(ds_in);
       if (DS1820_OUT && pub->is_connected()) pub->publish_sensor(ds_out);
+      if (SCT013_1 && pub->is_connected()) pub->publish_sensor(sct013_1);
+
+      pub->publish_uptime();
 
       if (RELAY1 && pub->is_connected()) {
         //debug("SERVICE_LOOP", "Public Rrelay1 info");
-        pub->publish_uptime(r1);
+       
         pub->publish_ontime(r1);
         pub->publish_downtime(r1);
         pub->publish_relay_state(r1);
@@ -529,22 +576,33 @@ class DSupply: public DBase {
     };
 
     void sync_blink_mode() {
+      if(!RELAY1){
+        if(pub->is_connected()) {
+          set_blink(BL_CONNECTED_OFF);
+          return;
+        } 
+        else {
+          set_blink(BL_OFFLINE_OFF);
+          return;
+        } 
 
-      if (pub->is_connected() && r1->is_off()) {
+      }
+
+      if (pub->is_connected() && r1->is_off() && RELAY1) {
         //debug("--->connected,off");
         set_blink(BL_CONNECTED_OFF);
         return;
       }
-      if (pub->is_connected() && r1->is_on()) {
+      if (pub->is_connected() && r1->is_on() && RELAY1) {
         set_blink(BL_CONNECTED_ON);
         return;
       }
-      if (!pub->is_connected() && r1->is_off()) {
+      if (!pub->is_connected() && r1->is_off() && RELAY1) {
         //debug("--->not connected,off");
         set_blink(BL_OFFLINE_OFF);
         return;
       }
-      if (!pub->is_connected() && r1->is_on()) {
+      if (!pub->is_connected() && r1->is_on() && RELAY1) {
         set_blink(BL_OFFLINE_ON);
         return;
       }

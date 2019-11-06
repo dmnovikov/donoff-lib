@@ -2,6 +2,7 @@
 #define donoffsensor_h
 
 #include <Queue.h>
+#include <donoffbase.h>
 
 
 class DSensor;
@@ -34,6 +35,7 @@ class DSensor: public DBase {
     int NEED_FILTERED = 0;
     int REQUEST_CIRCLE = 750;
     int MULTIPLIER = 1;
+    int NEED_ASK_WHILE_WATING=0;
 
 
     ulong low_start_ms = 0;
@@ -92,12 +94,17 @@ class DSensor: public DBase {
     };
 
     int virtual sensor_loop() {
+      //debug(nameStr, "Sensor_LOOP, ms="+String(millis()));
       if (init_ok == 0) {
         debug(nameStr, "No init, no sensor loop");
         return 0;
       }
       //debug("SENSOR", String(millis()));
       if (millis() < START_DELAY) {
+        if(NEED_ASK_WHILE_WATING){
+          //debug(nameStr,"calculate while waiting");
+          get_long_from_sensor(); 
+        } 
         debug(nameStr, "Waiting to start asking sensor");
         return 0;
       } else {
