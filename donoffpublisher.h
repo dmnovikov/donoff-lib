@@ -6,7 +6,7 @@
 #include <ArduinoJson.h>
 #include <donoffcommands.h>
 #include <donoffbase.h>
-#include <donoffsensor.h>
+#include <sensors/donoffsensor.h>
 #include <donoffrelay.h>
 #include <Queue.h>
 
@@ -144,13 +144,26 @@ public:
             }
             
             if (inS == D_R1_1) {
-              debug("QUEUE_WANTED", "Push R1_1");
+              debug("QUEUE_WANTED PUSH EVENT", "R1_1");
               que_wanted->push(PUBLISHER_WANT_R1_ON);
               
             }
             
             if (inS == D_R1_0) {
+              debug("QUEUE_WANTED PUSH EVENT", "R1_0");
               que_wanted->push(PUBLISHER_WANT_R1_OFF);
+            }
+
+             
+            if (inS == D_R2_1) {
+              debug("QUEUE_WANTED PUSH EVENT", "R2_1");
+              que_wanted->push(PUBLISHER_WANT_R2_ON);
+              
+            }
+            
+            if (inS == D_R2_0) {
+              debug("QUEUE_WANTED PUSH EVENT", "R2_0");
+              que_wanted->push(PUBLISHER_WANT_R2_OFF);
             }
           
             if (inS==D_RESET) {

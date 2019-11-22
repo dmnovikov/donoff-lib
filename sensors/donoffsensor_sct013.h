@@ -1,7 +1,7 @@
 #ifndef donoffsensorsct013_h
 #define donoffsensorsct013_h
 
-#include <donoffsensor.h>
+#include <sensors/donoffsensor.h>
 #include <EmonLib.h>
 
 

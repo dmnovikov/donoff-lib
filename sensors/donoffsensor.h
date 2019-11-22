@@ -260,72 +260,10 @@ class DSensor: public DBase {
       }
 
       state.prev_state=state.curr_state;
-/*
-      if(state_flg==1){               
-       if(state.curr_state!=state.prev_state){  
-             state.ps=this;
-             state.time=millis();
-             state.val=sens.val;
-             //debug("NOTIFYSENSOR-->"+nameStr, "Push to sensor que");
-             if(que_states->count()<3){
-                debug("NOTIFYSENSOR-->"+nameStr, "Push to sensor que");
-                que_states->push(state); 
-                
-              }else{
-                debug("NOTIFYER", "TOO MORE PUSHS, SKIP");
-              }         
-        }
-        state.prev_state=state.curr_state;
 
-     }else{
-        state.curr_state=NORM_STATE;
-        state.time=millis();
-        state.prev_state=state.curr_state;
-     }
-*/
      return 1;
            
     };
-
-/*
-    int publish_loop(DPublisher *_pub) {
-      _pub->publish_sensor("8", String(sens.val) );
-    };
-
-*/
-
-/*
-    int is_low_level(int _level) {
-      if (!is_started_and_ready()) {
-        debug(nameStr, "sensor not ready");
-        return -1;
-      }
-
-      if (_level < 100) _level = _level * 100; //old value in eeprom (in C)
-
-      if (get_val() > _level) {
-        return 0;
-      }
-
-      return 1;
-    };
-
-    int is_high_level(int _level) {
-      if (!is_started_and_ready()) {
-        debug(nameStr, "sensor not ready");
-        return -1;
-      }
-
-      if (_level < 100) _level = _level * 100; //old value in eeprom (in C)
-
-      if (get_val() < _level) {
-        return 0;
-      }
-
-      return 1;
-    };
-
-    */
 
     String virtual  get_val_Str() {
       return String(sens.val);

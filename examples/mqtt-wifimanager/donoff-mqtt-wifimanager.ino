@@ -1,8 +1,8 @@
 /* ********** Config supply *******************/
 #define RELAY1 0
-#define RELAY2 0
+#define RELAY2 1
 #define DS1820_INT 1
-#define DS1820_OUT 0
+#define DS1820_OUT 1
 #define SCT013_1 1
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
@@ -10,7 +10,7 @@
 #include <ESP8266WiFi.h>
 #include <TimeLib.h>
 
-#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
+//#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
 #include <EEPROM.h>
 
 #include <Ticker.h>
@@ -20,12 +20,20 @@
 #include <donoffcommands.h>
 #include <donoffdisplay.h>
 #include <donoffrelay.h>
-#include <donoffsupply.h>
+// #include <supplies/donoffsupply-common.h>
+// #include <supplies/donoffsupply-base.h>
+//#include <supplies/donoffsupply-donoff-universal.h>
+
+#include <supplies/donoffsupply-donoff.h>
+
+//#include <supplies/donoffsupply-sct013.h>
 #include <PubSubClient.h>
 
 
 
 WMSettings settings;
+
+WifiCreds wcreds;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -37,7 +45,15 @@ Queue<pub_events> que_wanted= Queue<pub_events>(MAX_QUEUE_WANTED);
 DPublisherMQTT pubmqtt(&settings, &client);
 
 
-DSupply supply(&settings);
+// DSupply supply(&settings);
+
+// DSupplyBase supply(&settings);
+
+//DSupplyDonoffUni supply(&settings);
+
+DSupplyDonoff supply(&settings);
+
+//DSupplySCT013Collector supply(&settings);
 
 
 DNotifyerEmailMQTT notifyer(&settings, &client);
@@ -61,11 +77,8 @@ void setup()
   Serial.begin(9600);
   
   supply.load();
- 
-#ifdef PINS_SET_V1
-  Wire.begin(13, 12); //d6 d7
-#endif 
- 
+
+  
   delay(2000);
 
   Serial.println ("SALT="+String(settings.salt));
@@ -88,9 +101,9 @@ void setup()
 
   WiFi.persistent(false);
   WiFi.mode(WIFI_STA);
- 
+
   WiFi.begin();
- 
+
     int c = 0;
     while (WiFi.status() != WL_CONNECTED && c < 20) {
       delay(500);

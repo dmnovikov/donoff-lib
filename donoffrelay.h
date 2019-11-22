@@ -28,7 +28,7 @@ class DRelay: public DBase {
   public:
     DRelay(WMSettings * __s): DBase(__s) {};
 
-    int init(int _pin, String _nStr, String _ch_onoffStr,  String _ch_ontimeStr="", String _ch_down_timeStr="") {
+    int init(int _pin, String _nStr, int _num, String _ch_onoffStr,  String _ch_ontimeStr="", String _ch_down_timeStr="") {
       pin = _pin;
       stop_ms = millis();
       start_ms = 0;
@@ -37,6 +37,7 @@ class DRelay: public DBase {
       channel_onoff_str=_ch_onoffStr;
       channel_ontime_str=_ch_ontimeStr;
       channel_downtime_str=_ch_down_timeStr;
+      num=_num;
       init_ok=1;
       //debug("INITR1","name="+nameStr);
       //debug("RELAY", "PIN:"+String(RELAY1_PIN));

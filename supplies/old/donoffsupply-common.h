@@ -3,7 +3,7 @@
 
 #include <donoffrelay.h>
 #include <donoffdisplay.h>
-#include <donoffconfig.h>
+#include <configs/donoffconfig-mqtt.h>
 #include <donoffbutton.h>
 
 // #define D_MQTT
@@ -19,8 +19,8 @@
 #include <Queue.h>
 #include <donoffbutton.h>
 #include <donoffnotifyer.h>
-#include <donoffsensor_ds1820.h>
-#include <donoffsensor_sct013.h>
+#include <sensors/donoffsensor_ds1820.h>
+#include <sensors/donoffsensor_sct013.h>
 
 #if !defined (RELAY1)
     #define RELAY1 1
@@ -87,11 +87,15 @@ class DSupply: public DBase {
     DPublisher* pub;
     DButton *b1;
     DNotifyer *notifyer;
-    DConfig *conf;
+    DConfigMQTT *conf;
 
 
   public:
     DSupply(WMSettings * __s): DBase(__s) {};
+
+    // int add_relay(){
+
+    // };
 
     int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
 
@@ -145,7 +149,7 @@ class DSupply: public DBase {
 
       if(DCONFIG){
         debug("SUPPLY_INIT", "CONFIG INIT");
-        conf = new DConfig(_s);
+        conf = new DConfigMQTT(_s);
         conf->init();
       }
 
@@ -282,10 +286,12 @@ class DSupply: public DBase {
        
       if(what_to_want==PUBLISHER_WANT_R1_ON) {
         if(RELAY1) relay_on(r1,"from publisher");
+        else pub->publish_to_info_topic("I:NO RELAY1");
       }
 
       if(what_to_want==PUBLISHER_WANT_R1_OFF) {
         if(RELAY1) relay_off(r1,"from publisher");
+        else pub->publish_to_info_topic("I:NO RELAY1");
       }
 
       if(RELAY1 && what_to_want==PUBLISHER_WANT_R1_OFF_LSCHM0) {
@@ -296,12 +302,14 @@ class DSupply: public DBase {
         relay_off(r2,"lschm=0");
       }
      
-       if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_ON) {
-        relay_on(r2,"from publisher");
+       if(what_to_want==PUBLISHER_WANT_R2_ON) {
+        if(RELAY2) relay_on(r2,"from publisher");
+        else pub->publish_to_info_topic("I:NO RELAY2");
       }
 
-      if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_OFF) {
-        relay_off(r2,"from publisher");
+      if(what_to_want==PUBLISHER_WANT_R2_OFF) {
+        if(RELAY2) relay_off(r2,"from publisher");
+        else pub->publish_to_info_topic("I:NO RELAY2");
       }
       
       if(what_to_want==PUBLISHER_WANT_RESET) {
@@ -377,7 +385,7 @@ class DSupply: public DBase {
       if (RELAY1 && _s->lscheme_num > 0 &&  _s->hotter==0 && _s->cooler==0) {
         lschm_on_off(r1, _s->lscheme_num);
       }
-      if (RELAY2 && _s->lscheme_num2) {
+      if (RELAY2 && _s->lscheme_num2>0) {
         lschm_on_off(r2, _s->lscheme_num2);
 
       }

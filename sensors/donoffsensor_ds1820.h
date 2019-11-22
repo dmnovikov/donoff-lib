@@ -1,7 +1,7 @@
 #ifndef donoffsensords1820_h
 #define donoffsensords1820_h
 
-#include <donoffsensor.h>
+#include <sensors/donoffsensor.h>
 
 #include <OneWire.h>
 #include <Wire.h>

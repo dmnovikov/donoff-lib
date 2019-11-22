@@ -6,6 +6,8 @@
 
 #define MAX_QUEUE_WANTED 12
 
+#define WIFI_CONFIG_AP_NAME "donoff-ap"
+
 #define D_MQTT
 
 #ifdef D_MQTT
@@ -13,17 +15,9 @@ const char INFO_CHANNEL[] = "/out/info";
 const char LOG_CHANNEL[] = "/out/log";
 const char UPTIME_CHANNEL[] = "/out/time_up";
 
-const char RELAY1_ONOFF_CHANNEL[] = "/out/b1";
-const char RELAY1_ONTIME_CHANNEL[] = "/out/time_comm";
-const char RELAY1_DOWNTIME_CHANNEL[] = "/out/time_down";
-const char DS_IN_CHANNEL[] = "/out/temp_in";
-const char DS_OUT_CHANNEL[] = "/out/temp_out";
-
-const char RELAY2_ONOFF_CHANNEL[] = "/out/b1";
 const char PARAMS_CHANNEL[]="/in/params";
 
 const char TOPIC_SENDMAIL[] = "/sys/sendmail";
-const char SCT013_OUT_CHANNEL[]="/out/sct013_1";
 
 #endif
 
@@ -67,6 +61,10 @@ enum pub_events {
  PUBLISHER_WANT_SH_R1,
  PUBLISHER_WANT_SH_R2
 };
+
+#define DS1820_NOT_FILTERED 0
+#define DS1820_FILTERED 1
+
 
 enum sensor_states {
  UNDEF_STATE,
@@ -135,7 +133,7 @@ enum sensor_states {
     #define IN_WIRE_BUS    14  //d5
     #define OUT_WIRE_BUS 13 //D7
     #define ANALOG_A0_PIN A0
-    #define RELAY2_PIN 12 //new d6 //old d8
+    #define RELAY2_PIN 5 //new d6 //old d8
 #endif
 
 
@@ -332,6 +330,14 @@ typedef struct {
   int     custom_level2=-128;
 
 } WMSettings;
+
+#define WIFI_EEPROM_SALT 111
+
+typedef struct{
+  int  SALT = WIFI_EEPROM_SALT;
+  char ssid[20];
+  char pass[50];
+} WifiCreds;
 
 
 /********** blink ****************/
