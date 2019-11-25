@@ -35,6 +35,8 @@ class DSupplyDonoff: public DSupplyBase {
     DRelay *r[4]={NULL, NULL, NULL, NULL};
     DigitalDS1820Sensor* ds_in;
 
+    String outStr;
+
   public:
     DSupplyDonoff(WMSettings * __s): DSupplyBase(__s) {};
 
@@ -50,7 +52,7 @@ class DSupplyDonoff: public DSupplyBase {
        
         debug("SUPPLY_INIT", "DS_IN INIT");
         ds_in = new DigitalDS1820Sensor(_s, IN_WIRE_BUS);
-        ds_in->init("DS_IN", DS_IN_CHANNEL, DS1820_NOT_FILTERED,que_sensor_states);
+        ds_in->init("ds_in", DS_IN_CHANNEL, DS1820_NOT_FILTERED,que_sensor_states);
 
         init_ok=1;
     
@@ -183,6 +185,16 @@ class DSupplyDonoff: public DSupplyBase {
       if (_s->lscheme_num > 0 &&  _s->hotter==0 && _s->cooler==0) {
         lschm_on_off(r[0], _s->lscheme_num);
       }
+    };
+
+    int virtual display_loop() {
+      String outStr="";
+      if (r[0]->is_on()) outStr += "r1:on"; else outStr += "r1:off";
+      D->show_str(1, outStr, "", D_FIRST_STRING, !D_LAST_STRING);
+
+        // D.show_sensor(1, "t:",  ds1820_get_filtered_val(), 100,0,0);
+      D->show_sensor(1, "t1", ds_in,  !D_FIRST_STRING, !D_LAST_STRING);
+
     };
 
 

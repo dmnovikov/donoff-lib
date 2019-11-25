@@ -57,10 +57,15 @@ class DConfigMQTT: public DConfig{
 
     int connect_new_creds(){
         new_creds=0;
+        char c_ssid[32];
+        char c_password[64];
+
         if (newssid != "" && newpass != "")
         {
-
+            //debug("CONFIG", "B:GET CONFIG");
             wifi_station_get_config (&stationConf);
+            //debug("CONFIG", "E:GET CONFIG");
+             debug("CONFIG", "old ssid:"+String((char*)stationConf.ssid)+", old pass=" + String((char*) stationConf.password));
 
             int  e1=strcmp((char*) stationConf.ssid,  newssid.c_str());
             int  e2=strcmp((char*) stationConf.password,   newpass.c_str());
@@ -68,9 +73,18 @@ class DConfigMQTT: public DConfig{
             // if somthing is changed, write config
             if ((e1!=0) ||(e2!=0))
             {
-                ets_strcpy((char*) stationConf.ssid,newssid.c_str());
-                ets_strcpy((char*) stationConf.password,newpass.c_str());
+                // ets_strcpy((char*) stationConf.ssid,newssid.c_str());
+                // ets_strcpy((char*) stationConf.password,newpass.c_str());
+                strcpy(c_ssid, newssid.c_str());
+                strcpy(c_password, newpass.c_str());
+
+                os_memcpy(&stationConf.ssid, c_ssid, 32);
+                os_memcpy(&stationConf.password, c_password, 64);
+   
+                //debug("CONFIG", "B:SET CONFIG");
+                debug("CONFIG", "new ssid:"+String((char*)stationConf.ssid)+", new pass=" + String((char*) stationConf.password));
                 wifi_station_set_config(&stationConf);
+                debug("CONFIG", "E:SET CONFIG");
                 new_creds=1;
             }
 

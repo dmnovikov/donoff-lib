@@ -6,6 +6,9 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#define  D_FIRST_STRING 1 
+#define  D_LAST_STRING 1
+
 class DDisplay {
   protected:
    int SDA_PIN=5; //D1
@@ -34,7 +37,7 @@ class DDisplay {
       display.setTextSize(0);
       display.setTextColor(WHITE);
       display.setCursor(0,0);
-      display.println("hi, this is donoff"); 
+      display.println("hi, donoff"); 
       display.display();
       debug("DISPLAY", "init ok");
       
@@ -56,9 +59,28 @@ class DDisplay {
       pos++;
     };
 
+     int show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){
+      String outS;
+      if(isFirst){
+        //debug("DISPLAY", "CLEAR DISPLAY");
+        display.clearDisplay();
+        pos=0;
+      }
+      display.setCursor(0,pos*10);
+      //debug("DISPLAY", "pos="+String(pos)+"; first="+String(isFirst));
+      if(_ps->is_ready() && _ps->is_started()  )
+         outS=short_name+":"+_ps->get_val_Str();
+      else outS=short_name+":nc";
+      
+      display.println(outS);
+      display.display();
+      pos++;
+    };
+
      int show_str(int ppos, String name, String data,  bool isFirst, bool isLast){
       String outS;
       if(isFirst){
+        //debug("DISPLAY", "CLEAR DISPLAY");
         display.clearDisplay();
         pos=0;
       }

@@ -45,7 +45,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       if (DS1820_OUT) {
         debug("SUPPLY_INIT", "DS_OUT INIT");
         ds_out = new DigitalDS1820Sensor(_s, OUT_WIRE_BUS);
-        ds_out->init("DS_OUT", DS_OUT_CHANNEL, DS1820_FILTERED,que_sensor_states);
+        ds_out->init("ds_out", DS_OUT_CHANNEL, DS1820_FILTERED,que_sensor_states);
       }
 
       
@@ -143,6 +143,24 @@ class DSupplyDonoffUni: public DSupplyDonoff {
         debug("LSCHM_LOOP", "r[1] lschm2="+String(_s->lscheme_num2));
         lschm_on_off(r[1], _s->lscheme_num2);
       }
+    };
+
+    int virtual display_loop() {
+
+      DSupplyDonoff::display_loop();
+
+      String outStr="";
+      
+      if(RELAY2){
+          if (r[1]->is_on()) outStr += "r2:on"; else outStr += "r2:off";
+          D->show_str(1, outStr, "", !D_FIRST_STRING, !D_LAST_STRING);
+      }
+
+        // D.show_sensor(1, "t:",  ds1820_get_filtered_val(), 100,0,0);
+      if(DS1820_OUT){
+          D->show_sensor(1, "t2", ds_out,  !D_FIRST_STRING, !D_LAST_STRING);
+      }
+
     };
 
 

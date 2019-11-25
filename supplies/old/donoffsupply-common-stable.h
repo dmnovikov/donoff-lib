@@ -412,7 +412,7 @@ class DSupply: public DBase {
 
       if(DDISPLAY && RELAY1){
          if (r1->is_on()) outStr += "r1:on"; else outStr += "r1:off";
-        D->show_str(1, outStr, "", 1, 0);
+        D->show_str(1, outStr, "", DISPLAY_FIRST_STRING, !DISPLAY_LAST_STRING);
       }
 
       if (DDISPLAY && DS1820_INT) {

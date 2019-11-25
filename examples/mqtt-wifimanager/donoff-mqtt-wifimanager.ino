@@ -1,9 +1,11 @@
 /* ********** Config supply *******************/
 #define RELAY1 0
-#define RELAY2 1
+#define RELAY2 0
 #define DS1820_INT 1
 #define DS1820_OUT 1
-#define SCT013_1 1
+#define SCT013_1 0
+#define DDISPLAY 1
+
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
 
@@ -22,9 +24,9 @@
 #include <donoffrelay.h>
 // #include <supplies/donoffsupply-common.h>
 // #include <supplies/donoffsupply-base.h>
-//#include <supplies/donoffsupply-donoff-universal.h>
+#include <supplies/donoffsupply-donoff-universal.h>
 
-#include <supplies/donoffsupply-donoff.h>
+//#include <supplies/donoffsupply-donoff.h>
 
 //#include <supplies/donoffsupply-sct013.h>
 #include <PubSubClient.h>
@@ -49,14 +51,16 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 // DSupplyBase supply(&settings);
 
-//DSupplyDonoffUni supply(&settings);
+DSupplyDonoffUni supply(&settings);
 
-DSupplyDonoff supply(&settings);
+//DSupplyDonoff supply(&settings);
 
 //DSupplySCT013Collector supply(&settings);
 
 
 DNotifyerEmailMQTT notifyer(&settings, &client);
+
+struct station_config stationConf;
 
 
 Ticker ticker;
@@ -98,6 +102,13 @@ void setup()
 
   /* try to connect to wifi*/
   Serial.println("Connecting Wifi...");
+
+  
+
+  wifi_station_get_config (&stationConf);
+
+  Serial.println(String("saved ssid:"+String((char*)stationConf.ssid)+", saved pass=" + String((char*) stationConf.password)));
+  
 
   WiFi.persistent(false);
   WiFi.mode(WIFI_STA);

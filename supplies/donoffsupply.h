@@ -20,7 +20,11 @@
 
 
 #if !defined(DDISPLAY)
-    #define DDISPLAY 1
+    #define DDISPLAY 0
+#endif
+
+#if !defined(DOFFLINE)
+    #define DOFFLINE 0
 #endif
 
 #include <Queue.h>
@@ -112,7 +116,7 @@ class DSupply: public DBase {
     int virtual slow_loop(int mycounter){
          if (mycounter == 0) {
           //debug("SUPPLY_LOOP", "Reconnect loop");
-          reconnect_loop();
+          if(!DOFFLINE) reconnect_loop();
         }
 
          if (mycounter == 2) {
@@ -129,7 +133,7 @@ class DSupply: public DBase {
         }
 
         if(mycounter==5){
-          display_loop();
+          if (DDISPLAY) display_loop();
         }
 
 

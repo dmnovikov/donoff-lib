@@ -114,7 +114,7 @@ enum sensor_states {
 
 //************************** PINS **********************************************
 
-#define PINS_SET_V1
+#define PINS_SET_V2
 
 #ifdef PINS_SET_V1
     #define BUTTON_PIN   0      //d3
@@ -136,58 +136,6 @@ enum sensor_states {
     #define RELAY2_PIN 5 //new d6 //old d8
 #endif
 
-
-/*
-#define BUTTON_PIN   0      //d3
-
-//#define RELAY1_PIN    5   //d1  
-#define RELAY1_PIN    12   //d6 //new v2.0
-
-#define SONOFF_LED      2  //d4
-#define IN_WIRE_BUS    14  //d5
-
- #define ADC_INT_PIN A0
-
-#ifdef DS1820
-  //#define OUT_WIRE_BUS 4     //d2
-  #define OUT_WIRE_BUS D7     //d2 //new v2.0
-#endif
-
-
-#define OUT_WIRE_BUS 4     //d2
-
-#define DS1820_2_PIN D7  //d7 //d8 old
-
-
-#define ANEMOMETER_PIN 4
-#define ANALOG_A0_PIN A0
-
-#ifdef PRESSURE2_SHIELD 
- #define PWR_PIN D8  
-  #define SDA_PIN 13        //d7
-  #define SCL_PIN 12        //d6
-#endif
-
-#ifdef ADC_SHIELD_PWR 
-  #define SDA_PIN 13        //d7
-  #define SCL_PIN 12        //d6
-  #define PWR_PIN D8        //d8 to pwer ADC
-  #define ADC1115_PWR_N 3
-  #define ADCPOWERINT 1
-#endif
-
-
-#define RELAY2_PIN D6 //new d6 //old d8
-
-
-
-//#ifdef MAX6675_SHIELD
- #define DO_PIN D6
- #define CS_PIN D7
- #define CLK_PIN D8
-//#endif
-
-*/
 
 //************** DEBUG  ***************************
 
