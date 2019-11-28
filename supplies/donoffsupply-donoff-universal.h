@@ -72,7 +72,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
        DSupplyDonoff::service_loop();
 
        if(pub->is_connected() && DS1820_OUT){
-            pub->publish_sensor(ds_in);
+            pub->publish_sensor(ds_out);
        }
 
        if(pub->is_connected() && RELAY2){
@@ -93,7 +93,40 @@ class DSupplyDonoffUni: public DSupplyDonoff {
          if(mycounter==7){
              aofh_loop();
          }
+
+         if(mycounter==8){
+             hotter_cooler_loop();
+         }
+
      };
+
+    int virtual hotter_cooler_loop() {
+      if (_s->hotter) {
+        if(_s->lscheme_num>0 || _s->autooff_hours >0){
+            pub->publish_to_info_topic("E:ignore hotter, lschm,aofs");
+        }else{
+            hotter_loop();
+        }
+      } else if (_s->cooler){
+         if(_s->lscheme_num>0 || _s->autooff_hours >0){
+            pub->publish_to_info_topic("E:ignore cooler, lschm,aofs");
+        }else{
+           cooler_loop();
+        }
+      }
+    };
+
+     int virtual hotter_loop(){
+      if(DS1820_OUT) hotter(ds_out, r[0]);
+    };
+
+    int virtual cooler_loop(){
+      if(DS1820_OUT) cooler(ds_out,r[0]);
+    };
+
+
+
+
 
     int virtual do_want_event(){
       DSupplyDonoff::do_want_event();
@@ -112,12 +145,6 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       
 
     };
-
-
-
-    int virtual fast_loop() {
-        aofs_loop();
-     };
 
   
      int virtual aofs_loop() {
@@ -139,10 +166,11 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
       DSupplyDonoff::lschm_loop();
 
-      if (_s->lscheme_num2 > 0) {
+      if (RELAY2 && _s->lscheme_num2 > 0) {
         debug("LSCHM_LOOP", "r[1] lschm2="+String(_s->lscheme_num2));
         lschm_on_off(r[1], _s->lscheme_num2);
       }
+      
     };
 
     int virtual display_loop() {
@@ -162,16 +190,6 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       }
 
     };
-
-
-
-
-
-
-
-    
-
-
 
 };
 

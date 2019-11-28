@@ -114,7 +114,6 @@ enum sensor_states {
 
 //************************** PINS **********************************************
 
-#define PINS_SET_V2
 
 #ifdef PINS_SET_V1
     #define BUTTON_PIN   0      //d3

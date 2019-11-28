@@ -9,7 +9,16 @@
 #define  D_FIRST_STRING 1 
 #define  D_LAST_STRING 1
 
-class DDisplay {
+class DDisplay:public DBase{
+ public:
+  int virtual init(){};
+  DDisplay(WMSettings * __s): DBase(__s) {};
+  int virtual show_sensor(int ppos, String name, long data,int mult,  bool isFirst, bool isLast){};
+  int virtual show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){};
+  int virtual show_str(int ppos, String name, String data,  bool isFirst, bool isLast){};
+};
+
+class DDisplay_SSD1306 :public DDisplay{
   protected:
    int SDA_PIN=5; //D1
    int SCL_PIN=4; //D2
@@ -26,9 +35,9 @@ class DDisplay {
    Adafruit_SSD1306 display;
    
   public:
-    DDisplay(): display(0) {};
+    DDisplay_SSD1306(WMSettings * __s): DDisplay(__s), display(0) {};
 
-    int init(){
+    int virtual init(){
       
       display.begin(SSD1306_SWITCHCAPVCC, 0x3C); 
       display.display();
@@ -43,7 +52,7 @@ class DDisplay {
       
     };
 
-    int show_sensor(int ppos, String name, long data,int mult,  bool isFirst, bool isLast){
+    int virtual show_sensor(int ppos, String name, long data,int mult,  bool isFirst, bool isLast){
       String outS;
       if(isFirst){
         display.clearDisplay();
@@ -59,7 +68,7 @@ class DDisplay {
       pos++;
     };
 
-     int show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){
+     int virtual show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){
       String outS;
       if(isFirst){
         //debug("DISPLAY", "CLEAR DISPLAY");
@@ -77,7 +86,7 @@ class DDisplay {
       pos++;
     };
 
-     int show_str(int ppos, String name, String data,  bool isFirst, bool isLast){
+     int virtual show_str(int ppos, String name, String data,  bool isFirst, bool isLast){
       String outS;
       if(isFirst){
         //debug("DISPLAY", "CLEAR DISPLAY");
@@ -96,14 +105,14 @@ class DDisplay {
     };
     
     
-    void debug(String debugStr) {
-      String debug_outStr = "DEBUG:<UNDEF SOURCE>:" + debugStr;
-      if (debug_level > 0) Serial.println(debug_outStr);
-    };
-    void debug(String sourceStr, String debugStr) {
-      String debug_outStr = "DEBUG:" + sourceStr + ":" + debugStr;
-      if (debug_level > 0) Serial.println(debug_outStr);
-    };
+    // void debug(String debugStr) {
+    //   String debug_outStr = "DEBUG:<UNDEF SOURCE>:" + debugStr;
+    //   if (debug_level > 0) Serial.println(debug_outStr);
+    // };
+    // void debug(String sourceStr, String debugStr) {
+    //   String debug_outStr = "DEBUG:" + sourceStr + ":" + debugStr;
+    //   if (debug_level > 0) Serial.println(debug_outStr);
+    // };
 
 };
 

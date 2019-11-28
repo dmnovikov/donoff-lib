@@ -10,9 +10,11 @@ class SCT013Sensor: public DSensor {
   public:
     EnergyMonitor emon1;
     float Irms = 0;
+    int SENSOR_PIN;
 
   public:
-    SCT013Sensor(WMSettings* __s): DSensor(__s) {
+    SCT013Sensor(WMSettings* __s, int _pin): DSensor(__s) {
+      SENSOR_PIN=_pin;
     };
 
     int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states) {
@@ -28,7 +30,7 @@ class SCT013Sensor: public DSensor {
       MULTIPLIER = 100;
       NEED_ASK_WHILE_WATING=1;
 
-      emon1.current(A0, 31.24);
+      emon1.current(SENSOR_PIN, 31.24);
 
       /***************/
        debug(nameStr, "init ok");

@@ -18,14 +18,24 @@
   #include <notifyers/donoffnotifyer-mqtt-pointer.h>
 #endif
 
-
 #if !defined(DDISPLAY)
     #define DDISPLAY 0
+#endif
+
+#if !defined(DDISPLAY_SSD1306)
+    #define DDISPLAY_SSD1306 0
 #endif
 
 #if !defined(DOFFLINE)
     #define DOFFLINE 0
 #endif
+
+
+#define MAX_LOOPS 10
+#define MAX_SENSORS 10
+#define MAX_LOOP_COUNTER 30
+#define MS_LOOP_TIMING 200
+
 
 #include <Queue.h>
 #include <donoffbutton.h>
@@ -52,7 +62,7 @@ class DSupply: public DBase {
 
     DPublisher* pub;
     DNotifyer* notifyer;
-    DDisplay* D;
+    DDisplay* D=NULL;
 
 
 
@@ -71,8 +81,8 @@ class DSupply: public DBase {
       que_sensor_states = new Queue<sensor_state>(10);
       mytimer = millis();
 
-      if (DDISPLAY) {
-        D = new DDisplay();
+      if (DDISPLAY_SSD1306) {
+        D = new DDisplay_SSD1306(_s);
         D->init();
       }
 
@@ -80,12 +90,9 @@ class DSupply: public DBase {
 
     };
 
-    #define MAX_LOOPS 10
-    #define MAX_SENSORS 10
-
     int supply_loop() {
 
-      if ((millis() - mytimer) >= 300 ) {
+      if ((millis() - mytimer) >= MS_LOOP_TIMING ) {
         //6 sec loop
         if(mycounter >=0 && mycounter<=MAX_LOOPS){
            //debug("SUPPLY_LOOP", "SLOW LOOP");
@@ -104,7 +111,7 @@ class DSupply: public DBase {
         pub_wanted_loop();
        
         //
-        if (mycounter > 25) mycounter = 0;
+        if (mycounter > MAX_LOOP_COUNTER) mycounter = 0;
         mytimer = millis();
 
       }
@@ -119,21 +126,21 @@ class DSupply: public DBase {
           if(!DOFFLINE) reconnect_loop();
         }
 
-         if (mycounter == 2) {
+         if (mycounter == 1) {
           //debug("SUPPLY_LOOP", "Sync loop");
           sync_blink_mode();
         }
 
-        if (mycounter == 3) {
+        if (mycounter == 2) {
           service_loop();
         }
 
-        if(mycounter==4){
+        if(mycounter==3){
           notifyer_loop();
         }
 
-        if(mycounter==5){
-          if (DDISPLAY) display_loop();
+        if(mycounter==4){
+          if(D!=NULL) display_loop();
         }
 
 
@@ -271,7 +278,11 @@ class DSupply: public DBase {
       if (!pub->is_time_synced()) return -1;
       if (_schm_num < 0 || _schm_num > 100) return -1;
       int h = hour();
-      if (_schm_num == 99) return _s->custom_scheme1[h];
+      debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
+      if (_schm_num == 99){
+          debug("IS_DAY","on_bit="+String(_s->custom_scheme1[h]));
+          return _s->custom_scheme1[h];
+      } 
       if (_schm_num == 100) return _s->custom_scheme2[h];
       return get_lschm_mode_bit(h, _schm_num);
     }
@@ -367,6 +378,118 @@ class DSupply: public DBase {
       }
 
     };
+
+     int hotter(DSensor* _sensor, DRelay* _r){
+
+      if(!_s->hotter) return -1;
+       
+      if(!_sensor->is_started_and_ready()){
+        debug("HOTTER", "sensor not ready");
+        if(_r->is_on()) relay_off(_r,"hotter, sensor not ready");
+        return -1;
+      }
+      
+     
+      long sensor_temp=_sensor->get_val();
+      int hotter_settings_temp=get_temp_settings(_s->schm_onoff_num1);
+      int delta=_s->level_delta;
+
+      if (delta<50) delta=delta*10; //old value in eeprom
+
+      if(hotter_settings_temp <100) hotter_settings_temp=hotter_settings_temp*100; //old value in eeprom (in C)
+
+      debug("HOTTER","sensor_t="+String(sensor_temp)+"; settings_temp="+String(hotter_settings_temp)+"; delta="+String(delta));
+
+       //temp bad 
+       
+       if(sensor_temp<hotter_settings_temp){
+         if(_r->is_off()){ 
+           relay_on(_r,"hotter");
+           //publish_relay_status(_r);
+           debug ("HOTTER", "turn on");
+           return 2;
+         }
+         debug("HOTTER","already turned on, nothing to do");     
+         return 0;      
+       }
+
+    
+     //temp ok;
+     debug("HOTTER","temp_ok");
+
+     if(_r->is_off()){
+      debug("HOTTER","nothing to do");
+      return 0;
+     }
+
+     //relay is on
+
+     if(sensor_temp>=hotter_settings_temp+delta){
+      if(_r->is_on()) relay_off(_r,"hotter");
+      //publish_relay_status(_r);
+      debug("HOTTER","temp+delta ok, turn off");
+      return 1;
+     }
+      debug("HOTTER","delta is small, still hot");
+      return 0;
+};
+
+int cooler(DSensor* _sensor, DRelay* _r){
+
+      if(!_s->cooler) return -1;
+       
+      if(!_sensor->is_started_and_ready()){
+        debug("COOLER","sensor not ready");
+        if(_r->is_on()) relay_off(_r,"cooler, sensor err");
+        return -1;
+      }
+      
+     
+      long sensor_temp=_sensor->get_val();
+      int hotter_settings_temp=get_temp_settings(_s->schm_onoff_num1);
+      int delta=_s->level_delta;
+
+      if (delta<50) delta=delta*10; //old value in eeprom
+
+      if(hotter_settings_temp <100) hotter_settings_temp=hotter_settings_temp*100; //old value in eeprom (in C)
+
+      debug("COOLER","sensor_t="+String(sensor_temp)+"; settings_temp="+String(hotter_settings_temp)+"; delta="+String(delta));
+
+       //temp bad 
+       
+       if(sensor_temp>hotter_settings_temp){
+         if(_r->is_off()){ 
+           relay_on(_r,"cooler");
+           //publish_relay_status(_r);
+           debug ("COOLER", "turn on");
+           return 2;
+         }
+         debug("COOLER","already turned on, nothing to do");     
+         return 0;      
+       }
+
+    
+     //temp ok;
+     debug("COOLER", "temp_ok");
+
+     if(_r->is_off()){
+      debug("COOLER","nothing to do");
+      return 0;
+     }
+
+     //relay is on
+
+     if(sensor_temp<=hotter_settings_temp-delta){
+      if(_r->is_on()) relay_off(_r,"cooler");
+      //publish_relay_status(_r);
+      debug("COOLER","temp-delta ok, turn off");
+      return 1;
+     }
+      debug("COOLER","delta is small, still cooling");
+      return 0;
+};
+
+
 
   
 

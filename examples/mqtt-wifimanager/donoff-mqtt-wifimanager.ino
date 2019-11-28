@@ -1,10 +1,18 @@
 /* ********** Config supply *******************/
-#define RELAY1 0
 #define RELAY2 0
 #define DS1820_INT 1
 #define DS1820_OUT 1
-#define SCT013_1 0
-#define DDISPLAY 1
+#define DDISPLAY_SSD1306 0
+
+#define PINS_SET_V1
+
+//when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1
+
+#ifdef PINS_SET_V1
+  #undef DDISPLAY_SSD1306
+  #define DDISPLAY_SSD1306 0
+#endif
+
 
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/

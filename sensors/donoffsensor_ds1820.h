@@ -56,6 +56,7 @@ class DigitalDS1820Sensor: public DSensor {
     long virtual get_long_from_sensor() {
       float raw = ds_sensor.getTempCByIndex(0);
       //debug(nameStr, "DS1820_RAW:" + String(raw) + "; " + "ms_req=" + String(start_request_ms));
+      //debug(nameStr, "DS1820_RAW:" + String(raw));
       return long (raw * MULTIPLIER);
     };
 

@@ -111,12 +111,12 @@ class DSupplyDonoff: public DSupplyBase {
 
          DSupplyBase::slow_loop(mycounter);
 
-         if(mycounter==6){
+         if(mycounter==5){
              //debug("SUPPLY", "LSCHM_LOOP");
              lschm_loop();
          }
 
-         if(mycounter==7){
+         if(mycounter==6){
              aofh_loop();
          }
      };

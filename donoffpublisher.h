@@ -341,7 +341,7 @@ public:
 
 
       if (shStr.startsWith (I_BSCHM)) {
-        String outS = "d24: ";
+        String outS = "";
         //debug("PUBLISHER",shStr);
         int point = shStr.indexOf(":");
         String testVal = shStr.substring(point + 1, shStr.length());

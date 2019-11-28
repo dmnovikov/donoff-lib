@@ -40,7 +40,7 @@ class DRelay: public DBase {
       num=_num;
       init_ok=1;
       //debug("INITR1","name="+nameStr);
-      //debug("RELAY", "PIN:"+String(RELAY1_PIN));
+       debug("RELAY:"+nameStr, "PIN:"+String(RELAY1_PIN));
     };
 
     int is_notifyed_h(){
@@ -87,11 +87,13 @@ class DRelay: public DBase {
     };
 
     unsigned long turn_on() {
-      // debug("Let's on, pin="+String(pin));
+      debug("RELAY", "Let's on, pin="+String(pin));
       digitalWrite(pin, HIGH);
       if (digitalRead(pin) == HIGH) {
         start_ms = millis();
         stop_ms = 0;
+      }else{
+        debug("RELAY", "Error, Relay didnt start");
       }
       return start_ms;
     };

@@ -1,5 +1,5 @@
-#ifndef donoffsupplysct013collector_h
-#define donoffsupplysct013collector_h
+#ifndef donoffsupplymultisct013collector_h
+#define donoffsupplymultisct013collector_h
 
 #include <donoffrelay.h>
 #include <donoffdisplay.h>
@@ -7,29 +7,29 @@
 #include <donoffbutton.h>
 
 #include <supplies/donoffsupply-base.h>
-#include <sensors/donoffsensor_sct013.h>
+#include <sensors/donoff-multisensor-sct013.h>
 
 #ifdef D_MQTT
-    const char SCT013_OUT_CHANNEL[]="/out/sct013_1";
+    const char SCT013_X3_OUT_CHANNEL[]="/out/sct013x3";
 #endif
 
 
-class DSupplySCT013Collector: public DSupplyBase {
+class DSupplyMultiSCT013Collector: public DSupplyBase {
 
   protected:
-    SCT013Sensor *sct013[4]={NULL, NULL, NULL, NULL};
+    DMultiSensorSCT013 *multi_sct013;
   
 
   public:
-    DSupplySCT013Collector(WMSettings * __s): DSupplyBase(__s) {};
+    DSupplyMultiSCT013Collector(WMSettings * __s): DSupplyBase(__s) {};
 
     int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupplyBase::init(_notifyer, _pub, _q);
         init_ok = 0;
       
         debug("SUPPLY_INIT", "SCT013_1 INIT");
-        sct013[0] = new SCT013Sensor(_s, A0);
-        sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states);
+        multi_sct013 = new DMultiSensorSCT013 (_s);
+        multi_sct013->init(12, 13, "SCT013x3", SCT013_X3_OUT_CHANNEL, 0,que_sensor_states);
         
 
         init_ok=1;
