@@ -104,12 +104,14 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       if (_s->hotter) {
         if(_s->lscheme_num>0 || _s->autooff_hours >0){
             pub->publish_to_info_topic("E:ignore hotter, lschm,aofs");
+            _s->hotter=0;
         }else{
             hotter_loop();
         }
       } else if (_s->cooler){
          if(_s->lscheme_num>0 || _s->autooff_hours >0){
             pub->publish_to_info_topic("E:ignore cooler, lschm,aofs");
+            _s->cooler=0;
         }else{
            cooler_loop();
         }

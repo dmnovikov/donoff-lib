@@ -60,14 +60,7 @@ class DigitalDS1820Sensor: public DSensor {
       return long (raw * MULTIPLIER);
     };
 
-    float get_float_val() {
-      return (float)sens.val / (float)MULTIPLIER;
-    };
-
-    String virtual  get_val_Str() {
-      return String(get_float_val());
-    };
-
+    
 
     int virtual fake_val(long _val) {
       if (_val == 85) return 1; //this is first "test" val of ds1820, ignore

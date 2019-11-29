@@ -265,9 +265,9 @@ class DSensor: public DBase {
            
     };
 
-    String virtual  get_val_Str() {
-      return String(sens.val);
-    };
+    // String virtual  get_val_Str() {
+    //   return String(sens.val);
+    // };
 
     String get_nameStr() {
       return nameStr;
@@ -304,6 +304,15 @@ class DSensor: public DBase {
     long get_val() {
       return sens.val;
     };
+
+    float get_float_val() {
+      return (float)sens.val / (float)MULTIPLIER;
+    };
+
+    String virtual  get_val_Str() {
+      return String(get_float_val());
+    };
+
 
 };
 

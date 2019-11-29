@@ -37,11 +37,30 @@ class DSupplyMultiSCT013Collector: public DSupplyBase {
     };
 
    //first sensor loop
-   int sensors_loop(int sensor_num){
+   int virtual sensors_loop(int sensor_num){
+
        if(sensor_num==1){
-          sct013[0]->sensor_loop();
-          debug("SCT013_OUT", sct013[0]->get_val_Str());
+          multi_sct013->multi_sensor_loop(sensor_num);
+          debug("SCT013_OUT_1", multi_sct013->sensors[0]->get_val_Str());
        }
+
+       if(sensor_num==2){
+          multi_sct013->multi_sensor_loop(sensor_num);
+          debug("SCT013_OUT_2", multi_sct013->sensors[1]->get_val_Str());
+       }
+
+      if(sensor_num==3){
+          multi_sct013->multi_sensor_loop(sensor_num);
+          debug("SCT013_OUT_3", multi_sct013->sensors[2]->get_val_Str());
+       }
+
+       if(sensor_num==4){
+          multi_sct013->multi_sensor_loop(sensor_num);
+          debug("SCT013_ALL",multi_sct013->get_val_Str());
+       }
+
+
+
    };
 
 
@@ -50,7 +69,17 @@ class DSupplyMultiSCT013Collector: public DSupplyBase {
 
        DSupplyBase::service_loop();
 
-       if (pub->is_connected()) pub->publish_sensor(sct013[0]);
+       if (pub->is_connected()) {
+            //debug("SERVICE_LOOP", "PUBLISH SCT-XX");
+
+             for(int i=0; i<=2; i++){
+                  pub->publish_sensor(multi_sct013->sensors[i]);
+                  //debug("SERVICE_LOOP", "PUBLISH SCT-XX:"+String(i));
+             }
+
+             pub->publish_sensor(multi_sct013);
+
+       }
 
    };
 
