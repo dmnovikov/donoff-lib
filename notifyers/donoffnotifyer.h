@@ -69,7 +69,7 @@ public:
     SubjStr += stateStr;
     BodyStr = "sensor value=" + String(state->val) + ", " + "sensor level=" + String(state->level);
     debug("NOTIFYER", SubjStr + ":::" + BodyStr);
-    //send_notify(SubjStr, BodyStr);
+    send_notify(SubjStr, BodyStr);
   };
 
   int notify_working_hours(DRelay *r){

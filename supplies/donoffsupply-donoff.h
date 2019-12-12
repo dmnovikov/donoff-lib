@@ -40,6 +40,8 @@ class DSupplyDonoff: public DSupplyBase {
   public:
     DSupplyDonoff(WMSettings * __s): DSupplyBase(__s) {};
 
+    int virtual notify_sesnors_loop()=0;
+
     int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupplyBase::init(_notifyer, _pub, _q);
         init_ok = 0;
@@ -79,8 +81,10 @@ class DSupplyDonoff: public DSupplyBase {
    };
 
    int virtual notifyer_loop(){
-      if(!_s->notifyer) return 0;
-       notify_relay_hours_loop();
+      if(!_s->notifyer || _s->hours_on_notify==0 ) return 0;
+      
+      if(_s->hours_on_notify!=0) notify_relay_hours_loop();
+      notify_sesnors_loop();
    };
 
    int virtual notify_relay_hours_loop(){

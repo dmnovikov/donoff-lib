@@ -60,13 +60,13 @@ class DConfigMQTT: public DConfig{
         char c_ssid[32];
         char c_password[64];
 
+        wifi_station_get_config (&stationConf);
+
+        debug("CONFIG", "old ssid="+String((char*)stationConf.ssid)+", old pass=" + String((char*) stationConf.password));
+
         if (newssid != "" && newpass != "")
         {
-            //debug("CONFIG", "B:GET CONFIG");
-            wifi_station_get_config (&stationConf);
-            //debug("CONFIG", "E:GET CONFIG");
-             debug("CONFIG", "old ssid:"+String((char*)stationConf.ssid)+", old pass=" + String((char*) stationConf.password));
-
+            
             int  e1=strcmp((char*) stationConf.ssid,  newssid.c_str());
             int  e2=strcmp((char*) stationConf.password,   newpass.c_str());
 
@@ -83,22 +83,27 @@ class DConfigMQTT: public DConfig{
    
                 //debug("CONFIG", "B:SET CONFIG");
                 debug("CONFIG", "new ssid:"+String((char*)stationConf.ssid)+", new pass=" + String((char*) stationConf.password));
-                wifi_station_set_config(&stationConf);
-                debug("CONFIG", "E:SET CONFIG");
+                wifi_station_set_config_current(&stationConf);
+                //debug("CONFIG", "E:SET CONFIG");
                 new_creds=1;
+                debug("CONFIG", "newcreds="+String(new_creds)+", new ssid:"+String((char*)stationConf.ssid)+", new pass=" + String((char*) stationConf.password));
             }
-
-            debug("CONFIG", "newcreds="+String(new_creds)+", new ssid:"+String((char*)stationConf.ssid)+", new pass=" + String((char*) stationConf.password));
-
 
         }
 
         WiFi.disconnect(); 
-        WiFi.mode(WIFI_STA);
+        //WiFi.mode(WIFI_STA);
 
         // if(new_creds){
-            debug("CONFIG", "start Wifi Client with ssid\pass");
+            //debug("CONFIG", "start Wifi Client with ssid\pass");            
+        debug("CONFIG", "Starting wifi with ssid="+String((char*)stationConf.ssid)+", pass=" + String((char*) stationConf.password));
+        if(String((char*)stationConf.ssid)!="" && String((char*) stationConf.password)!=""){
+            debug("CONFIG", "Start with new ssid\pass");
             WiFi.begin((char*)stationConf.ssid, (char*) stationConf.password);
+        }else{
+            debug("CONFIG", "Start with old ssid\pass");
+            WiFi.begin();
+        }
         // } 
         // else{
         //     debug("CONFIG", "start Wifi Client with saved ssid\pass");
@@ -127,6 +132,10 @@ class DConfigMQTT: public DConfig{
 
     };
 
+    int virtual connect_with_new_creds(){
+
+    }
+
  
     int virtual config(){
       
@@ -140,7 +149,7 @@ class DConfigMQTT: public DConfig{
     //     }
 
         wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, &newssid, &newpass );
-        debug("CONFIG", "GOT FROM WIFIMANAGER - NEWSSID="+newssid+", newpass="+newpass);
+        debug("CONFIG", "GOT FROM WIFIMANAGER - newssid="+newssid+", newpass="+newpass);
 
         connect_new_creds();
         

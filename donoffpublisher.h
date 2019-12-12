@@ -490,6 +490,14 @@ public:
         return 1;
       }
 
+      if (cmdStr == C_TIME_ZONE) {
+       if (set_settings_val_int(cmdStr, valStr, (int*) &_s->time_zone, -15, 15)) {
+          return 2;
+        }
+        return 1;
+      }
+
+
       if (cmdStr == C_AUTO_STOP_HOURS) {
         if (set_settings_val_int( cmdStr, valStr, (int*) &_s->autooff_hours, 0, MAX_AUTOOFF_HOURS)) {
           if (_s->autooff_hours > 0) {

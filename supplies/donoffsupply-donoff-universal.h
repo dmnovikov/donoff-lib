@@ -63,6 +63,14 @@ class DSupplyDonoffUni: public DSupplyDonoff {
               ds_out->sensor_loop();
               debug("DS_OUT", ds_out->get_val_Str());
          }
+         if (DS1820_OUT && _s->notifyer ){
+          long low_level=_s->temp_low_level_notify;
+          long high_level=_s->temp_high_level_notify;
+          //old format (celsius), new format celsius*100
+          if(abs(_s->temp_low_level_notify)<100) low_level=_s->temp_low_level_notify*100;
+          if(abs(_s->temp_high_level_notify)<100) high_level=_s->temp_high_level_notify*100;
+          ds_out->sensor_check_state(low_level,high_level);
+        }
        }
    };
    
@@ -193,7 +201,26 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
     };
 
+     int virtual notify_sesnors_loop(){   
+       
+      if (que_sensor_states->count()==0) return 0;
+      debug("QUE_SENS", String(que_sensor_states->count()) );
+      while(que_sensor_states->count()!=0){
+         sensor_state state=que_sensor_states->pop();
+         debug("QUE_SENS", state.ps->get_nameStr()+":"+String(state.val)+":"+String(state.curr_state)+":"+String(state.prev_state));
+         notifyer->notify_sensor_state(&state);
+      }
+      
+    };
+
+//  int virtual notifyer_loop(){
+
+//    debug("NOTIFYER_LOOP", "sensor notify");
+//  };
+
 };
+
+ 
 
 
 

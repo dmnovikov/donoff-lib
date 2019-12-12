@@ -39,7 +39,7 @@
 #include <TimeLib.h>
 #include <WidgetRTC.h>
 #include <Bounce2.h>
-#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
+#include <WiFiManager-dmn.h>          //https://github.com/tzapu/WiFiManager
 #include <EEPROM.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
