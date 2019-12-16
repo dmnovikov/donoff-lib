@@ -1,7 +1,7 @@
 #ifndef donoffconfig_h
 #define donoffconfig_h
 
-#include <WiFiManager-dmn.h> 
+#include <WiFiManager.h> 
 #include <donoffbase.h>
 
 class DConfig: public DBase{
@@ -22,16 +22,16 @@ class DConfig: public DBase{
     };
 
     int virtual config(){
-       String newssid;
-       String newpass;
-       if (!wm.startConfigPortal("OnDemandAP", NULL, &newssid, &newpass)) {
-            Serial.println("failed to connect and hit timeout");
-            delay(3000);
-            //reset and try again, or maybe put it to deep sleep
+    //    String newssid;
+    //    String newpass;
+    //    if (!wm.startConfigPortal("OnDemandAP", NULL, &newssid, &newpass)) {
+    //         Serial.println("failed to connect and hit timeout");
+    //         delay(3000);
+    //         //reset and try again, or maybe put it to deep sleep
 
-            ESP.reset();
-            delay(5000);
-        }
+    //         ESP.reset();
+    //         delay(5000);
+    //     }
     };
 
    

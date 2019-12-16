@@ -1,7 +1,7 @@
 #ifndef donoffconfigmqtt_h
 #define donoffconfigmqtt_h
 
-#include <WiFiManager-dmn.h> 
+#include <WiFiManager.h> 
 #include <configs/donoffconfig.h>
 #include <donoffbase.h>
 #include <donoffsettings.h>
@@ -83,7 +83,9 @@ class DConfigMQTT: public DConfig{
    
                 //debug("CONFIG", "B:SET CONFIG");
                 debug("CONFIG", "new ssid:"+String((char*)stationConf.ssid)+", new pass=" + String((char*) stationConf.password));
-                wifi_station_set_config_current(&stationConf);
+                //wifi_station_set_config_current(&stationConf);
+                //wifi_station_set_config(&stationConf);
+               
                 //debug("CONFIG", "E:SET CONFIG");
                 new_creds=1;
                 debug("CONFIG", "newcreds="+String(new_creds)+", new ssid:"+String((char*)stationConf.ssid)+", new pass=" + String((char*) stationConf.password));
@@ -91,7 +93,7 @@ class DConfigMQTT: public DConfig{
 
         }
 
-        WiFi.disconnect(); 
+        //WiFi.disconnect(); 
         //WiFi.mode(WIFI_STA);
 
         // if(new_creds){
@@ -99,7 +101,8 @@ class DConfigMQTT: public DConfig{
         debug("CONFIG", "Starting wifi with ssid="+String((char*)stationConf.ssid)+", pass=" + String((char*) stationConf.password));
         if(String((char*)stationConf.ssid)!="" && String((char*) stationConf.password)!=""){
             debug("CONFIG", "Start with new ssid\pass");
-            WiFi.begin((char*)stationConf.ssid, (char*) stationConf.password);
+            //WiFi.begin((char*)stationConf.ssid, (char*) stationConf.password);
+            WiFi.begin(newssid.c_str(), newpass.c_str());
         }else{
             debug("CONFIG", "Start with old ssid\pass");
             WiFi.begin();
@@ -148,10 +151,12 @@ class DConfigMQTT: public DConfig{
     //         delay(5000);
     //     }
 
-        wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, &newssid, &newpass );
-        debug("CONFIG", "GOT FROM WIFIMANAGER - newssid="+newssid+", newpass="+newpass);
+        wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, false);
 
-        connect_new_creds();
+        //wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, &newssid, &newpass );
+        //debug("CONFIG", "GOT FROM WIFIMANAGER - newssid="+newssid+", newpass="+newpass);
+
+        //connect_new_creds();
         
         // WifiCreds w;
         // w.SALT=WIFI_EEPROM_SALT;
@@ -218,7 +223,7 @@ class DConfigMQTT: public DConfig{
 
         save();
         
-        
+        //wifi_station_set_config(&stationConf);
 
     };
 
