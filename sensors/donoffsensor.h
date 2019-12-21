@@ -36,6 +36,10 @@ class DSensor: public DBase {
     int REQUEST_CIRCLE = 750;
     int MULTIPLIER = 1;
     int NEED_ASK_WHILE_WATING=0;
+    int TYPE=0; //0 - default type of sensor
+
+    bool NEED_BASELOG=0; 
+    int  BASELOG_PERIOD=0;
 
 
     ulong low_start_ms = 0;
@@ -66,7 +70,7 @@ class DSensor: public DBase {
 
     int virtual req_sensor() {};
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states){
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=0, int _need_baselog=0){
       que_states=_que_sensor_states;
       nameStr=_name;
       channelStr=_chname;
@@ -76,6 +80,9 @@ class DSensor: public DBase {
       sens.v[1] = NOT_READY_VAL;
       sens.v[2] = NOT_READY_VAL;
       sens.val =  NOT_READY_VAL;
+      TYPE=_type;
+      NEED_BASELOG=_need_baselog;
+
 
       init_ok = 1;
     };
@@ -87,10 +94,6 @@ class DSensor: public DBase {
     int virtual nosensor_val(long val){
       if (val==NO_SENSOR_VAL) return 1;
       return 0;
-    };
-
-    String get_channelStr(){
-        return channelStr;
     };
 
     int virtual sensor_loop() {
@@ -312,6 +315,32 @@ class DSensor: public DBase {
     String virtual  get_val_Str() {
       return String(get_float_val());
     };
+
+    String virtual  get_longval_Str() {
+      return String(sens.val);
+    };
+
+
+    String get_channelStr(){
+        return channelStr;
+    };
+
+    int get_type(){
+      return TYPE;
+    };
+
+    int get_multiplier(){
+      return MULTIPLIER;
+    };
+
+    bool need_baselog(){
+      return NEED_BASELOG;
+    };
+
+    void set_baselog(bool v){
+      NEED_BASELOG=v;
+    };
+
 
 
 };

@@ -1,11 +1,7 @@
 #ifndef donoffsupplydonoffuniversal_h
 #define donoffsupplydonoffuniversal_h
 
-#include <donoffrelay.h>
-#include <donoffdisplay.h>
-#include <configs/donoffconfig-mqtt.h>
 #include <supplies/donoffsupply-donoff.h>
-#include <donoffbutton.h>
 
 #ifdef D_MQTT
     const char DS_OUT_CHANNEL[] = "/out/temp_out";
@@ -45,10 +41,8 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       if (DS1820_OUT) {
         debug("SUPPLY_INIT", "DS_OUT INIT");
         ds_out = new DigitalDS1820Sensor(_s, OUT_WIRE_BUS);
-        ds_out->init("ds_out", DS_OUT_CHANNEL, DS1820_FILTERED,que_sensor_states);
+        ds_out->init("ds_out", DS_OUT_CHANNEL, DS1820_FILTERED,que_sensor_states, DEFAULT, 1);
       }
-
-      
         init_ok=1;
     
     };

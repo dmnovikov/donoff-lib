@@ -1,23 +1,8 @@
 #ifndef donoffsupplyconfigbutton_h
 #define donoffsupplyconfigbutton_h
 
-#include <donoffrelay.h>
-#include <donoffdisplay.h>
+
 #include <configs/donoffconfig-mqtt.h>
-#include <donoffbutton.h>
-
-// #define D_MQTT
-
-#ifdef D_BLYNK
-  #include <donoffpublisher_blynk.h>
-#endif
-
-#ifdef D_MQTT
-  #include <donoffpublisher_mqtt.h>
-#endif
-
-#include <Queue.h>
-#include <donoffbutton.h>
 #include <supplies/donoffsupply.h>
 #include <configs/donoffconfig-mqtt.h>
 

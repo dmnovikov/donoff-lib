@@ -1,11 +1,6 @@
 #ifndef donoffsupplysct013collector_h
 #define donoffsupplysct013collector_h
 
-#include <donoffrelay.h>
-#include <donoffdisplay.h>
-#include <configs/donoffconfig-mqtt.h>
-#include <donoffbutton.h>
-
 #include <supplies/donoffsupply-base.h>
 #include <sensors/donoffsensor_sct013.h>
 
@@ -29,7 +24,7 @@ class DSupplySCT013Collector: public DSupplyBase {
       
         debug("SUPPLY_INIT", "SCT013_1 INIT");
         sct013[0] = new SCT013Sensor(_s, A0);
-        sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states);
+        sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states,2,1);
         
 
         init_ok=1;

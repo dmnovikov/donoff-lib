@@ -5,16 +5,17 @@
 #include <donoffdisplay.h>
 #include <configs/donoffconfig-mqtt.h>
 #include <donoffbutton.h>
+#include <Queue.h>
 
 
 // #define D_MQTT
 
 #ifdef D_BLYNK
-  #include <donoffpublisher_blynk.h>
+  #include <publishers/donoffpublisher_blynk.h>
 #endif
 
 #ifdef D_MQTT
-  #include <donoffpublisher_mqtt.h>
+  #include <publishers/donoffpublisher_mqtt.h>
   #include <notifyers/donoffnotifyer-mqtt-pointer.h>
 #endif
 
@@ -36,9 +37,6 @@
 #define MAX_LOOP_COUNTER 30
 #define MS_LOOP_TIMING 200
 
-
-#include <Queue.h>
-#include <donoffbutton.h>
 
 class DSupply: public DBase {
   private:

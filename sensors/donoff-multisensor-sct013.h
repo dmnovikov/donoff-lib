@@ -34,7 +34,7 @@ class DMultiSensorSCT013: public DSensor {
         
     };
 
-    int virtual init(int _pin1, int _pin2, String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states){
+    int virtual init(int _pin1, int _pin2, String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=3){
    
       MULTI_PIN1=_pin1;
       MULTI_PIN2=_pin2;
@@ -51,7 +51,7 @@ class DMultiSensorSCT013: public DSensor {
       MULTIPLIER = 100;
       NEED_ASK_WHILE_WATING=1;
 
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type);
 
       sensors[0]= new SCT013Sensor(_s, A0);
       sensors[0]->init("SCT013_1",SCT013_1_OUT_CHANNEL, 0, _que_sensor_states);

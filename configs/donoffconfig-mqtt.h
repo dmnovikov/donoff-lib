@@ -222,6 +222,8 @@ class DConfigMQTT: public DConfig{
         // delete p6;
 
         save();
+
+        WiFi.begin();
         
         //wifi_station_set_config(&stationConf);
 

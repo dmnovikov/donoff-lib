@@ -1,11 +1,6 @@
 #ifndef donoffsupplymultisct013collector_h
 #define donoffsupplymultisct013collector_h
 
-#include <donoffrelay.h>
-#include <donoffdisplay.h>
-#include <configs/donoffconfig-mqtt.h>
-#include <donoffbutton.h>
-
 #include <supplies/donoffsupply-base.h>
 #include <sensors/donoff-multisensor-sct013.h>
 

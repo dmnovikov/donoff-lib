@@ -17,10 +17,11 @@ class SCT013Sensor: public DSensor {
       SENSOR_PIN=_pin;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=2, int _need_baselog=0) {
       
       
-        
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
       START_DELAY = 30000;
@@ -29,8 +30,10 @@ class SCT013Sensor: public DSensor {
       // REQUEST_CIRCLE = 750;
       MULTIPLIER = 100;
       NEED_ASK_WHILE_WATING=1;
+      
+      debug("INITDCT013", "type="+String(_type));
 
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states);
+     
 
       
       emon1.current(SENSOR_PIN, 31.24);

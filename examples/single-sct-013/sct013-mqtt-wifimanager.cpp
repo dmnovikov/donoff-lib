@@ -1,15 +1,10 @@
-/* ********** Config supply *******************/
-#define RELAY2 0
-#define DS1820_INT 1
-#define DS1820_OUT 1
-#define DDISPLAY_SSD1306 0
-#define DTIME_ZONE 2
+
 
 #define PINS_SET_V1
 
 //when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1
 
-#ifdef PINS_SET_V2
+#ifdef PINS_SET_V1
   #undef DDISPLAY_SSD1306
   #define DDISPLAY_SSD1306 0
 #endif
@@ -33,11 +28,11 @@
 #include <donoffrelay.h>
 // #include <supplies/donoffsupply-common.h>
 // #include <supplies/donoffsupply-base.h>
-#include <supplies/donoffsupply-donoff-universal.h>
+//#include <supplies/donoffsupply-donoff-universal.h>
 
 //#include <supplies/donoffsupply-donoff.h>
 
-//#include <supplies/donoffsupply-sct013.h>
+#include <supplies/donoffsupply-sct013.h>
 #include <PubSubClient.h>
 
 
@@ -60,11 +55,11 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 // DSupplyBase supply(&settings);
 
- DSupplyDonoffUni supply(&settings);
+// DSupplyDonoffUni supply(&settings);
 
 //DSupplyDonoff supply(&settings);
 
-//DSupplySCT013Collector supply(&settings);
+DSupplySCT013Collector supply(&settings);
 
 
 DNotifyerEmailMQTT notifyer(&settings, &client);

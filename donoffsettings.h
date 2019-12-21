@@ -19,6 +19,8 @@ const char PARAMS_CHANNEL[]="/in/params";
 
 const char TOPIC_SENDMAIL[] = "/sys/sendmail";
 
+const char TOPIC_SENSOR_BASELOG[] = "/sys/sensor_baselog";
+
 #endif
 
 
@@ -242,7 +244,7 @@ typedef struct {
   bool     custom_scheme2[24]={1,1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   //uint      custom_scheme2=0B101010101010101010101010;
   int      custom_level_notify1=-128;
-  bool      ads_shield=0;
+  bool     baselog=0;
   
 // ** hotter \ cooler 
   bool      hotter=0;

@@ -4,7 +4,7 @@
 //#include <>
 #include <donoffcommands.h>
 #include <donoffbase.h>
-#include <donoffpublisher.h>
+#include <publishers/donoffpublisher.h>
 
 class DPublisherMQTT : public DPublisher
 {
@@ -185,6 +185,17 @@ public:
     int virtual publish_sensor(DSensor * _sensor){
        if (!is_connected()) return 0;   
       _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
+
+      if(_sensor->need_baselog()){
+      
+        if(_sensor->is_ready() && _sensor->is_started()){
+          debug("BASELOG", _sensor->get_nameStr()+":Send to database sensor");
+          baselog_sensor(_sensor);
+        }else{
+          debug("BASELOG", _sensor->get_nameStr()+":Skip baselog, sensor is not ready");
+        } 
+
+      }
     };
 
     int virtual publish_relay_state(DRelay * _r)
@@ -214,5 +225,36 @@ public:
       if (!is_connected()) return 0;
      _c->publish(form_full_topic(_r->get_downtime_channel_str()).c_str(), _r->get_downtime_str().c_str());
     };
+
+
+    int virtual baselog_sensor(DSensor * _sensor){
+      if (!is_connected()) return 0;   
+      DynamicJsonBuffer jsonBuffer;
+
+      JsonObject &root = jsonBuffer.createObject();
+      String json_str;
+      root["dev"] = _s->dev_id;
+      root["user"] = _s->mqttUser;
+      root["s_type"] = String(_sensor->get_type());
+      root["name"] = String(_sensor->get_nameStr());
+      root["val"] = _sensor->get_longval_Str();
+      root["mult"] = _sensor->get_multiplier();
+
+      root.printTo(json_str);
+      _c->publish(TOPIC_SENSOR_BASELOG, json_str.c_str());
+
+      //debug("BASELOG",json_str);
+
+      // root["body"] = _notifyBody;
+      
+      // int len = json_str.length();
+      // _pub->publish(TOPIC_SENDMAIL, json_str.c_str());
+
+      // _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
+    };
+
   };
+
+
+
 #endif

@@ -18,11 +18,11 @@ class DigitalDS1820Sensor: public DSensor {
   public:
     DigitalDS1820Sensor(WMSettings* __s, int _pin): DSensor(__s), oneWire(_pin), ds_sensor(&oneWire) {};
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=1, int _need_baselog=0) {
       
       
 
-      DSensor::init(_name,_chname, _filtered, _que_sensor_states);
+      DSensor::init(_name,_chname, _filtered, _que_sensor_states, _type);
         
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
@@ -31,6 +31,7 @@ class DigitalDS1820Sensor: public DSensor {
       NEED_FILTERED = _filtered;
       REQUEST_CIRCLE = 750;
       MULTIPLIER = 100;
+      NEED_BASELOG=_need_baselog;
 
      
 
