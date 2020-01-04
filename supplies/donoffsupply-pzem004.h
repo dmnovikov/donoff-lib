@@ -27,8 +27,10 @@ class DSupplyPZEM004: public DSupplyBase {
         init_ok = 0;
       
         debug("SUPPLY_INIT", "PZEM004 INIT");
+        
         pzem004 = new PZEM004Tv30Sensor(_s, PIN1, PIN2);
         pzem004->init("PZEM004", PZEM_004_OUT_CHANNEL, que_sensor_states, 10, 0);
+        
         init_ok=1;
     
     };
@@ -37,7 +39,16 @@ class DSupplyPZEM004: public DSupplyBase {
    int sensors_loop(int sensor_num){
        if(sensor_num==1){
           pzem004->pzem_current->sensor_loop();
-          debug("PZEM004", pzem004->pzem_current->get_val_Str());
+          debug("PZEM004C", pzem004->pzem_current->get_val_Str());
+
+          pzem004->pzem_voltage->sensor_loop();
+          debug("PZEM004V", pzem004->pzem_voltage->get_val_Str());
+
+          pzem004->pzem_power->sensor_loop();
+          debug("PZEM004P", pzem004->pzem_power->get_val_Str());
+
+          pzem004->pzem_energy->sensor_loop();
+          debug("PZEM004E", pzem004->pzem_energy->get_val_Str());
        }
    };
 
@@ -48,6 +59,9 @@ class DSupplyPZEM004: public DSupplyBase {
        DSupplyBase::service_loop();
 
        if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_current);
+       if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_voltage);
+       if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_power);
+       if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_energy);
 
    };
 
