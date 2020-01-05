@@ -203,6 +203,11 @@ public:
         return 1;
       }
 
+      if (shStr == C_BASELOG) {
+        publish_sh_to_info_topic(shStr, String(_s->baselog));
+        return 1;
+      }
+
       if (shStr == C_AUTO_STOP_SEC) {
         publish_sh_to_info_topic( shStr, String(_s->autostop_sec));
         return 1;
@@ -482,6 +487,11 @@ public:
 
       if (cmdStr == C_ON_START) {
         set_settings_val_bool( cmdStr, valStr, &_s->start_on);
+        return 1;
+      }
+
+      if (cmdStr == C_BASELOG) {
+        set_settings_val_bool( cmdStr, valStr, &_s->baselog);
         return 1;
       }
 

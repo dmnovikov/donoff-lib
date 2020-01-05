@@ -8,6 +8,9 @@
     const char SCT013_X3_OUT_CHANNEL[]="/out/sct013x3";
 #endif
 
+#define MULTISENSOR_PIN1 12
+#define MULTISENSOR_PIN2 13
+
 
 class DSupplyMultiSCT013Collector: public DSupplyBase {
 
@@ -24,7 +27,7 @@ class DSupplyMultiSCT013Collector: public DSupplyBase {
       
         debug("SUPPLY_INIT", "SCT013_1 INIT");
         multi_sct013 = new DMultiSensorSCT013 (_s);
-        multi_sct013->init(12, 13, "SCT013x3", SCT013_X3_OUT_CHANNEL, 0,que_sensor_states);
+        multi_sct013->init(MULTISENSOR_PIN1, MULTISENSOR_PIN1, "SCT013x3", SCT013_X3_OUT_CHANNEL, 0,que_sensor_states, SENSOR_TYPE_CURRENT, BASELOG_YES);
         
 
         init_ok=1;

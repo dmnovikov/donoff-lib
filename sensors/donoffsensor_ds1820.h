@@ -18,22 +18,18 @@ class DigitalDS1820Sensor: public DSensor {
   public:
     DigitalDS1820Sensor(WMSettings* __s, int _pin): DSensor(__s), oneWire(_pin), ds_sensor(&oneWire) {};
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=1, int _need_baselog=0) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_baselog) {
       
       
 
-      DSensor::init(_name,_chname, _filtered, _que_sensor_states, _type);
-        
-      NO_SENSOR_VAL = -12700;
-      NOT_READY_VAL = -12800;
-      START_DELAY = 10000;
+      DSensor::init(_name,_chname, _filtered, _que_sensor_states, _type, _need_baselog);
+
+      //ds_1820 needs asking before get results 
       NEED_ASKING = 1;
-      NEED_FILTERED = _filtered;
       REQUEST_CIRCLE = 750;
-      MULTIPLIER = 100;
-      NEED_BASELOG=_need_baselog;
 
-     
+      //25.24C we store as 2524
+      MULTIPLIER = 100;
 
       DeviceAddress tempDeviceAddress;
       ds_sensor.begin();

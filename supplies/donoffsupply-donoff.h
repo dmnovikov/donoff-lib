@@ -37,7 +37,7 @@ class DSupplyDonoff: public DSupplyBase {
        
         debug("SUPPLY_INIT", "DS_IN INIT");
         ds_in = new DigitalDS1820Sensor(_s, IN_WIRE_BUS);
-        ds_in->init("ds_in", DS_IN_CHANNEL, DS1820_NOT_FILTERED,que_sensor_states);
+        ds_in->init("ds_in", DS_IN_CHANNEL, DS1820_NOT_FILTERED,que_sensor_states,SENSOR_TYPE_TEMPERATURE,BASELOG_NO);
 
         init_ok=1;
     

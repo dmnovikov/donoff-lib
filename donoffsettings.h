@@ -78,6 +78,23 @@ enum sensor_states {
  ERR_STATE
 };
 
+
+/* sensors types */
+
+#define SENSOR_TYPE_TEMPERATURE 1
+#define SENSOR_TYPE_CURRENT 2
+#define SENSOR_TYPE_POWER 3
+#define SENSOR_TYPE_VOLTAGE 4
+#define SENSOR_TYPE_ENERGY 5
+
+
+/* need to write to database*/
+
+#define  BASELOG_NO 0
+#define  BASELOG_YES 1
+
+
+
 /* 
 #define MAX_QUEUE_WANTED 12
 #define PUBLISHER_WANT_SAVE 1
@@ -244,7 +261,7 @@ typedef struct {
   bool     custom_scheme2[24]={1,1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   //uint      custom_scheme2=0B101010101010101010101010;
   int      custom_level_notify1=-128;
-  bool     baselog=0;
+  bool     baselog=1;
   
 // ** hotter \ cooler 
   bool      hotter=0;

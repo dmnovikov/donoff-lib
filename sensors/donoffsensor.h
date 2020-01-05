@@ -70,19 +70,18 @@ class DSensor: public DBase {
 
     int virtual req_sensor() {};
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=0, int _need_baselog=0){
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_baselog){
       que_states=_que_sensor_states;
       nameStr=_name;
       channelStr=_chname;
       NEED_FILTERED=_filtered;
+      NEED_BASELOG=_need_baselog;
 
       sens.v[0] = NOT_READY_VAL;
       sens.v[1] = NOT_READY_VAL;
       sens.v[2] = NOT_READY_VAL;
       sens.val =  NOT_READY_VAL;
       TYPE=_type;
-      NEED_BASELOG=_need_baselog;
-
 
       init_ok = 1;
     };

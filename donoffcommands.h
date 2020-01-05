@@ -46,6 +46,7 @@ const char* C_EMAIL="email";
 
 const char* C_HOTTER="hotter";
 const char* C_COOLER="cooler";
+const char* C_BASELOG="baselog";
 
 const char* C_TARIFF="tariff";
 const char* C_ONOFF1_VAL="onoffv1";

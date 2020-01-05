@@ -26,7 +26,7 @@
 #include <Ticker.h>
 //#include <SimpleTimer.h>
 #include <donoffsettings.h>
-#include <donoffpublisher_mqtt.h>
+#include <publishers/donoffpublisher_mqtt.h>
 #include <donoffcommands.h>
 #include <donoffdisplay.h>
 #include <donoffrelay.h>
@@ -53,17 +53,7 @@ Queue<pub_events> que_wanted= Queue<pub_events>(MAX_QUEUE_WANTED);
 
 DPublisherMQTT pubmqtt(&settings, &client);
 
-
-// DSupply supply(&settings);
-
-// DSupplyBase supply(&settings);
-
 DSupplyMultiSCT013Collector supply(&settings);
-
-//DSupplyDonoff supply(&settings);
-
-//DSupplySCT013Collector supply(&settings);
-
 
 DNotifyerEmailMQTT notifyer(&settings, &client);
 
