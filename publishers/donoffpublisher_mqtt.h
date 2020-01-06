@@ -185,7 +185,7 @@ public:
     int virtual publish_sensor(DSensor * _sensor){
        if (!is_connected()) return 0;   
       _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
-
+      //debug("BASELOG", "check log, settings="+String(_s->baselog)+" sensor_baselog="+String(_sensor->need_baselog()));
       if(_sensor->need_baselog() && _s->baselog){
       
         if(_sensor->is_ready() && _sensor->is_started()){

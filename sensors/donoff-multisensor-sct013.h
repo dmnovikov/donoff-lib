@@ -113,7 +113,9 @@ class DMultiSensorSCT013: public DSensor {
 
             
             if(ready_c==3) {
+                started_ok =1;
                 calculate_value();
+                
             }else{
                 sens.val=NOT_READY_VAL;
             }
@@ -131,7 +133,8 @@ class DMultiSensorSCT013: public DSensor {
               for(int i=0; i<=2; i++){
                 sens.val+=sensors[i]->get_val();
               }
-              //debug("MULTI_SENSOR", "VAL="+String(sens.val));
+              debug("MULTI_SENSOR", "VAL="+String(sens.val));
+              sensor_ready=1;
     };
 
 };

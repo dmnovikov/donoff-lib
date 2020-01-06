@@ -27,7 +27,7 @@ class DSupplyMultiSCT013Collector: public DSupplyBase {
       
         debug("SUPPLY_INIT", "SCT013_1 INIT");
         multi_sct013 = new DMultiSensorSCT013 (_s);
-        multi_sct013->init(MULTISENSOR_PIN1, MULTISENSOR_PIN1, "SCT013x3", SCT013_X3_OUT_CHANNEL, 0,que_sensor_states, SENSOR_TYPE_CURRENT, BASELOG_YES);
+        multi_sct013->init(MULTISENSOR_PIN1, MULTISENSOR_PIN2, "SCT013x3", SCT013_X3_OUT_CHANNEL, 0,que_sensor_states, SENSOR_TYPE_CURRENT, BASELOG_YES);
         
 
         init_ok=1;
