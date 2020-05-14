@@ -228,7 +228,7 @@ typedef struct {
 } sensor_data;
 
 
-#define EEPROM_SALT 1204
+#define EEPROM_SALT 1206
 //#define EEPROM_SALT 1205
 //#define EEPROM_SALT 1206
 
@@ -294,7 +294,11 @@ typedef struct {
   int     analog_level2=-128;
   int     custom_level1=-128;
   int     custom_level2=-128;
-
+  //uint    hotter2=0;
+  //int     custom_hotter2[24]={22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22};
+  uint cb_schm1=0B000000000011111111111100;
+  uint cb_schm2=0B111111111111100000000000;
+  int     temp_matix[24]={22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,21};
 } WMSettings;
 
 #define WIFI_EEPROM_SALT 111

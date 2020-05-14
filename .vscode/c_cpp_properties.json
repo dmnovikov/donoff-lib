@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "/home/dmn/.arduino15/packages/esp8266/tools/**",
-                "/home/dmn/.arduino15/packages/esp8266/hardware/esp8266/2.5.2/**",
+                "/home/dmn/.arduino15/packages/esp8266/hardware/esp8266/2.6.3/**",
                 "/home/dmn/Arduino/libraries/**"
             ],
             "forcedInclude": [],

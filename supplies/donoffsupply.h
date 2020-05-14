@@ -188,7 +188,8 @@ class DSupply: public DBase {
     int virtual service_loop() {
 
       debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + " ,t_sync=" + String(pub->is_time_synced())+ 
-           ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected()) 
+           ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected())+
+           ", size_s="+String(sizeof(*_s))
        );
 
       if(pub->is_connected()) pub->publish_uptime();
@@ -272,7 +273,7 @@ class DSupply: public DBase {
     };
 
 
-    int is_day(int _schm_num) {
+    int is_day2(int _schm_num) {
       if (!pub->is_time_synced()) return -1;
       if (_schm_num < 0 || _schm_num > 100) return -1;
       int h = hour();
@@ -282,6 +283,23 @@ class DSupply: public DBase {
           return _s->custom_scheme1[h];
       } 
       if (_schm_num == 100) return _s->custom_scheme2[h];
+      return get_lschm_mode_bit(h, _schm_num);
+    }
+
+    int is_day(int _schm_num) {
+      if (!pub->is_time_synced()) return -1;
+      if (_schm_num < 0 || _schm_num > 100) return -1;
+      int h = hour();
+      debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
+      if (_schm_num == 99){
+          //_s->cb_schm1=0B000000000011111111111110;
+          bool br=bitRead(_s->cb_schm1,23-h); //read bit of hour in custom scheme
+          debug("IS_DAY","hour="+String(h)+", on_bit="+String(br));
+          return br;
+      } 
+      if (_schm_num == 100){
+            return bitRead(_s->cb_schm2,23-h);
+      } 
       return get_lschm_mode_bit(h, _schm_num);
     }
 

@@ -1,11 +1,13 @@
 /* ********** Config supply *******************/
-#define RELAY2 0
+#define RELAY2 1
 #define DS1820_INT 1
 #define DS1820_OUT 1
 #define DDISPLAY_SSD1306 0
 #define DTIME_ZONE 2
 
 #define PINS_SET_V1
+
+//#define SETDEFNEW
 
 //when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1
 
@@ -96,11 +98,32 @@ void setup()
 
   Serial.println ("SALT="+String(settings.salt));
 
-  if (settings.salt != EEPROM_SALT) {
+  //if(settings.salt==1025) settings.salt=1205;
+
+  if(settings.salt==1204){
+    Serial.println("OLD SALT detected, implement new default options from settings");
+    Serial.println("set new salt to 1025");
+    settings.salt=1205;
+    settings.cb_schm1=0B000000000011111111111100;
+    settings.cb_schm2=0B111111111111100000000000;
+  }
+
+  else if (settings.salt==1025){
+    settings.salt=1026;
+    WMSettings defaults;
+    for(int i=0; i<=23; i++) settings.temp_matix[i]=defaults.temp_matix[i];
+  }
+
+  else if (settings.salt != EEPROM_SALT) {
     Serial.println("Invalid settings in EEPROM, trying with defaults");
     WMSettings defaults;
     settings = defaults;
   }
+
+  // #ifdef SETDEFNEW //newdef vualues
+  //    settings.cb_schm1=0B000000000011111111111100;
+  //    settings.cb_schm2=0B111111111111100000000000;
+  // #endif
 
   pinMode(SONOFF_LED, OUTPUT);
   

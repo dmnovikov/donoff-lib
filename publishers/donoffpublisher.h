@@ -328,6 +328,44 @@ public:
       }
 
 
+      if (shStr == C_CSHM1 || shStr== C_CSHM2) {
+        String sbits="";
+        for(int i=0; i<=23; i++){
+          if (i == 4 || i == 8 || i == 12 || i == 16 || i == 20) sbits += " ";
+          shStr==C_CSHM1? sbits+=bitRead(_s->cb_schm1,23-i): sbits+=bitRead(_s->cb_schm2,23-i);
+        }
+        //publish_sh_to_info_topic( shStr, sbits);
+        publish_to_info_topic(sbits);
+        return 1;
+      }
+
+      if (shStr.startsWith(C_TEMP_MATRIX)) {
+        if(shStr==C_TEMP_MATRIX){
+          String outS="";
+          for(int i=0; i<=23; i++){
+            outS+=_s->temp_matix[i];
+            outS+=":";
+          }
+          debug("CTEMP_MATRIX", outS);
+          publish_to_info_topic(outS);
+          return 1;
+        }
+        //debug("PUBLISHER",shStr);
+        int point = shStr.indexOf(":");
+        String testVal = shStr.substring(point + 1, shStr.length());
+        int hour = testVal.toInt();
+        if(hour<0 || hour>23) {
+          publish_sh_err();
+          return -1;
+        }
+        
+        publish_sh_to_info_topic(shStr, String(_s->temp_matix[hour]));
+        return 1;
+      }
+
+
+
+
       if (shStr == C_EMAIL) {
         Serial.println("***** SH EMAIL");
         publish_sh_to_info_topic( shStr, String(_s->email_notify));
@@ -396,6 +434,11 @@ public:
 
       if (shStr == I_TIME) {
          publish_to_info_topic("I:S="+String(is_time_synced())+",T="+String(hour())+":"+String(minute())+":"+String(year()));
+         return 1;
+      }
+
+      if (shStr == I_SALT) {
+         publish_sh_to_info_topic( shStr, String(_s->salt));
          return 1;
       }
       
@@ -666,6 +709,32 @@ public:
         if(err==0){    
             if(cmdStr==C_ONOFF1_VAL) _s->custom_scheme1[_h]=_v;
             if(cmdStr==C_ONOFF2_VAL) _s->custom_scheme2[_h]=_v;
+            publish_to_info_topic("N:V["+String(_h)+"]"+"="+String(_v));
+            return 1;
+        }
+
+        publish_to_info_topic("E:params error");
+        return 0;
+      }
+
+      if (cmdStr == C_CSHM1 || cmdStr == C_CSHM2) {
+        int err=0;
+        int point=valStr.indexOf(":");
+        int len=valStr.length();
+        String  hStr=valStr.substring(0,point);
+        String  vStr=valStr.substring(point+1,len);
+        int _h=hStr.toInt();
+        int  _v=vStr.toInt();
+        
+        if(hStr!="0" && _h==0) err=1;
+        if(vStr!="0" && _v==0) err=1;
+        if(_h<0 || _h>23) err=1;
+        if(_v<0 || _v>1) err=1;
+        
+        debug("C_CSCHM", "hStr="+hStr+"; "+"vStr="+vStr+"; err="+String(err));
+        if(err==0){    
+            if(cmdStr==C_CSHM1) bitWrite(_s->cb_schm1,23-_h,_v);
+            if(cmdStr==C_CSHM2) bitWrite(_s->cb_schm2,23-_h,_v);
             publish_to_info_topic("N:V["+String(_h)+"]"+"="+String(_v));
             return 1;
         }

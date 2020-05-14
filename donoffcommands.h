@@ -49,10 +49,12 @@ const char* C_COOLER="cooler";
 const char* C_BASELOG="baselog";
 
 const char* C_TARIFF="tariff";
-const char* C_ONOFF1_VAL="onoffv1";
-const char* C_ONOFF1_MATRIX="onoffm";
-const char* C_ONOFF2_VAL="onoffv2";
-const char* C_ONOFF2_MATRIX="onoffm2";
+const char* C_ONOFF1_VAL="onoffv1";     //depricated from 1025
+const char* C_ONOFF1_MATRIX="onoffm";   //depricated from 1025
+const char* C_ONOFF2_VAL="onoffv2";     //depricated from 1025
+const char* C_ONOFF2_MATRIX="onoffm2";  //depricated from 1025
+
+const char* C_TEMP_MATRIX="tmatrix"; 
 
 const char* C_ONOFF1_10="bbschm1";
 const char* C_ONOFF2_10="bbschm2";
@@ -68,6 +70,7 @@ const char* I_TEMP_LEVELS_ALIAS="tls";
 const char* I_HOTTER_INFO="hot";
 const char* I_IS_SYNCED="synced";
 const char* I_TIME="time";
+const char* I_SALT="salt";
 const char* I_CUSTOM_SCHEME1="cschm1";
 const char* I_CUSTOM_SCHEME2="cschm2";
 const char* I_BSCHM="bschm";
@@ -93,6 +96,9 @@ const char* D_R2_0="r20";
 
 const char* I_RELAY1="r1";
 const char* I_RELAY2="r2";
+
+const char* C_CSHM1="cschm1";
+const char* C_CSHM2="cschm2";
 
 #endif
 
