@@ -35,8 +35,8 @@
 #include <donoffrelay.h>
 // #include <supplies/donoffsupply-common.h>
 // #include <supplies/donoffsupply-base.h>
-#include <supplies/donoffsupply-donoff-universal.h>
-//#include <supplies/prj_supplies/pump_current_time_check_supply.h>
+//#include <supplies/donoffsupply-donoff-universal.h>
+#include <supplies/prj_supplies/pump_current_time_check_supply.h>
 
 
 //#include <supplies/donoffsupply-donoff.h>
@@ -64,9 +64,9 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 // DSupplyBase supply(&settings);
 
- DSupplyDonoffUni supply(&settings);
+ //DSupplyDonoffUni supply(&settings);
 
-//DSupplyDonoffUniCurr supply(&settings);
+DSupplyDonoffUniCurr supply(&settings);
 
 //DSupplyDonoff supply(&settings);
 

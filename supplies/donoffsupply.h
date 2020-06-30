@@ -113,6 +113,8 @@ class DSupply: public DBase {
         pub_wanted_loop();
        
         //
+
+        
         if (mycounter > MAX_LOOP_COUNTER) {
           mycounter = 0;
           if(m_just_synced==1) m_just_synced=0;
@@ -166,7 +168,7 @@ class DSupply: public DBase {
       what_to_want=que_wanted->pop();
 
       if(what_to_want==PUBLISHER_WANT_SAY_JUST_SYNCED){
-        debug("SUPPLY_QUEUE", "just_synced SET TO 1");
+        debug("SUPPLY_QUEUE", "just_synced SET TO 1, mycouner="+String(mycounter));
         m_just_synced=1;
       }
 
