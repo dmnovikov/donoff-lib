@@ -143,7 +143,7 @@ class DRelay: public DBase {
       lschm_hour_on = _h ;
     };
     void reset_lschm_hour() {
-      debug("RELAY", "reset lschm_hour");
+      debug("RELAY<"+String(num)+">", "reset lschm_hour");
       lschm_hour_on = 24 ;
 
     };

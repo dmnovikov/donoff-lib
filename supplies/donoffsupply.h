@@ -53,6 +53,7 @@ class DSupply: public DBase {
     int mycounter = 0;
     ulong mytimer = 0;
     int init_ok = 0;
+    int m_just_synced=0;
     pub_events what_to_want;
 
     Queue<pub_events>* que_wanted;
@@ -95,6 +96,7 @@ class DSupply: public DBase {
         if(mycounter >=0 && mycounter<=MAX_LOOPS){
            //debug("SUPPLY_LOOP", "SLOW LOOP");
            slow_loop(mycounter);
+           
         }
 
         if(mycounter >MAX_LOOPS && mycounter <=MAX_LOOPS+MAX_SENSORS){
@@ -106,10 +108,15 @@ class DSupply: public DBase {
         //300 ms loop
 
         fast_loop();
+
+       
         pub_wanted_loop();
        
         //
-        if (mycounter > MAX_LOOP_COUNTER) mycounter = 0;
+        if (mycounter > MAX_LOOP_COUNTER) {
+          mycounter = 0;
+          if(m_just_synced==1) m_just_synced=0;
+        }
         mytimer = millis();
 
       }
@@ -157,6 +164,11 @@ class DSupply: public DBase {
 
       debug("SUPPLY_QUEUE", "WANTED EVENT DETECTED:"+String(what_to_want));
       what_to_want=que_wanted->pop();
+
+      if(what_to_want==PUBLISHER_WANT_SAY_JUST_SYNCED){
+        debug("SUPPLY_QUEUE", "just_synced SET TO 1");
+        m_just_synced=1;
+      }
 
       do_want_event();
       
@@ -287,9 +299,17 @@ class DSupply: public DBase {
     }
 
     int is_day(int _schm_num) {
-      if (!pub->is_time_synced()) return -1;
-      if (_schm_num < 0 || _schm_num > 100) return -1;
+
       int h = hour();
+
+      if(!pub->is_time_synced() && _schm_num==2) {  //always on sheme (2), can be without time sync
+        return -2;
+      }
+      if(!pub->is_time_synced() && _schm_num==1) return -3; //always off sheme (1), can be without time sync
+      if (!pub->is_time_synced()) return -1;
+      
+      if (_schm_num < 0 || _schm_num > 100) return -1;
+      
       debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
       if (_schm_num == 99){
           //_s->cb_schm1=0B000000000011111111111110;
@@ -348,16 +368,27 @@ class DSupply: public DBase {
       int on_bit = is_day(_schm_num);
       uint hour_curr = hour();
 
-      String debugSrcStr = "LSCHM<" + String(_r->get_num()) + ">";
+       String debugSrcStr = "LSCHM<" + String(_r->get_num()) + ">";
+
+
+       debug(debugSrcStr, "just_synced="+String(m_just_synced));
+
+      if(m_just_synced==1 && _schm_num==2){
+        
+        _r->set_hour_lschm_on(hour_curr);
+         debug(debugSrcStr, "JUST SYNCED, set lschm_hour="+String(hour_curr));
+      }
+
+     
       debug(debugSrcStr, "on_bit=" + String(on_bit) + "; schm_num=" + String(_schm_num));
 
       if (on_bit == -1 ) { //not synced
-        if (_r->is_on()) relay_off(_r, "lschm, no time sync");
+        if (_r->is_on()) relay_off(_r, "lschm, no time sync"); //shm_num2 is always on 
         return -1;
       }
 
       //********  must be on  ************************
-      if (on_bit == 1) {
+      if (on_bit == 1 || on_bit ==-2 ) {
         if (_r->is_on()) {
           if (_r->get_last_hour_when_on() != hour_curr) {
             _r->set_hour_lschm_on(hour_curr);
@@ -367,7 +398,7 @@ class DSupply: public DBase {
           return 0;
         }
         //relay is off, can we turn on ?
-        if (_r->get_last_hour_when_on() != hour_curr) {
+        if (_r->is_off() && _r->get_last_hour_when_on() != hour_curr) {
           debug(debugSrcStr, "turn on, h=" + String(hour_curr) + "; relay_h=" + String(_r->get_last_hour_when_on()));
           _r->set_hour_lschm_on(hour_curr);
           relay_on(_r, "lschm,on");
@@ -377,10 +408,12 @@ class DSupply: public DBase {
           debug(debugSrcStr, "already was on in this hour, h=" + String(hour_curr) + "; relay_h=" + String(_r->get_last_hour_when_on()));
           return 0;
         }
+
+       
       }
 
       //********  must be off  ************************
-      if (on_bit == 0) { //must off
+      if (on_bit == 0 || on_bit == -3) { //must off
         if (relay_off(_r, "lschm,off")) {
           debug(debugSrcStr, "turn off !");
           _r->reset_lschm_hour();

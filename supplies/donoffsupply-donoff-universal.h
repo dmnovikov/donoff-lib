@@ -85,18 +85,9 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
      int slow_loop(int mycounter){
 
-         DSupplyBase::slow_loop(mycounter);
-
-         if(mycounter==6){
-             //debug("SUPPLY", "LSCHM_LOOP");
-             lschm_loop();
-         }
+         DSupplyDonoff::slow_loop(mycounter);
 
          if(mycounter==7){
-             aofh_loop();
-         }
-
-         if(mycounter==8){
              hotter_cooler_loop();
          }
 

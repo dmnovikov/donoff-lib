@@ -66,7 +66,8 @@ public:
           debug("TIMESYNC", "FAIL TO SYNC TIME :(");
           time_synced=0;
         }else{
-          debug("TIMESYNC", "TIME SYNCED:"+String(hour())+":"+String(minute())+":"+String(year()));
+          debug("TIMESYNC", "TIME SYNCED:"+String(hour())+":"+String(minute())+":"+String(year())+"; push event");
+          que_wanted->push(PUBLISHER_WANT_SAY_JUST_SYNCED);
           time_synced=1;
         }
     };
@@ -251,6 +252,10 @@ public:
       // _pub->publish(TOPIC_SENDMAIL, json_str.c_str());
 
       // _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
+    };
+
+    int virtual publish_to_topic(String _topic, String _valStr){
+        _c->publish(form_full_topic(_topic).c_str(), _valStr.c_str());
     };
 
   };

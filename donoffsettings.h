@@ -61,7 +61,8 @@ enum pub_events {
  PUBLISHER_WANT_RESET_HOUR_R1_M,
  PUBLISHER_WANT_RESET_HOUR_R2_M,
  PUBLISHER_WANT_SH_R1,
- PUBLISHER_WANT_SH_R2
+ PUBLISHER_WANT_SH_R2,
+ PUBLISHER_WANT_SAY_JUST_SYNCED
 };
 
 #define DS1820_NOT_FILTERED 0
@@ -172,7 +173,7 @@ enum sensor_states {
 //************* OTHER
 
 #define MIN_AUTOSTOP_SEC 0
-#define MAX_AUTOSTOP_SEC 200
+#define MAX_AUTOSTOP_SEC 1200
 #define MAX_AUTOOFF_HOURS 24
 #define MAX_LSCHM_NUM 100
 #define MAX_ANALOG_NOTIFY 50000
@@ -184,6 +185,8 @@ enum sensor_states {
 #define MAX_ANALOG_LEVEL 16000
 #define MAX_NOTIFY_CUSTOM 5000
 
+#define MIN_CUSTOM_LEVEL -32000
+#define MAX_CUSTOM_LEVEL 32000
 #define DONOFF_DEBUG_PUBLISH
 
 /*
@@ -331,9 +334,6 @@ const uint8_t modes[] = {
   0B01010101,  //Частые короткие вспышки (4 раза в секунду)
   0B11111110
 };
-
-
-
 
 
 /****** light **********/

@@ -69,6 +69,8 @@ public:
 
     int virtual publish_to_log_topic(String _valStr)=0;
 
+    int virtual publish_to_topic(String _topic, String _valStr)=0;
+
     
 
     int virtual is_connected()=0;
@@ -171,9 +173,11 @@ public:
             }
 
             if (inS==D_RESET_HOUR1) {
+              debug("QUEUE", "PUSHING EVENT RESET_HOUR_R1");
               que_wanted->push(PUBLISHER_WANT_RESET_HOUR_R1_M);
             }
             if (inS==D_RESET_HOUR2) {
+              debug("QUEUE", "PUSHING EVENT RESET_HOUR_R2");
               que_wanted->push(PUBLISHER_WANT_RESET_HOUR_R2_M);
             }
             
@@ -646,11 +650,24 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_ANALOG_LEVEL2) {
+        if (cmdStr == C_ANALOG_LEVEL2) {
         set_settings_val_int( cmdStr, valStr, (int*) &_s->analog_level2, -128, MAX_ANALOG_LEVEL);
         return 1;
       }
 
+
+      if (cmdStr == C_CUSTOM_LEVEL1) {
+        set_settings_val_int( cmdStr, valStr, (int*) &_s->custom_level1, MIN_CUSTOM_LEVEL, MAX_CUSTOM_LEVEL);
+        return 1;
+      }
+
+      if (cmdStr == C_CUSTOM_LEVEL2) {
+        set_settings_val_int( cmdStr, valStr, (int*) &_s->custom_level2, MIN_CUSTOM_LEVEL, MAX_CUSTOM_LEVEL);
+        return 1;
+      }
+
+
+    
       if (cmdStr == C_LOW_NOTIFY_LEVEL) {
         set_settings_val_int( cmdStr, valStr, (int*) &_s->temp_low_level_notify, -128, MAX_TEMP_LEVEL);
         return 1;
@@ -742,6 +759,9 @@ public:
         publish_to_info_topic("E:params error");
         return 0;
       }
+
+      publish_to_info_topic("E:param not found");
+      return 0;
 
     };
 /*

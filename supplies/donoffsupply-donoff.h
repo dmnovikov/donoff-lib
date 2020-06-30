@@ -139,9 +139,17 @@ class DSupplyDonoff: public DSupplyBase {
       if(what_to_want==PUBLISHER_WANT_RESET_HOUR_R1_M) {
         if(r[0]!=NULL){
           r[0]->reset_lschm_hour();
-          pub->publish_to_info_topic("I: lschm last hour is reseted");
+          pub->publish_to_info_topic("I: R1 lschm last hour is reseted");
         }else pub->publish_to_info_topic("I:R1=DISABLED");
       }
+
+       if(what_to_want==PUBLISHER_WANT_RESET_HOUR_R2_M) {
+        if(r[1]!=NULL){
+          r[1]->reset_lschm_hour();
+          pub->publish_to_info_topic("I: R2 lschm last hour is reseted");
+        }else pub->publish_to_info_topic("I:R2=DISABLED");
+      }
+
 
     };
 

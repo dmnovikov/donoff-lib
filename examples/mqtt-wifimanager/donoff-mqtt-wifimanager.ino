@@ -1,7 +1,7 @@
 /* ********** Config supply *******************/
-#define RELAY2 1
+#define RELAY2 2
 #define DS1820_INT 1
-#define DS1820_OUT 1
+#define DS1820_OUT 2
 #define DDISPLAY_SSD1306 0
 #define DTIME_ZONE 2
 
@@ -36,6 +36,8 @@
 // #include <supplies/donoffsupply-common.h>
 // #include <supplies/donoffsupply-base.h>
 #include <supplies/donoffsupply-donoff-universal.h>
+//#include <supplies/prj_supplies/pump_current_time_check_supply.h>
+
 
 //#include <supplies/donoffsupply-donoff.h>
 
@@ -63,6 +65,8 @@ DPublisherMQTT pubmqtt(&settings, &client);
 // DSupplyBase supply(&settings);
 
  DSupplyDonoffUni supply(&settings);
+
+//DSupplyDonoffUniCurr supply(&settings);
 
 //DSupplyDonoff supply(&settings);
 
@@ -101,15 +105,17 @@ void setup()
   //if(settings.salt==1025) settings.salt=1205;
 
   if(settings.salt==1204){
-    Serial.println("OLD SALT detected, implement new default options from settings");
-    Serial.println("set new salt to 1025");
+    Serial.println("VERY OLD SALT detected(1204), implement new default options from settings");
+    Serial.println("set new salt to 1205");
     settings.salt=1205;
     settings.cb_schm1=0B000000000011111111111100;
     settings.cb_schm2=0B111111111111100000000000;
   }
 
-  else if (settings.salt==1025){
-    settings.salt=1026;
+  else if (settings.salt==1205){
+    Serial.println("OLD SALT detected (1205), implement new default options from settings");
+    Serial.println("set new salt to 1206");
+    settings.salt=1206;
     WMSettings defaults;
     for(int i=0; i<=23; i++) settings.temp_matix[i]=defaults.temp_matix[i];
   }
