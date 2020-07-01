@@ -275,7 +275,7 @@ typedef struct {
 // ** temp level
   uint      default_temp_level=20;
   uint      day_temp_level=18;
-  uint      night_temp_level=24;
+  uint      night_temp_level=21;
   /*     */
 
   uint      schm_onoff_num1=99;
