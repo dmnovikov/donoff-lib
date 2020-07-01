@@ -90,8 +90,8 @@ class DSupplyDonoff: public DSupplyBase {
 
         if (button_result == SHORT_PRESS){
            debug("SUPPLY_DBUTTON", "Toggle relay");
-           if(_s->hotter==1) _s->hotter=0;
-           if(_s->cooler==1) _s->cooler=0;
+           if(_s->hotter>=1) _s->hotter=0;
+           if(_s->cooler>=1) _s->cooler=0;
            if(_s->lscheme_num>0) _s->lscheme_num=0;
            if(_s->autostop_sec>0) _s->autostop_sec=0;
            relay_toggle(r[0], "hardware"); //if SHORT_PRESS, TOGGLE
@@ -148,7 +148,7 @@ class DSupplyDonoff: public DSupplyBase {
         }else pub->publish_to_info_topic("I:R1=DISABLED");
       }
 
-       if(what_to_want==PUBLISHER_WANT_RESET_HOUR_R2_M) {
+      if(what_to_want==PUBLISHER_WANT_RESET_HOUR_R2_M) {
         if(r[1]!=NULL){
           r[1]->reset_lschm_hour();
           pub->publish_to_info_topic("I: R2 lschm last hour is reseted");

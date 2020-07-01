@@ -117,7 +117,7 @@ void setup()
     Serial.println("set new salt to 1206");
     settings.salt=1206;
     WMSettings defaults;
-    for(int i=0; i<=23; i++) settings.temp_matix[i]=defaults.temp_matix[i];
+    for(int i=0; i<=23; i++) settings.temp_matrix[i]=defaults.temp_matrix[i];
   }
 
   else if (settings.salt != EEPROM_SALT) {

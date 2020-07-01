@@ -94,7 +94,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
      };
 
     int virtual hotter_cooler_loop() {
-      if (_s->hotter) {
+      if (_s->hotter>=1) {
         if(_s->lscheme_num>0 || _s->autooff_hours >0){
             pub->publish_to_info_topic("E:ignore hotter, lschm,aofs");
             _s->hotter=0;
@@ -112,7 +112,9 @@ class DSupplyDonoffUni: public DSupplyDonoff {
     };
 
      int virtual hotter_loop(){
-      if(DS1820_OUT) hotter(ds_out, r[0]);
+      if(DS1820_OUT) {
+       hotter1(ds_out, r[0]);
+      }
     };
 
     int virtual cooler_loop(){
@@ -120,11 +122,10 @@ class DSupplyDonoffUni: public DSupplyDonoff {
     };
 
 
-
-
-
     int virtual do_want_event(){
       DSupplyDonoff::do_want_event();
+
+      //debug ("DO_WANT", "universal do want:"+String(what_to_want));
 
       if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_OFF_LSCHM0) {
         relay_off(r[1],"lschm=0");
@@ -136,6 +137,27 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
       if(RELAY2 && what_to_want==PUBLISHER_WANT_R2_OFF) {
         relay_off(r[1],"from publisher");
+      }
+
+      if(what_to_want==PUBLISHER_WANT_SH_HOTTER) {
+          if(_s->hotter==0)  pub->publish_to_info_topic("I: hotter=0");
+          if(!DS1820_OUT)  pub->publish_to_info_topic("I: no sensor");
+          String outs="";
+          outs+=String(_s->hotter);
+          outs+=";";
+          outs+="s=";
+          outs+=ds_out->get_val_Str();
+          outs+=";";
+          outs+="l=";
+
+          if(_s->hotter==1) outs+=String(get_temp_settings_ver1(_s->schm_onoff_num1));
+          if(_s->hotter==2) outs+=String(get_temp_settings_ver2(_s->schm_onoff_num1));
+          
+
+          outs+=";";
+          outs+="td="+String(_s->level_delta);
+
+          pub->publish_to_info_topic(outs);
       }
       
 

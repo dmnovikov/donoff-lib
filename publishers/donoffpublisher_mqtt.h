@@ -15,6 +15,7 @@ protected:
   PubSubClient* _c;
   int not_configured=0;
   int time_synced=0;
+  ulong m_incoming_ms=0;
 
 public:
   DPublisherMQTT(WMSettings *__s, PubSubClient *__c) : DPublisher(__s){
@@ -25,6 +26,7 @@ public:
     DPublisher::init(_q);
       sync_time();
       try_connect();
+      m_incoming_ms=millis();
       init_ok = 1;
     };
 
@@ -141,6 +143,16 @@ public:
     void callback(char* topic, byte* payload, unsigned int length){
         //debug("CALLBACK", String(topic)+"::"+String((char*)payload));
         char message[100];
+        
+        //antispam, check time between commands
+        if(millis()-m_incoming_ms<DDOS_MS){
+          publish_to_info_topic("DDOS CHECK");
+          m_incoming_ms=millis();
+          return;
+        }
+        m_incoming_ms=millis();
+
+
         String inS="";
         for (int i = 0; i < length; i++)
         {
@@ -152,7 +164,9 @@ public:
         if (String(topic) == topic_params_full) {
           debug("CALLBACK_PARAMS", "Params incoming msg is detected-->"+inS);
           recognize_incoming_str(inS);
+          
         }
+
     };
 
     int virtual publish_sh_to_info_topic(String shStr, String _valStr)

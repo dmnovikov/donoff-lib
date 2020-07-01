@@ -168,7 +168,7 @@ class DSupply: public DBase {
       what_to_want=que_wanted->pop();
 
       if(what_to_want==PUBLISHER_WANT_SAY_JUST_SYNCED){
-        debug("SUPPLY_QUEUE", "just_synced SET TO 1, mycouner="+String(mycounter));
+        //debug("SUPPLY_QUEUE", "just_synced SET TO 1, mycouner="+String(mycounter));
         m_just_synced=1;
       }
 
@@ -325,13 +325,9 @@ class DSupply: public DBase {
       return get_lschm_mode_bit(h, _schm_num);
     }
 
-    int get_temp_settings(int _schm_num) {
-      if (is_day(_schm_num) == 0)  return _s->night_temp_level;
-      if (is_day(_schm_num) == 1)  return _s->day_temp_level;
-      return _s->default_temp_level;
-    }
+   
 
-      int aofs_off(DRelay* _r, int _aofs) {
+    int aofs_off(DRelay* _r, int _aofs) {
       if (_aofs < 0) _aofs = 0; //wrong aofs ??
       if (_aofs == 0) return -1; //aofs=0 - nothing to do;
 
@@ -373,7 +369,7 @@ class DSupply: public DBase {
        String debugSrcStr = "LSCHM<" + String(_r->get_num()) + ">";
 
 
-       debug(debugSrcStr, "just_synced="+String(m_just_synced));
+      //debug(debugSrcStr, "just_synced="+String(m_just_synced));
 
       if(m_just_synced==1 && _schm_num==2){
         
@@ -430,9 +426,25 @@ class DSupply: public DBase {
 
     };
 
-     int hotter(DSensor* _sensor, DRelay* _r){
+    int get_temp_settings_ver1(int _schm_num) {
+      if (is_day(_schm_num) == 0)  return _s->night_temp_level;
+      if (is_day(_schm_num) == 1)  return _s->day_temp_level;
+      return _s->default_temp_level;
+    };
 
-      if(!_s->hotter) return -1;
+    int get_temp_settings_ver2(int _schm_num) {
+      if(!pub->is_time_synced()) return _s->default_temp_level;
+      
+      uint h=hour();
+      return _s->temp_matrix[h];
+    };
+
+     int hotter1(DSensor* _sensor, DRelay* _r){
+       int hotter_settings_temp;
+       long sensor_temp;
+       long delta;
+
+      if(_s->hotter!=1 && _s->hotter!=2) return -1;
        
       if(!_sensor->is_started_and_ready()){
         debug("HOTTER", "sensor not ready");
@@ -441,9 +453,10 @@ class DSupply: public DBase {
       }
       
      
-      long sensor_temp=_sensor->get_val();
-      int hotter_settings_temp=get_temp_settings(_s->schm_onoff_num1);
-      int delta=_s->level_delta;
+      sensor_temp=_sensor->get_val();
+      if(_s->hotter==1) hotter_settings_temp=get_temp_settings_ver1(_s->schm_onoff_num1);
+      if(_s->hotter==2) hotter_settings_temp=get_temp_settings_ver2(_s->schm_onoff_num1);
+      delta=_s->level_delta;
 
       if (delta<50) delta=delta*10; //old value in eeprom
 
@@ -485,6 +498,11 @@ class DSupply: public DBase {
       return 0;
 };
 
+int hotter2(DSensor* _sensor, DRelay* _r){
+   if(!_s->hotter==2) return -1;
+
+};
+
 int cooler(DSensor* _sensor, DRelay* _r){
 
       if(!_s->cooler) return -1;
@@ -497,7 +515,7 @@ int cooler(DSensor* _sensor, DRelay* _r){
       
      
       long sensor_temp=_sensor->get_val();
-      int hotter_settings_temp=get_temp_settings(_s->schm_onoff_num1);
+      int hotter_settings_temp=get_temp_settings_ver1(_s->schm_onoff_num1);
       int delta=_s->level_delta;
 
       if (delta<50) delta=delta*10; //old value in eeprom

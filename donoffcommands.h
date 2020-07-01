@@ -61,10 +61,10 @@ const char* C_COOLER="cooler";
 const char* C_BASELOG="baselog";
 
 const char* C_TARIFF="tariff";
+
 const char* C_ONOFF1_VAL="onoffv1";     //depricated from 1025
-const char* C_ONOFF1_MATRIX="om1";   //depricated from 1025
 const char* C_ONOFF2_VAL="onoffv2";     //depricated from 1025
-const char* C_ONOFF2_MATRIX="om2";  //depricated from 1025
+
 
 const char* C_TEMP_MATRIX="tmatrix"; 
 
@@ -111,6 +111,8 @@ const char* I_RELAY2="r2";
 
 const char* C_CSHM1="cschm1";
 const char* C_CSHM2="cschm2";
+const char* C_ONOFF2_MATRIX="om2";  //set 24bit matrix 0\1
+const char* C_ONOFF1_MATRIX="om1";   //set 24bit matrix 0\1
 
 #endif
 

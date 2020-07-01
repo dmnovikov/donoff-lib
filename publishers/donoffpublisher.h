@@ -358,7 +358,7 @@ public:
         if(shStr==C_TEMP_MATRIX){
           String outS="";
           for(int i=0; i<=23; i++){
-            outS+=_s->temp_matix[i];
+            outS+=_s->temp_matrix[i];
             outS+=":";
           }
           debug("CTEMP_MATRIX", outS);
@@ -374,7 +374,7 @@ public:
           return -1;
         }
         
-        publish_sh_to_info_topic(shStr, String(_s->temp_matix[hour]));
+        publish_sh_to_info_topic(shStr, String(_s->temp_matrix[hour]));
         return 1;
       }
 
@@ -447,6 +447,11 @@ public:
          return 1;
       }
 
+      if (shStr == I_HOTTER_INFO) {
+         que_wanted->push(PUBLISHER_WANT_SH_HOTTER);
+         return 1;
+      }
+
       if (shStr == I_TIME) {
          publish_to_info_topic("I:S="+String(is_time_synced())+",T="+String(hour())+":"+String(minute())+":"+String(year()));
          return 1;
@@ -459,7 +464,6 @@ public:
       
       publish_sh_err();
       return 0;
-
 
     };
 
@@ -502,22 +506,26 @@ public:
 
       if (cmdStr == C_HOTTER) {
         bool b;
-        // if (set_settings_val_bool( cmdStr, valStr, &_s->hotter)) {
-        //   if (_s->hotter) {
-        //     //debug("SETHOTTER:", "set hotter to 1");
-        //     _s->lscheme_num = 0;
-        //     _s->autooff_hours = 0;
-        //     _s->autostop_sec = 0;
-        //     _s->cooler = 0;
-        //   } else {
-        //     // debug("SETHOTTER:", "set hotter to 0");
-        //     /*supply.r1.reset_lschm_hour();
-        //       supply.relay1_off("hotter=0");
-        //     */
-        //     que_wanted->push(PUBLISHER_WANT_R1_OFF);
-        //   }
-        //   return 2;
-        // }
+        int l_hotter;
+        debug("SETHOTTER", "set hotter");
+        if (set_settings_val_int( cmdStr, valStr,  &l_hotter, 0, 255)) {
+           _s->hotter=(byte) l_hotter;
+           if (_s->hotter==1 || _s->hotter==2) {
+             //debug("SETHOTTER:", "set hotter to 1");
+            _s->lscheme_num = 0;
+            _s->autooff_hours = 0;
+            _s->autostop_sec = 0;
+            _s->cooler = 0;
+          
+          } else if (_s->hotter==0) {
+            // debug("SETHOTTER:", "set hotter to 0");
+            /*supply.r1.reset_lschm_hour();
+              supply.relay1_off("hotter=0");
+            */
+            que_wanted->push(PUBLISHER_WANT_R1_OFF);
+          }
+          return 2;
+        }
         return 1;
       }
 
@@ -675,9 +683,6 @@ public:
         return 1;
       }
 
-
-
-    
       if (cmdStr == C_LOW_NOTIFY_LEVEL) {
         set_settings_val_int( cmdStr, valStr, (int*) &_s->temp_low_level_notify, -128, MAX_TEMP_LEVEL);
         return 1;
@@ -719,9 +724,39 @@ public:
       }
 
       if (cmdStr == C_ONOFF1_VAL || cmdStr == C_ONOFF2_VAL) {
-        /*
+        publish_to_info_topic("E:use cschm1, cschm2");
+        return 0;
+      }
+
+      /*
+
+          for hotter2
+          set temp_matrix values tmatrix=<hour>:<value>
+      */
+
+      if (cmdStr == C_TEMP_MATRIX) {
         int err=0;
+        int allvalues;
         int point=valStr.indexOf(":");
+        
+        // 
+        if(point==-1){
+
+            allvalues=valStr.toInt();
+            if(valStr!="0" && allvalues==0) err=1;
+          
+            if(allvalues >= MIN_TEMP_LEVEL  && allvalues <= MAX_TEMP_LEVEL && err==0){  
+                for(int i=0; i<=23; i++){
+                  _s->temp_matrix[i]=allvalues;
+                }
+                publish_to_info_topic("N: ALLMATRIX="+String(allvalues));
+                return 1;
+            }else{
+                publish_to_info_topic("E:params error");
+                return 0;
+            }
+        }
+        
         int len=valStr.length();
         String  hStr=valStr.substring(0,point);
         String  vStr=valStr.substring(point+1,len);
@@ -731,21 +766,24 @@ public:
         if(hStr!="0" && _h==0) err=1;
         if(vStr!="0" && _v==0) err=1;
         if(_h<0 || _h>23) err=1;
-        if(_v<0 || _v>1) err=1;
+        if(_v<MIN_TEMP_LEVEL || _v>MAX_TEMP_LEVEL) err=1;
         
-        debug("ONOFFV", "hStr="+hStr+"; "+"vStr="+vStr+"; err="+String(err));
+        debug("TEMP_MATRIX", "hStr="+hStr+"; "+"vStr="+vStr+"; err="+String(err));
         if(err==0){    
-            if(cmdStr==C_ONOFF1_VAL) _s->custom_scheme1[_h]=_v;
-            if(cmdStr==C_ONOFF2_VAL) _s->custom_scheme2[_h]=_v;
+            _s->temp_matrix[_h]=_v;
             publish_to_info_topic("N:V["+String(_h)+"]"+"="+String(_v));
             return 1;
         }
 
         publish_to_info_topic("E:params error");
-        */
-        publish_to_info_topic("E:use cschm1, cschm2");
         return 0;
       }
+
+
+    /*
+        cschm1=<hour>:1?0 (day?nigth)
+        cschm2=<hour>:1?0 (day?nigth)
+    */
 
       if (cmdStr == C_CSHM1 || cmdStr == C_CSHM2) {
         int err=0;
@@ -848,7 +886,7 @@ public:
       return 0;
     };
 
-    int set_settings_val_int(String _command, String _valStr, int* _setting_val,  int _min, int _max) {
+    int set_settings_val_int(String _command, String _valStr, int* _setting_val,  int _min =0, int _max=255) {
       int test_val;
       bool recognize = 0;
       if (_valStr.startsWith("0") && _valStr.length() == 1) {
@@ -878,7 +916,10 @@ public:
 
     int virtual publish_to_info_topic(String _valStr) =0;
 
-    int virtual clear_info_channel(){publish_to_info_topic("                          ");};
+    int virtual clear_info_channel(){
+      publish_to_info_topic("                          ");
+      
+    };
 
     // int virtual publish_tlevels_to_info(){
     //         String infostr = "";

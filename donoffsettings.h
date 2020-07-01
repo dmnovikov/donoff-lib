@@ -62,7 +62,8 @@ enum pub_events {
  PUBLISHER_WANT_RESET_HOUR_R2_M,
  PUBLISHER_WANT_SH_R1,
  PUBLISHER_WANT_SH_R2,
- PUBLISHER_WANT_SAY_JUST_SYNCED
+ PUBLISHER_WANT_SAY_JUST_SYNCED,
+ PUBLISHER_WANT_SH_HOTTER
 };
 
 #define DS1820_NOT_FILTERED 0
@@ -129,6 +130,7 @@ enum sensor_states {
 #define DALLAS_RES_IN 9
 #define DALLAS_RES_OUT 10
 #define DALLAS_RES_OUT2 9
+#define DDOS_MS 1000  //period in MS between to incoming commands
 
 #define FLASH_TEMPLATE1
 
@@ -267,7 +269,7 @@ typedef struct {
   bool     baselog=1;
   
 // ** hotter \ cooler 
-  bool      hotter=0;
+  byte      hotter=0;
   bool      cooler=0;
 
 // ** temp level
@@ -305,7 +307,7 @@ typedef struct {
   //int     custom_hotter2[24]={22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22};
   uint cb_schm1=0B000000000011111111111100;
   uint cb_schm2=0B111111111111100000000000;
-  int     temp_matix[24]={22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,21};
+  int     temp_matrix[24]={22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,21};
 } WMSettings;
 
 #define WIFI_EEPROM_SALT 111
