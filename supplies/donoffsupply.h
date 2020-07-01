@@ -184,7 +184,7 @@ class DSupply: public DBase {
       
       if(what_to_want==PUBLISHER_WANT_RESET) {
         pub->publish_to_info_topic("I: OK, LET'S RESET");
-        ESP.reset();
+        reset();
       }
     };
     
@@ -328,7 +328,7 @@ class DSupply: public DBase {
     int get_temp_settings(int _schm_num) {
       if (is_day(_schm_num) == 0)  return _s->night_temp_level;
       if (is_day(_schm_num) == 1)  return _s->day_temp_level;
-      return _s->critical_temp_level;
+      return _s->default_temp_level;
     }
 
       int aofs_off(DRelay* _r, int _aofs) {

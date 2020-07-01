@@ -198,6 +198,14 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       
     };
 
+  int virtual reset(){
+    //turn off 2nd relay before relay
+      debug("RESET", "turn off relays before reset");
+      relay_off(r[1], "off, before reset");
+      DSupplyDonoff::reset();
+  };
+
+
 //  int virtual notifyer_loop(){
 
 //    debug("NOTIFYER_LOOP", "sensor notify");

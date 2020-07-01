@@ -6,20 +6,32 @@ const char* C_AUTO_STOP_SEC2="a2ofs";
 const char* C_AUTO_STOP_SEC2T="aofs2";
 
 const char* C_LIGHT_SCHEME_NUM="lschm";
+const char* C_LIGHT_SCHEME_NUM_ALIAS1="schm";
+const char* C_LIGHT_SCHEME_NUM_ALIAS2="schm1";
+
 const char* C_LIGHT_SCHEME_NUM2="l2schm";
 const char* C_LIGHT_SCHEME_NUM2T="lschm2";
+const char* C_LIGHT_SCHEME_NUM2T_ALIAS1="schm2";
+
+
+const char* C_SCHEME_AOS="schma";
+const char* C_SCHEME_AOS1="schma1";
+const char* C_SCHEME_AOS2="schma2";
+
 
 const char* C_CHECK_CURRENT="ccheck";
-const char* C_ON_START="strton";
+const char* C_ON_START="strton";   // forgotten 
 const char* C_AUTO_STOP_HOURS="aofh";
 
-const char* C_ONOFF_SCHEME1="onoffschm1";
+const char* C_ONOFF_SCHEME1="onoffschm1"; 
 const char* C_ONOFF_SCHEME2="onoffschm2";
 
-const char* C_ANALOG_LEVEL1="alevel1";
-const char* C_ANALOG_LEVEL2="alevel2";
+
 const char* C_CUSTOM_LEVEL1="clevel1";
 const char* C_CUSTOM_LEVEL2="clevel2";
+
+const char* C_CUSTOM_LEVEL3="clevel3";
+const char* C_CUSTOM_LEVEL4="clevel4";
 
 
 const char* C_NOTIFYER="notifyer";
@@ -50,9 +62,9 @@ const char* C_BASELOG="baselog";
 
 const char* C_TARIFF="tariff";
 const char* C_ONOFF1_VAL="onoffv1";     //depricated from 1025
-const char* C_ONOFF1_MATRIX="onoffm";   //depricated from 1025
+const char* C_ONOFF1_MATRIX="om1";   //depricated from 1025
 const char* C_ONOFF2_VAL="onoffv2";     //depricated from 1025
-const char* C_ONOFF2_MATRIX="onoffm2";  //depricated from 1025
+const char* C_ONOFF2_MATRIX="om2";  //depricated from 1025
 
 const char* C_TEMP_MATRIX="tmatrix"; 
 
@@ -85,8 +97,8 @@ const char* D_CLEAR="clear";
 const char* D_RESET="reset";
 const char* D_SAVE="save";
 const char* D_DEFAULT="setdefault";
-const char* D_NOTIFY_DEF="zeronotify";
-const char* D_ZERO_HLEVELS="zerohours";
+//const char* D_NOTIFY_DEF="zeronotify";
+//const char* D_ZERO_HLEVELS="zerohours";
 
 
 const char* D_R1_1="r11";

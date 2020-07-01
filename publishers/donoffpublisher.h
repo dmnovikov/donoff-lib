@@ -220,14 +220,25 @@ public:
         publish_sh_to_info_topic( shStr, String(_s->autostop_sec2));
         return 1;
       }
-      if (shStr == C_LIGHT_SCHEME_NUM) {
+      if (shStr == C_LIGHT_SCHEME_NUM || shStr == C_LIGHT_SCHEME_NUM_ALIAS1 || shStr ==  C_LIGHT_SCHEME_NUM_ALIAS2) {
         publish_sh_to_info_topic( shStr, String(_s->lscheme_num));
         return 1;
       }
-      if (shStr == C_LIGHT_SCHEME_NUM2 || shStr == C_LIGHT_SCHEME_NUM2T) {
+      if (shStr == C_LIGHT_SCHEME_NUM2 || shStr == C_LIGHT_SCHEME_NUM2T || shStr == C_LIGHT_SCHEME_NUM2T_ALIAS1) {
         publish_sh_to_info_topic( shStr, String(_s->lscheme_num2));
         return 1;
       }
+
+      if (shStr == C_SCHEME_AOS || shStr == C_SCHEME_AOS1) {
+        publish_sh_to_info_topic( shStr, String(_s->lscheme_num)+":"+String(_s->autostop_sec));
+        return 1;
+      }
+
+      if (shStr == C_SCHEME_AOS2) {
+        publish_sh_to_info_topic( shStr, String(_s->lscheme_num2)+":"+String(_s->autostop_sec2));
+        return 1;
+      }
+
       if (shStr == C_ON_START) {
         publish_sh_to_info_topic( shStr, String(_s->start_on));
         return 1;
@@ -246,16 +257,6 @@ public:
         return 1;
       }
 
-      if (shStr == C_ANALOG_LEVEL1) {
-        publish_sh_to_info_topic( shStr, String(_s->analog_level1));
-        return 1;
-      }
-
-      if (shStr == C_ANALOG_LEVEL2) {
-        publish_sh_to_info_topic( shStr, String(_s->analog_level2));
-        return 1;
-      }
-
       if (shStr == C_CUSTOM_LEVEL1) {
         publish_sh_to_info_topic( shStr, String(_s->custom_level1));
         return 1;
@@ -263,6 +264,16 @@ public:
 
       if (shStr == C_CUSTOM_LEVEL2) {
         publish_sh_to_info_topic( shStr, String(_s->custom_level2));
+        return 1;
+      }
+
+      if (shStr == C_CUSTOM_LEVEL3) {
+        publish_sh_to_info_topic( shStr, String(_s->custom_level3));
+        return 1;
+      }
+
+      if (shStr == C_CUSTOM_LEVEL4) {
+        publish_sh_to_info_topic( shStr, String(_s->custom_level4));
         return 1;
       }
 
@@ -317,7 +328,7 @@ public:
       }
 
       if (shStr == C_CTEMP_LEVEL) {
-        publish_sh_to_info_topic( shStr, String(_s->critical_temp_level));
+        publish_sh_to_info_topic( shStr, String(_s->default_temp_level));
         return 1;
       }
 
@@ -421,7 +432,7 @@ public:
       }
 
       if (shStr == I_TEMP_LEVELS || shStr == I_TEMP_LEVELS_ALIAS) {
-        String outS = "C=" + String(_s->critical_temp_level) + ",D=" + String(_s->day_temp_level) + ",N=" + String(_s->night_temp_level) + " dT=" + String(_s->level_delta);
+        String outS = "C=" + String(_s->default_temp_level) + ",D=" + String(_s->day_temp_level) + ",N=" + String(_s->night_temp_level) + " dT=" + String(_s->level_delta);
         publish_to_info_topic(outS);
         return 1;
       }
@@ -491,22 +502,22 @@ public:
 
       if (cmdStr == C_HOTTER) {
         bool b;
-        if (set_settings_val_bool( cmdStr, valStr, &_s->hotter)) {
-          if (_s->hotter) {
-            //debug("SETHOTTER:", "set hotter to 1");
-            _s->lscheme_num = 0;
-            _s->autooff_hours = 0;
-            _s->autostop_sec = 0;
-            _s->cooler = 0;
-          } else {
-            // debug("SETHOTTER:", "set hotter to 0");
-            /*supply.r1.reset_lschm_hour();
-              supply.relay1_off("hotter=0");
-            */
-            que_wanted->push(PUBLISHER_WANT_R1_OFF);
-          }
-          return 2;
-        }
+        // if (set_settings_val_bool( cmdStr, valStr, &_s->hotter)) {
+        //   if (_s->hotter) {
+        //     //debug("SETHOTTER:", "set hotter to 1");
+        //     _s->lscheme_num = 0;
+        //     _s->autooff_hours = 0;
+        //     _s->autostop_sec = 0;
+        //     _s->cooler = 0;
+        //   } else {
+        //     // debug("SETHOTTER:", "set hotter to 0");
+        //     /*supply.r1.reset_lschm_hour();
+        //       supply.relay1_off("hotter=0");
+        //     */
+        //     que_wanted->push(PUBLISHER_WANT_R1_OFF);
+        //   }
+        //   return 2;
+        // }
         return 1;
       }
 
@@ -566,7 +577,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_LIGHT_SCHEME_NUM) {
+      if (cmdStr == C_LIGHT_SCHEME_NUM || cmdStr == C_LIGHT_SCHEME_NUM_ALIAS1 || cmdStr == C_LIGHT_SCHEME_NUM_ALIAS2) {
         if (set_settings_val_int( cmdStr, valStr, (int*) &_s->lscheme_num, 0, MAX_LSCHM_NUM)) {
           if (_s->lscheme_num > 0) {
             _s->hotter = 0; // not together !
@@ -585,7 +596,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_LIGHT_SCHEME_NUM2 || cmdStr == C_LIGHT_SCHEME_NUM2T  ) {
+      if (cmdStr == C_LIGHT_SCHEME_NUM2 || cmdStr == C_LIGHT_SCHEME_NUM2T || cmdStr ==C_LIGHT_SCHEME_NUM2T_ALIAS1 ) {
         set_settings_val_int(cmdStr, valStr, (int*) &_s->lscheme_num2, 0, MAX_LSCHM_NUM);
         if(_s->lscheme_num2==0) que_wanted->push(PUBLISHER_WANT_R2_OFF_LSCHM0);
         //supply.r2.reset_lschm_hour();
@@ -635,7 +646,7 @@ public:
       }
 
       if (cmdStr == C_CTEMP_LEVEL) {
-        set_settings_val_int( cmdStr, valStr, (int*) &_s->critical_temp_level, MIN_TEMP_LEVEL, MAX_TEMP_LEVEL);
+        set_settings_val_int( cmdStr, valStr, (int*) &_s->default_temp_level, MIN_TEMP_LEVEL, MAX_TEMP_LEVEL);
         return 1;
       }
 
@@ -643,18 +654,6 @@ public:
         set_settings_val_int( cmdStr, valStr, (int*) &_s->time_zone, -12, 14);
         return 1;
       }
-
-
-      if (cmdStr == C_ANALOG_LEVEL1) {
-        set_settings_val_int( cmdStr, valStr, (int*) &_s->analog_level1, -128, MAX_ANALOG_LEVEL);
-        return 1;
-      }
-
-        if (cmdStr == C_ANALOG_LEVEL2) {
-        set_settings_val_int( cmdStr, valStr, (int*) &_s->analog_level2, -128, MAX_ANALOG_LEVEL);
-        return 1;
-      }
-
 
       if (cmdStr == C_CUSTOM_LEVEL1) {
         set_settings_val_int( cmdStr, valStr, (int*) &_s->custom_level1, MIN_CUSTOM_LEVEL, MAX_CUSTOM_LEVEL);
@@ -665,6 +664,17 @@ public:
         set_settings_val_int( cmdStr, valStr, (int*) &_s->custom_level2, MIN_CUSTOM_LEVEL, MAX_CUSTOM_LEVEL);
         return 1;
       }
+
+      if (cmdStr == C_CUSTOM_LEVEL3) {
+        set_settings_val_int( cmdStr, valStr, (int*) &_s->custom_level3, MIN_CUSTOM_LEVEL, MAX_CUSTOM_LEVEL);
+        return 1;
+      }
+
+      if (cmdStr == C_CUSTOM_LEVEL4) {
+        set_settings_val_int( cmdStr, valStr, (int*) &_s->custom_level4, MIN_CUSTOM_LEVEL, MAX_CUSTOM_LEVEL);
+        return 1;
+      }
+
 
 
     
@@ -709,6 +719,7 @@ public:
       }
 
       if (cmdStr == C_ONOFF1_VAL || cmdStr == C_ONOFF2_VAL) {
+        /*
         int err=0;
         int point=valStr.indexOf(":");
         int len=valStr.length();
@@ -731,6 +742,8 @@ public:
         }
 
         publish_to_info_topic("E:params error");
+        */
+        publish_to_info_topic("E:use cschm1, cschm2");
         return 0;
       }
 
@@ -754,6 +767,50 @@ public:
             if(cmdStr==C_CSHM2) bitWrite(_s->cb_schm2,23-_h,_v);
             publish_to_info_topic("N:V["+String(_h)+"]"+"="+String(_v));
             return 1;
+        }
+
+        publish_to_info_topic("E:params error");
+        return 0;
+      }
+
+      /*
+        om1=000011110000111100001111000 (24 items)
+        om2=000011110000111100001111000 (24 items)
+      */
+
+      if (cmdStr == C_ONOFF1_MATRIX || cmdStr == C_ONOFF2_MATRIX  ) {
+
+        int err=0;
+        int _v;
+        int _c;
+        debug("C_ONOFF1_MATRIX", "LENGTH="+String(valStr.length()));
+
+        //check length
+        if(valStr.length()!=24 ) err =1;
+
+        // debug("C_ONOFF1_MATRIX",  "err="+String(err));
+
+        // chek if on inut string only '0' or '1'
+        for(int i=0; i<=23; i++){
+            _c=valStr.charAt(i);
+            if(_c!='0' && _c!='1') {
+              err=1;
+              break;
+            }
+        }
+
+        if(err==0){    
+         for(int i=0; i<=23; i++){
+            _c=valStr.charAt(i);
+            _c=='0' ? _v=0: _v=1;   // if char=="0", _v=0, else _v=1;
+            //debug("C_ONOFF1_MATRIX", "valStr["+String(i)+"]="+String(_v)+","+String(_c));
+            if(cmdStr==C_ONOFF1_MATRIX) bitWrite(_s->cb_schm1,23-i,_v);
+            if(cmdStr==C_ONOFF2_MATRIX) bitWrite(_s->cb_schm2,23-i,_v);
+         }
+         debug("PUBLISHER", "ONOFFMATRIX saved");
+         publish_to_info_topic("N:ONOFFMATRIX saved");
+         return 1;
+
         }
 
         publish_to_info_topic("E:params error");
@@ -823,16 +880,16 @@ public:
 
     int virtual clear_info_channel(){publish_to_info_topic("                          ");};
 
-    int virtual publish_tlevels_to_info(){
-            String infostr = "";
-            infostr += "h=" + String(_s->hotter) + ";";
-            infostr += "ct=" + String(_s->critical_temp_level) + "; ";
-            infostr += "dt=" + String(_s->day_temp_level) + "; ";
-            infostr += "nt=" + String(_s->night_temp_level) + "; ";
-            infostr += "tdelta=" + String(_s->level_delta) + "; ";
-            infostr += "schm=" + String(_s->schm_onoff_num1) + ";";
-            publish_to_info_topic(infostr);
-    };
+    // int virtual publish_tlevels_to_info(){
+    //         String infostr = "";
+    //         infostr += "h=" + String(_s->hotter) + ";";
+    //         infostr += "ct=" + String(_s->default_temp_level) + "; ";
+    //         infostr += "dt=" + String(_s->day_temp_level) + "; ";
+    //         infostr += "nt=" + String(_s->night_temp_level) + "; ";
+    //         infostr += "tdelta=" + String(_s->level_delta) + "; ";
+    //         infostr += "schm=" + String(_s->schm_onoff_num1) + ";";
+    //         publish_to_info_topic(infostr);
+    // };
 
 };
 

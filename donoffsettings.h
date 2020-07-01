@@ -269,9 +269,13 @@ typedef struct {
 // ** hotter \ cooler 
   bool      hotter=0;
   bool      cooler=0;
-  uint      critical_temp_level=20;
+
+// ** temp level
+  uint      default_temp_level=20;
   uint      day_temp_level=18;
   uint      night_temp_level=24;
+  /*     */
+
   uint      schm_onoff_num1=99;
   uint      schm_onoff_num2=0;
   uint      level_delta=10;  //delta in Celsius*10
@@ -293,8 +297,8 @@ typedef struct {
   unsigned long      pwr_amount=0;  //счетчик потребления в рублях\долл\евр
   uint weekschm[7]={99,99,99,99,99,99,99};
   //*****
-  int     analog_level1=-128;
-  int     analog_level2=-128;
+  int     custom_level3=-128;
+  int     custom_level4=-128;
   int     custom_level1=-128;
   int     custom_level2=-128;
   //uint    hotter2=0;
