@@ -1,11 +1,11 @@
 /* ********** Config supply *******************/
-#define RELAY2 2
+#define RELAY2 0
 #define DS1820_INT 1
-#define DS1820_OUT 2
+#define DS1820_OUT 0
 #define DDISPLAY_SSD1306 0
-#define DTIME_ZONE 2
+//#define DTIME_ZONE 3
 
-#define PINS_SET_V1
+#define PINS_SET_V2
 
 //#define SETDEFNEW
 
@@ -16,6 +16,15 @@
   #define DDISPLAY_SSD1306 0
 #endif
 
+
+//Define here any specific supply 
+
+// #define SUPPLY_PUMP
+
+//default we compile SUPPLY_UNIVERSAL supply
+#ifndef SUPPLY_PUMP 
+  #define SUPPLY_UNIVERSAL
+#endif
 
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
@@ -35,9 +44,16 @@
 #include <donoffrelay.h>
 // #include <supplies/donoffsupply-common.h>
 // #include <supplies/donoffsupply-base.h>
-#include <supplies/donoffsupply-donoff-universal.h>
-//#include <supplies/prj_supplies/pump_current_time_check_supply.h>
 
+
+#ifdef SUPPLY_UNIVERSAL
+  #include <supplies/donoffsupply-donoff-universal.h>
+#endif
+
+#ifdef SUPPLY_PUMP
+  #include <supplies/prj_supplies/pump_current_time_check_supply.h>
+#endif
+//
 
 //#include <supplies/donoffsupply-donoff.h>
 
@@ -64,9 +80,18 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 // DSupplyBase supply(&settings);
 
- DSupplyDonoffUni supply(&settings);
 
-//DSupplyDonoffUniCurr supply(&settings);
+//
+
+
+#ifdef SUPPLY_UNIVERSAL
+    DSupplyDonoffUni supply(&settings);
+#endif
+
+#ifdef SUPPLY_PUMP
+    DSupplyDonoffUniCurr supply(&settings);
+#endif
+
 
 //DSupplyDonoff supply(&settings);
 

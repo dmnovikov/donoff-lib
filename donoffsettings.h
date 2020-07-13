@@ -126,6 +126,7 @@ enum sensor_states {
 #define  BUTTON_MIN_DELAY 5
 #define PR_DIFF 317
 #define MAX_LSCHEME_MODES 20
+#define MAX_SLOW_LOOP_COUNTER 600
 
 #define DALLAS_RES_IN 9
 #define DALLAS_RES_OUT 10
@@ -279,7 +280,7 @@ typedef struct {
   /*     */
 
   uint      schm_onoff_num1=99;
-  uint      schm_onoff_num2=0;
+  uint      schm_onoff_num2=0; //not use
   uint      level_delta=10;  //delta in Celsius*10
 
   bool      notifyer=0;
@@ -296,7 +297,7 @@ typedef struct {
   int      custom_level_notify4=-128;
   byte      urgent_off=75;
   uint      tariff=500;      // копееек \ центов за 1квт\ч
-  unsigned long      pwr_amount=0;  //счетчик потребления в рублях\долл\евр
+  unsigned long      ucounter=0;  //счетчик потребления в рублях\долл\евр
   uint weekschm[7]={99,99,99,99,99,99,99};
   //*****
   int     custom_level3=-128;

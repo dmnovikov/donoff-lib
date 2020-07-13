@@ -35,7 +35,7 @@ class DSupplyDonoff: public DSupplyBase {
         r[0]->init(RELAY1_PIN, "r1", 1, String(RELAY1_ONOFF_CHANNEL), String(RELAY1_ONTIME_CHANNEL), String(RELAY1_DOWNTIME_CHANNEL));
         //debug("SUPPLYINIT", "r1name="+r1->get_nameStr());
 
-        if(_s->start_on){
+        if(_s->start_on && _s->custom_scheme1==0){
           relay_on(r[0],"on, start on");
         }
         

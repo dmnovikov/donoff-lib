@@ -89,7 +89,7 @@ const char* I_BSCHM="bschm";
 const char* I_NET="net";
 const char* I_SENDALIVE="sendalive";
 
-const char* D_ZERO_PWR_AMOUNT="zeropwramount";
+const char* C_U_COUNTER="resetucounter";
 const char* D_ZERO_ALARM="zeroalarm";
 const char* D_RESET_HOUR1="resethour1";
 const char* D_RESET_HOUR2="resethour2";

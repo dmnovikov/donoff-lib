@@ -50,7 +50,8 @@ class DSupply: public DBase {
 
     int numrelays = 0;
    
-    int mycounter = 0;
+    uint mycounter = 0;
+    uint mycounter2=0;
     ulong mytimer = 0;
     int init_ok = 0;
     int m_just_synced=0;
@@ -104,12 +105,18 @@ class DSupply: public DBase {
           sensors_loop(mycounter-MAX_LOOPS);
         }
 
+        if(mycounter==MAX_LOOP_COUNTER) {
+          debug("VERY_SLOWLOOP", "counter="+String(mycounter2));
+          very_slow_loop(mycounter2);
+          mycounter2++;
+        }
+
         mycounter++;
         //300 ms loop
+       
 
         fast_loop();
 
-       
         pub_wanted_loop();
        
         //
@@ -123,7 +130,41 @@ class DSupply: public DBase {
 
       }
 
+      if(mycounter2>MAX_SLOW_LOOP_COUNTER){
+        mycounter2=0;
+      }
+
       native_loop();
+
+    };
+
+    int virtual one_minute_loop(){};
+    int virtual ten_minutes_loop(){};
+    int virtual thirty_minutes_loop(){};
+    int virtual one_hour_loop(){};
+
+    int virtual very_slow_loop(int counter){
+          
+          if(counter % 10 == 0 && counter!=0){ 
+              debug("SLOWLOOP", "1 MINUTE, counter="+String(counter));
+              one_minute_loop();
+          }
+
+
+          if(counter % 100 == 1 && counter!=0){   
+              debug("SLOWLOOP", " 10 MINUTES, counter="+String(counter));
+              ten_minutes_loop();
+          }
+
+          if((counter == 302 || counter==598) && counter!=0){           
+              debug("SLOWLOOP", "30 MINUTES, counter="+String(counter));
+              thirty_minutes_loop();
+          }
+
+          if(counter==599 && counter!=0){           
+              debug("SLOWLOOP", " one_hour, counter="+String(counter));
+              one_hour_loop();
+          }
 
     };
 
@@ -168,7 +209,6 @@ class DSupply: public DBase {
       what_to_want=que_wanted->pop();
 
       if(what_to_want==PUBLISHER_WANT_SAY_JUST_SYNCED){
-        //debug("SUPPLY_QUEUE", "just_synced SET TO 1, mycouner="+String(mycounter));
         m_just_synced=1;
       }
 
@@ -201,7 +241,7 @@ class DSupply: public DBase {
 
     int virtual service_loop() {
 
-      debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + " ,t_sync=" + String(pub->is_time_synced())+ 
+      debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + ":" + String(second()) + " ,t_sync=" + String(pub->is_time_synced())+ 
            ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected())+
            ", size_s="+String(sizeof(*_s))
        );

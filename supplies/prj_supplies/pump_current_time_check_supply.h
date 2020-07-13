@@ -62,7 +62,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
 
        DSupplyDonoffUni::sensors_loop(sensor_num);
 
-       if(sensor_num==3){
+       if(sensor_num==3 && _s->custom_level1>0){
           sct013->sensor_loop();
           debug("SCT013_OUT", sct013->get_val_Str());
           ulong current=sct013->get_val();
@@ -82,7 +82,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
               }
               else{
                 strong_current_ms=millis()-start_strong_current_ms;
-                debug("STRONG_CURR", "STRONG_TIME:"+String(strong_current_ms/1000));
+                //debug("STRONG_CURR", "STRONG_TIME:"+String(strong_current_ms/1000));
               }
             }
           }else{
@@ -110,7 +110,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
 
          DSupplyDonoffUni::slow_loop(mycounter);      
 
-         if(mycounter==8){
+         if(mycounter==8 && _s->custom_level1>0){  //id custom_level1==0 ignore this sensor
 
             if(strong_current_ms>0)
                debug("STRONG_CURR", "CURRENT MS="+String(strong_current_ms)+"; level="+String(_s->custom_level2*1000));
