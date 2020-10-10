@@ -5,7 +5,7 @@
 #include <sensors/donoffsensor_sct013.h>
 
 #ifdef D_MQTT
-    const char SCT013_OUT_CHANNEL[]="/out/sct013_1";
+    const char SCT013_OUT_CHANNEL[]="/out/sensors/sct013_1";
 #endif
 
 

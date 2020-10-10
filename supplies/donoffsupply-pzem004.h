@@ -7,7 +7,7 @@
 
 
 #ifdef D_MQTT
-    const char PZEM_004_OUT_CHANNEL[]="/out/pzem004";
+    const char PZEM_004_OUT_CHANNEL[]="/out/sensors/pzem004";
 #endif
 
 #define PIN1 D1

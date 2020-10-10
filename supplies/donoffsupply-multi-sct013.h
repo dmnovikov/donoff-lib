@@ -5,7 +5,7 @@
 #include <sensors/donoff-multisensor-sct013.h>
 
 #ifdef D_MQTT
-    const char SCT013_X3_OUT_CHANNEL[]="/out/sct013x3";
+    const char SCT013_X3_OUT_CHANNEL[]="/out/sensors/sct013x3";
 #endif
 
 #define MULTISENSOR_PIN1 12

@@ -4,8 +4,8 @@
 #include <supplies/donoffsupply-donoff.h>
 
 #ifdef D_MQTT
-    const char DS_OUT_CHANNEL[] = "/out/temp_out";
-    const char RELAY2_ONOFF_CHANNEL[] = "/out/b2";
+    const char DS_OUT_CHANNEL[] = "/out/sensors/temp_out";
+    const char RELAY2_ONOFF_CHANNEL[] = "/out/relays/r2";
 #endif
 
 #if !defined (RELAY2)

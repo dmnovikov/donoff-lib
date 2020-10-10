@@ -5,10 +5,10 @@
 #include <sensors/donoffsensor_ds1820.h>
 
 #ifdef D_MQTT
-    const char RELAY1_ONOFF_CHANNEL[] = "/out/b1";
+    const char RELAY1_ONOFF_CHANNEL[] = "/out/relays/r1";
     const char RELAY1_ONTIME_CHANNEL[] = "/out/time_comm";
     const char RELAY1_DOWNTIME_CHANNEL[] = "/out/time_down";
-    const char DS_IN_CHANNEL[] = "/out/temp_in";
+    const char DS_IN_CHANNEL[] = "/out/sensors/temp_in";
 #endif
 
 class DSupplyDonoff: public DSupplyBase {
