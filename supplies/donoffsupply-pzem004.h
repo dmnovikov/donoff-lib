@@ -39,16 +39,16 @@ class DSupplyPZEM004: public DSupplyBase {
    int sensors_loop(int sensor_num){
        if(sensor_num==1){
           pzem004->pzem_current->sensor_loop();
-          debug("PZEM004C", pzem004->pzem_current->get_val_Str());
+          debug("PZEM004-Current", pzem004->pzem_current->get_val_Str());
 
           pzem004->pzem_voltage->sensor_loop();
-          debug("PZEM004V", pzem004->pzem_voltage->get_val_Str());
+          debug("PZEM004-Voltage", pzem004->pzem_voltage->get_val_Str());
 
           pzem004->pzem_power->sensor_loop();
-          debug("PZEM004P", pzem004->pzem_power->get_val_Str());
+          debug("PZEM004-Power", pzem004->pzem_power->get_val_Str());
 
           pzem004->pzem_energy->sensor_loop();
-          debug("PZEM004E", pzem004->pzem_energy->get_val_Str());
+          debug("PZEM004-Energy", pzem004->pzem_energy->get_val_Str());
        }
    };
 
@@ -63,6 +63,38 @@ class DSupplyPZEM004: public DSupplyBase {
        if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_power);
        if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_energy);
 
+      //move it to pzem004 class !!!
+
+      // String s_timestamp;
+      // s_timestamp=String(year());
+      // s_timestamp+="-";
+      // s_timestamp+= month()<10? "0"+String(month()): String(month());
+      // s_timestamp+="-";
+      // s_timestamp+= day()<10? "0"+String(day()): String(day());
+      // s_timestamp+="T";
+      // s_timestamp+= hour()<10? "0"+String(hour()): String(hour());
+      // s_timestamp+=":";
+      // s_timestamp+= minute()<10? "0"+String(minute()): String(minute());
+      // s_timestamp+=":";
+      // s_timestamp+= second()<10? "0"+String(second()): String(second());
+      // s_timestamp+="Z";
+
+
+      DynamicJsonBuffer jsonBuffer;
+      JsonObject &root = jsonBuffer.createObject();
+      String json_str;
+      root["timestamp"] =s_get_timestamp();
+      root["current"] =  pzem004->pzem_current->get_val_Str();
+      root["volage"] = pzem004->pzem_voltage->get_val_Str();
+      root["power"] = pzem004->pzem_power->get_val_Str();
+      root["energy"] = pzem004->pzem_energy->get_val_Str();
+      root.printTo(json_str);
+      //int len = json_str.length();
+      debug("PZEM004-json", json_str);
+
+      // ----
+
+      if (pub->is_connected() && pub->is_time_synced()) pub->publish_to_topic(PZEM_004_OUT_CHANNEL,json_str);
    };
 
 

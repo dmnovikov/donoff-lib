@@ -47,6 +47,23 @@ int load(){
     EEPROM.end();
 }
 
+String s_get_timestamp(){
+    String s_timestamp;
+    s_timestamp=String(year());
+    s_timestamp+="-";
+    s_timestamp+= month()<10? "0"+String(month()): String(month());
+    s_timestamp+="-";
+    s_timestamp+= day()<10? "0"+String(day()): String(day());
+    s_timestamp+="T";
+    s_timestamp+= hour()<10? "0"+String(hour()): String(hour());
+    s_timestamp+=":";
+    s_timestamp+= minute()<10? "0"+String(minute()): String(minute());
+    s_timestamp+=":";
+    s_timestamp+= second()<10? "0"+String(second()): String(second());
+    s_timestamp+="Z";
+    return s_timestamp;
+};
+
 int virtual reset(){
   ESP.reset();
 }

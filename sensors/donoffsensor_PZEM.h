@@ -7,10 +7,11 @@
 
 
 #ifdef D_MQTT
-    const char PZEM_CURRENT_OUT_CHANNEL[]="/out/current";
-    const char PZEM_POWER_OUT_CHANNEL[]="/out/power";
-    const char PZEM_ENERGY_OUT_CHANNEL[]="/out/energy";
-    const char PZEM_VOLTAGE_OUT_CHANNEL[]="/out/voltage";
+    const char PZEM_CURRENT_OUT_CHANNEL[]="/out/sensors/pzem_current";
+    const char PZEM_POWER_OUT_CHANNEL[]="/out/sensors/pzem_power";
+    const char PZEM_ENERGY_OUT_CHANNEL[]="/out/sensors/pzem_energy";
+    const char PZEM_VOLTAGE_OUT_CHANNEL[]="/out/sensors/pzem_voltage";
+    const char PZEM_JSON_OUT_CHANNEL[]="/out/sensors/pzem_voltage";
 #endif
 
 
