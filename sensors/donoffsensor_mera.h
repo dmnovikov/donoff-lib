@@ -17,15 +17,17 @@ class SCT013Sensor: public DSensor {
       SENSOR_PIN=_pin;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_baselog) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
 
       START_DELAY = 30000;
       NEED_FILTERED = _filtered;
       MULTIPLIER = 100;
       NEED_ASK_WHILE_WATING=1;
+      TYPE=_type;
+      need_json=_need_json;
       
       debug("INITDCT013", "type="+String(_type));
 

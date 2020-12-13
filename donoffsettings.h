@@ -92,8 +92,8 @@ enum sensor_states {
 
 /* need to write to database*/
 
-#define  BASELOG_NO 0
-#define  BASELOG_YES 1
+#define  JSON_CHANNEL_YES 1
+#define  JSON_CHANNEL_NO 0
 
 
 

@@ -24,10 +24,10 @@ class PZEM004Tv30SensorCurrent: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=11, int _need_baselog=0) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
 
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
@@ -35,8 +35,8 @@ class PZEM004Tv30SensorCurrent: public DSensor{
       NEED_ASKING = 0;
       NEED_FILTERED = _filtered;
       MULTIPLIER = 100;
-
-      debug(nameStr, "type="+String(_type)+" needbaselog="+String(_need_baselog));
+      TYPE=_type;
+      need_json=_need_json;
       debug(nameStr, "init ok");
     };
 
@@ -64,10 +64,10 @@ class PZEM004Tv30SensorPower: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=11, int _need_baselog=0) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
 
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
@@ -76,7 +76,6 @@ class PZEM004Tv30SensorPower: public DSensor{
       NEED_FILTERED = _filtered;
       MULTIPLIER = 100;
 
-      debug(nameStr, "type="+String(_type)+" needbaselog="+String(_need_baselog));
       debug(nameStr, "init ok");
     };
 
@@ -105,10 +104,10 @@ class PZEM004Tv30SensorVoltage: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=12, int _need_baselog=0) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
 
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
@@ -116,8 +115,6 @@ class PZEM004Tv30SensorVoltage: public DSensor{
       NEED_ASKING = 0;
       NEED_FILTERED = _filtered;
       MULTIPLIER = 100;
-
-       debug(nameStr, "type="+String(_type)+" needbaselog="+String(_need_baselog));
 
       /***************/
        debug(nameStr, "init ok");
@@ -147,10 +144,10 @@ class PZEM004Tv30SensorEnergy: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type=12, int _need_baselog=0) {
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
 
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
@@ -158,8 +155,6 @@ class PZEM004Tv30SensorEnergy: public DSensor{
       NEED_ASKING = 0;
       NEED_FILTERED = _filtered;
       MULTIPLIER = 100;
-
-       debug(nameStr, "type="+String(_type)+" needbaselog="+String(_need_baselog));
 
       /***************/
        debug(nameStr, "init ok");
@@ -197,22 +192,22 @@ class PZEM004Tv30Sensor: public DBase {
     PZEM004Tv30Sensor(WMSettings* __s, int _pin1, int _pin2): DBase(__s), pzem(_pin1, _pin2) {
     };
 
-    int virtual init(String _name, String _chname, Queue<sensor_state> *_que_sensor_states, int _type=2, int _need_baselog=0) {
+    int virtual init(String _name, String _chname, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
 
       nameStr=_name;
       channelName=_chname;
 
       pzem_current= new PZEM004Tv30SensorCurrent(_s, &pzem);
-      pzem_current->init("PZEM04_Current", PZEM_CURRENT_OUT_CHANNEL, 0, _que_sensor_states, 11,1);
+      pzem_current->init("PZEM04_Current", PZEM_CURRENT_OUT_CHANNEL, 0, _que_sensor_states, 11,JSON_CHANNEL_NO);
 
       pzem_power= new PZEM004Tv30SensorPower(_s, &pzem);
-      pzem_power->init("PZEM04_Power", PZEM_POWER_OUT_CHANNEL, 0, _que_sensor_states, 12,1);
+      pzem_power->init("PZEM04_Power", PZEM_POWER_OUT_CHANNEL, 0, _que_sensor_states, 12,JSON_CHANNEL_NO);
 
       pzem_voltage= new PZEM004Tv30SensorVoltage(_s, &pzem);
-      pzem_voltage->init("PZEM04_Voltage", PZEM_VOLTAGE_OUT_CHANNEL, 0, _que_sensor_states, 13,1);
+      pzem_voltage->init("PZEM04_Voltage", PZEM_VOLTAGE_OUT_CHANNEL, 0, _que_sensor_states, 13,JSON_CHANNEL_NO);
 
       pzem_energy= new PZEM004Tv30SensorEnergy(_s, &pzem);
-      pzem_energy->init("PZEM04_Energy", PZEM_ENERGY_OUT_CHANNEL, 0, _que_sensor_states, 14,1);
+      pzem_energy->init("PZEM04_Energy", PZEM_ENERGY_OUT_CHANNEL, 0, _que_sensor_states, 14,JSON_CHANNEL_NO);
 
         
       debug("INITPZEM004", "type="+String(_type));

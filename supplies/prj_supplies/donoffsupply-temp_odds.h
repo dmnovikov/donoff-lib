@@ -27,7 +27,7 @@ class DSupplyDonoffTempOdds: public DSupplyDonoffDS2 {
 
       if(DS_ODDS){
         ds_odds= new DTempOddsSensor(_s,ds_out, ds_out2);
-        ds_odds->init("DS_ODDS", DS_OUT_ODD_CHANNEL, 0,que_sensor_states, SENSOR_TYPE_TEMPERATURE, BASELOG_YES);
+        ds_odds->init("DS_ODDS", DS_OUT_ODD_CHANNEL, 0,que_sensor_states, SENSOR_TYPE_TEMPERATURE, JSON_CHANNEL_NO);
       }
       init_ok=1;
     

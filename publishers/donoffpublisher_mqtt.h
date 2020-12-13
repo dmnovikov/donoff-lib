@@ -201,8 +201,8 @@ public:
        if (!is_connected()) return 0;   
       _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
       //debug("BASELOG", "check log, settings="+String(_s->baselog)+" sensor_baselog="+String(_sensor->need_baselog()));
-      if(_sensor->need_baselog() && _s->baselog){
-         baselog_sensor(_sensor);
+      if(_sensor->need_publish_json()){
+         publish_sensor_json(_sensor);
       }
     };
 
@@ -248,6 +248,7 @@ public:
 
       JsonObject &root = jsonBuffer.createObject();
       String json_str;
+      root["timestamp"] = s_get_timestamp();
       root["dev"] = _s->dev_id;
       root["user"] = _s->mqttUser;
       root["s_type"] = String(_sensor->get_type());
@@ -267,6 +268,28 @@ public:
 
       // _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
     };
+
+    int virtual publish_sensor_json(DSensor * _sensor){
+      if (!is_connected()) return 0;   
+
+      debug("JSONLOG", _sensor->get_nameStr()+":Send to json sensor");
+
+      DynamicJsonBuffer jsonBuffer;
+
+      JsonObject &root = jsonBuffer.createObject();
+      String json_str;
+      root["timestamp"] = s_get_timestamp();
+      root["s_type"] = String(_sensor->get_type());
+      root["name"] = String(_sensor->get_nameStr());
+      root["val"] = _sensor->get_longval_Str();
+      root["mult"] = _sensor->get_multiplier();
+
+      root.printTo(json_str);
+      _c->publish(form_full_topic(_sensor->get_channelStr()+"_json").c_str(), json_str.c_str());
+
+     
+    };
+
 
     int virtual publish_to_topic(String _topic, String _valStr){
         _c->publish(form_full_topic(_topic).c_str(), _valStr.c_str());

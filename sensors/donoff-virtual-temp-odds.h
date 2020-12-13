@@ -29,7 +29,9 @@ class DTempOddsSensor: public DSensor {
         num_of_sensors=2;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_baselog){
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
+
+      DSensor::init(_name,_chname, _filtered, _que_sensor_states, _type, _need_json);
    
       NO_SENSOR_VAL = -12700;
       NOT_READY_VAL = -12800;
@@ -39,6 +41,7 @@ class DTempOddsSensor: public DSensor {
       // REQUEST_CIRCLE = 750;
       MULTIPLIER = 100;
       NEED_ASK_WHILE_WATING=0;
+      TYPE=_type;
 
       DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
       init_ok = 1;

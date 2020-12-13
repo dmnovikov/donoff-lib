@@ -26,6 +26,8 @@ class DSensor: public DBase {
 
     String nameStr = "unknown";
     String channelStr="unknown";
+    uint need_json=0;
+
     int id;
     
     long  NO_SENSOR_VAL = -12700;
@@ -70,12 +72,15 @@ class DSensor: public DBase {
 
     int virtual req_sensor() {};
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_baselog){
+    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
       que_states=_que_sensor_states;
       nameStr=_name;
       channelStr=_chname;
+      need_json=_need_json;
+
+
       NEED_FILTERED=_filtered;
-      NEED_BASELOG=_need_baselog;
+      //NEED_BASELOG=_need_baselog;
 
       sens.v[0] = NOT_READY_VAL;
       sens.v[1] = NOT_READY_VAL;
@@ -336,9 +341,14 @@ class DSensor: public DBase {
       return NEED_BASELOG;
     };
 
-    void set_baselog(bool v){
-      NEED_BASELOG=v;
+     bool need_publish_json(){
+      return need_json;
+      debug("NEEDJSON", String(need_json));
     };
+
+    // void set_baselog(bool v){
+    //   NEED_BASELOG=v;
+    // };
 
 
 

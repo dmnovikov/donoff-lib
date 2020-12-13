@@ -10,8 +10,8 @@
     const char PZEM_004_OUT_CHANNEL[]="/out/sensors/pzem004";
 #endif
 
-#define PIN1 D1
-#define PIN2 D2
+#define PIN1 D7
+#define PIN2 D6
 
 
 class DSupplyPZEM004: public DSupplyBase {
@@ -29,7 +29,7 @@ class DSupplyPZEM004: public DSupplyBase {
         debug("SUPPLY_INIT", "PZEM004 INIT");
         
         pzem004 = new PZEM004Tv30Sensor(_s, PIN1, PIN2);
-        pzem004->init("PZEM004", PZEM_004_OUT_CHANNEL, que_sensor_states, 10, 0);
+        pzem004->init("PZEM004", PZEM_004_OUT_CHANNEL, que_sensor_states, 10, JSON_CHANNEL_YES);
         
         init_ok=1;
     
@@ -63,27 +63,11 @@ class DSupplyPZEM004: public DSupplyBase {
        if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_power);
        if (pub->is_connected()) pub->publish_sensor(pzem004->pzem_energy);
 
-      //move it to pzem004 class !!!
-
-      // String s_timestamp;
-      // s_timestamp=String(year());
-      // s_timestamp+="-";
-      // s_timestamp+= month()<10? "0"+String(month()): String(month());
-      // s_timestamp+="-";
-      // s_timestamp+= day()<10? "0"+String(day()): String(day());
-      // s_timestamp+="T";
-      // s_timestamp+= hour()<10? "0"+String(hour()): String(hour());
-      // s_timestamp+=":";
-      // s_timestamp+= minute()<10? "0"+String(minute()): String(minute());
-      // s_timestamp+=":";
-      // s_timestamp+= second()<10? "0"+String(second()): String(second());
-      // s_timestamp+="Z";
-
-
+     
       DynamicJsonBuffer jsonBuffer;
       JsonObject &root = jsonBuffer.createObject();
       String json_str;
-      root["timestamp"] =s_get_timestamp();
+      root["timestamp"] = s_get_timestamp();
       root["current"] =  pzem004->pzem_current->get_val_Str();
       root["volage"] = pzem004->pzem_voltage->get_val_Str();
       root["power"] = pzem004->pzem_power->get_val_Str();
@@ -91,8 +75,6 @@ class DSupplyPZEM004: public DSupplyBase {
       root.printTo(json_str);
       //int len = json_str.length();
       debug("PZEM004-json", json_str);
-
-      // ----
 
       if (pub->is_connected() && pub->is_time_synced()) pub->publish_to_topic(PZEM_004_OUT_CHANNEL,json_str);
    };
