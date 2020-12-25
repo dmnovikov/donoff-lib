@@ -5,7 +5,7 @@
 #define DDISPLAY_SSD1306 0
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V2
+#define PINS_SET_V1
 
 //#define SETDEFNEW
 
@@ -22,14 +22,17 @@
 
 // #define SUPPLY_PUMP
 //#define SUPPLY_DS2
-
 //#define SUPPLY_TEMP_ODDS
+
+#define SUPPLY_UNI_SCT013
 
 //default we compile SUPPLY_UNIVERSAL supply
 #ifndef SUPPLY_PUMP 
  #ifndef SUPPLY_DS2
   #ifndef SUPPLY_TEMP_ODDS
+    #ifndef SUPPLY_UNI_SCT013
       #define SUPPLY_UNIVERSAL
+    #endif
   #endif
  #endif
 #endif
@@ -68,6 +71,10 @@
 
 #ifdef SUPPLY_TEMP_ODDS
   #include <supplies/prj_supplies/donoffsupply-temp_odds.h>
+#endif
+
+#ifdef SUPPLY_UNI_SCT013
+  #include <supplies/donoffsupply-uni-sct013.h>
 #endif
 
 //
@@ -115,6 +122,12 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 #ifdef SUPPLY_TEMP_ODDS
     DSupplyDonoffTempOdds supply(&settings);
+#endif
+
+
+#ifdef SUPPLY_UNI_SCT013
+    DSupplyDonoffUniSct013 supply(&settings);
+  
 #endif
 
 
