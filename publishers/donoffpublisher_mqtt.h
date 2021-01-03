@@ -2,6 +2,8 @@
 #define dpublishermqtt_h
 
 //#include <>
+#include <TZ.h>
+#include <time.h>
 #include <donoffcommands.h>
 #include <donoffbase.h>
 #include <publishers/donoffpublisher.h>
@@ -61,10 +63,40 @@ public:
 
         time_t t;
 
-        configTime(_s->time_zone * 3600, 0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
+        //configTime(TZ_Europe_Tallinn, "pool.ntp.org");
+        //configTime(TZ_Europe_Moscow, "pool.ntp.org");
+
+        //TZ_Europe_Tallinn
+        //TZ_Europe_Moscow
+        
+        /*************************************************************************/
+        
+        //sntp_set_timezone_in_seconds(3*3600);
+
+        //  sntp_stop();
+
+        // setServer(0, server1);
+        // setServer(1, server2);
+        // setServer(2, server3);
+
+        // sntp_set_timezone_in_seconds(_s->time_zone * 3600;
+        // sntp_set_daylight(daylightOffset_sec);
+        // sntp_init();
+
+        /**************************************************************************/
+        
+
+        //configTime(_s->time_zone * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
+        //configTime_old(3 * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
+
+        debug("TIMESYNC", "TZ=" + String (_s->time_zone)+", "+ (year()) + ":"+ String (hour()) + ":"+ String(minute()));
+        configTime(_s->time_zone * 3600,  3600 / 2, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
+        
+        //setenv("TZ","MSK-3", 1);
+
         t = time(NULL);
         setTime(t);
-        if(year(t)==1970){ //default date
+        if(year()==1970){ //default date
           debug("TIMESYNC", "FAIL TO SYNC TIME :(");
           time_synced=0;
         }else{

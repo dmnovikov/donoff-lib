@@ -87,7 +87,11 @@ const char* I_CUSTOM_SCHEME1="cschm1";
 const char* I_CUSTOM_SCHEME2="cschm2";
 const char* I_BSCHM="bschm";
 const char* I_NET="net";
+const char* I_IP="ip";
+const char* I_PINSET="pinset";
 const char* I_SENDALIVE="sendalive";
+const char* I_COMPILE_PARAMS="cmpl";
+
 
 const char* C_U_COUNTER="resetucounter";
 const char* D_ZERO_ALARM="zeroalarm";

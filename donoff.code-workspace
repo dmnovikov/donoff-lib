@@ -8,6 +8,7 @@
 		"files.associations": {
 			"new": "cpp"
 		},
-		"arduino.additionalUrls": ""
+		"arduino.additionalUrls": "",
+		"arduino.defaultBaudRate": 9600
 	}
 }

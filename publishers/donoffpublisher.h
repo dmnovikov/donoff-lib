@@ -397,6 +397,34 @@ public:
         return 1;
       }
 
+      if (shStr == I_IP) {
+        publish_to_info_topic( WiFi.localIP().toString());
+        return 1;
+      }
+
+      if (shStr == I_PINSET) {
+        #ifdef PINS_SET_V1
+           publish_to_info_topic( "pinsver=v1");
+        #endif
+
+        #ifdef PINS_SET_V2
+           publish_to_info_topic( "pinsver=v2");
+        #endif
+
+        return 1;
+      }
+
+       if (shStr == I_COMPILE_PARAMS) {
+        String outS="cmpl=";
+        if(RELAY2) outS+="R2:1;"; else outS+="R2:0;";
+        if(DS1820_OUT) outS+="DS_OUT:1;"; else outS+="DS_OUT:0;";
+        if(DS1820_INT) outS+="DS_INT:1;"; else outS+="DS_INT:0;";
+        publish_to_info_topic(outS);
+        return 1;
+      }
+
+
+
 
       if (shStr.startsWith (I_BSCHM)) {
         String outS = "";
@@ -788,6 +816,36 @@ public:
       if (cmdStr == C_CSHM1 || cmdStr == C_CSHM2) {
         int err=0;
         int point=valStr.indexOf(":");
+
+        if(point==-1) { //not found
+          if(valStr=="0"){
+            if(cmdStr==C_CSHM1){
+                _s->cb_schm1=valStr.toInt();
+                publish_to_info_topic("N:CCSCM1="+String(_s->cb_schm1));
+            } 
+            if(cmdStr==C_CSHM2) {
+              _s->cb_schm2=valStr.toInt();
+              publish_to_info_topic("N:CCSCM2="+String(_s->cb_schm2));
+            }
+            return 1;
+          }
+
+          if(valStr=="1"){
+            if(cmdStr==C_CSHM1){
+                _s->cb_schm1=0b111111111111111111111111;
+                publish_to_info_topic("N:CCSCM1=1");
+            } 
+            if(cmdStr==C_CSHM2) {
+              _s->cb_schm2=0b111111111111111111111111;;
+              publish_to_info_topic("N:CCSCM2=1");
+            }
+            return 1;
+          }
+
+          return 0;
+         
+        }
+
         int len=valStr.length();
         String  hStr=valStr.substring(0,point);
         String  vStr=valStr.substring(point+1,len);

@@ -20,18 +20,21 @@
 
 //Define here any specific supply 
 
-// #define SUPPLY_PUMP
+//#define SUPPLY_PUMP
 //#define SUPPLY_DS2
 //#define SUPPLY_TEMP_ODDS
+//#define SUPPLY_UNI_SCT013 
+//#define SUPPLY_SCT03_SINGLE
 
-#define SUPPLY_UNI_SCT013
 
 //default we compile SUPPLY_UNIVERSAL supply
 #ifndef SUPPLY_PUMP 
  #ifndef SUPPLY_DS2
   #ifndef SUPPLY_TEMP_ODDS
     #ifndef SUPPLY_UNI_SCT013
-      #define SUPPLY_UNIVERSAL
+      #ifndef SUPPLY_SCT03_SINGLE
+        #define SUPPLY_UNIVERSAL
+      #endif
     #endif
   #endif
  #endif
@@ -58,7 +61,7 @@
 
 
 #ifdef SUPPLY_UNIVERSAL
-  #include <supplies/donoffsupply-donoff-universal.h>
+    #include <supplies/donoffsupply-donoff-universal.h>
 #endif
 
 #ifdef SUPPLY_PUMP
@@ -77,14 +80,12 @@
   #include <supplies/donoffsupply-uni-sct013.h>
 #endif
 
-//
+#ifdef SUPPLY_SCT03_SINGLE
+  #include <supplies/donoffsupply-sct013.h>
+#endif
 
-//#include <supplies/donoffsupply-donoff.h>
 
-//#include <supplies/donoffsupply-sct013.h>
 #include <PubSubClient.h>
-
-
 
 WMSettings settings;
 
@@ -98,15 +99,6 @@ void callback(char* topic, byte* payload, unsigned int length);
 Queue<pub_events> que_wanted= Queue<pub_events>(MAX_QUEUE_WANTED);
 
 DPublisherMQTT pubmqtt(&settings, &client);
-
-
-// DSupply supply(&settings);
-
-// DSupplyBase supply(&settings);
-
-
-//
-
 
 #ifdef SUPPLY_UNIVERSAL
     DSupplyDonoffUni supply(&settings);
@@ -127,14 +119,12 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 #ifdef SUPPLY_UNI_SCT013
     DSupplyDonoffUniSct013 supply(&settings);
-  
 #endif
 
 
-
-//DSupplyDonoff supply(&settings);
-
-//DSupplySCT013Collector supply(&settings);
+#ifdef SUPPLY_SCT03_SINGLE
+  DSupplySCT013Collector supply(&settings);
+#endif
 
 
 DNotifyerEmailMQTT notifyer(&settings, &client);
@@ -190,16 +180,11 @@ void setup()
     settings = defaults;
   }
 
-  // #ifdef SETDEFNEW //newdef vualues
-  //    settings.cb_schm1=0B000000000011111111111100;
-  //    settings.cb_schm2=0B111111111111100000000000;
-  // #endif
-
+  
   pinMode(SONOFF_LED, OUTPUT);
   
   ticker.attach(0.25,tick);
-  
-  
+    
   supply.set_blink(BL_CONNECTING);
 
   /* try to connect to wifi*/
@@ -235,7 +220,12 @@ void setup()
   pubmqtt.init(&que_wanted);
   notifyer.init(&pubmqtt);
 
+  #ifdef SUPPLY_UNIVERSAL
+    Serial.println("UNIVERSAL SUPPLY");
+  #endif
+
   supply.init(&notifyer, &pubmqtt, &que_wanted);
+
 
 }
 
@@ -246,6 +236,8 @@ void loop()
 {
 
 if (client.connected()) client.loop();
+
+
 supply.supply_loop();
 
 
