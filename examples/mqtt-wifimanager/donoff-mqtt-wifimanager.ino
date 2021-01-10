@@ -1,30 +1,32 @@
 /* ********** Config supply *******************/
+
+//UNIVERSAL SUPPLY parameters 
 #define RELAY2 0
 #define DS1820_INT 1
 #define DS1820_OUT 1
 #define DDISPLAY_SSD1306 0
+
 //#define DTIME_ZONE 3
 
 #define PINS_SET_V1
-
-//#define SETDEFNEW
+//#define SETDEFNEW 
 
 //when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1
 
-
-#ifdef PINS_SET_V1
+#ifdef PINS_SET_V2
   #undef DDISPLAY_SSD1306
   #define DDISPLAY_SSD1306 0
 #endif
-
 
 //Define here any specific supply 
 
 //#define SUPPLY_PUMP
 //#define SUPPLY_DS2
+//#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
 //#define SUPPLY_UNI_SCT013 
 //#define SUPPLY_SCT03_SINGLE
+// #define SUPPLY_MULTI_SCT013
 
 
 //default we compile SUPPLY_UNIVERSAL supply
@@ -32,8 +34,10 @@
  #ifndef SUPPLY_DS2
   #ifndef SUPPLY_TEMP_ODDS
     #ifndef SUPPLY_UNI_SCT013
-      #ifndef SUPPLY_SCT03_SINGLE
-        #define SUPPLY_UNIVERSAL
+      #ifndef SUPPLY_UNI_SCT013
+        #ifndef SUPPLY_MULTI_SCT013
+          #define SUPPLY_UNIVERSAL
+        #endif
       #endif
     #endif
   #endif
@@ -84,6 +88,10 @@
   #include <supplies/donoffsupply-sct013.h>
 #endif
 
+#ifdef SUPPLY_MULTI_SCT013
+  #include <supplies/donoffsupply-multi-sct013.h>
+#endif
+
 
 #include <PubSubClient.h>
 
@@ -125,6 +133,11 @@ DPublisherMQTT pubmqtt(&settings, &client);
 #ifdef SUPPLY_SCT03_SINGLE
   DSupplySCT013Collector supply(&settings);
 #endif
+
+#ifdef SUPPLY_MULTI_SCT013
+  DSupplyMultiSCT013Collector supply(&settings);
+#endif
+
 
 
 DNotifyerEmailMQTT notifyer(&settings, &client);
@@ -199,6 +212,7 @@ void setup()
 
   WiFi.persistent(false);
   WiFi.mode(WIFI_STA);
+  WiFi.setAutoReconnect(true);
 
   WiFi.begin();
 

@@ -43,7 +43,7 @@ class DTempOddsSensor: public DSensor {
       NEED_ASK_WHILE_WATING=0;
       TYPE=_type;
 
-      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_baselog);
+      DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
       init_ok = 1;
 
 

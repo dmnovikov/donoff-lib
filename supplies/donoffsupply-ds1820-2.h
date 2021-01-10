@@ -1,8 +1,8 @@
 #ifndef donoffsupplydonoffds2_h
 #define donoffsupplydonoffds2_h
 
-#define DS1820_OUT2 1
-#define DS2_PIN 13
+#define DS1820_OUT2 1 //for SUPPLY_DS2
+#define DS2_PIN D1
 
 #include <supplies/donoffsupply-donoff-universal.h>
 
@@ -60,46 +60,14 @@ class DSupplyDonoffDS2: public DSupplyDonoffUni {
 
          DSupplyDonoffUni::slow_loop(mycounter);
 
-        //  if(mycounter==7){
-        //      hotter_cooler_loop();
-        //  }
-
      };
 
     int virtual hotter_cooler_loop() {
 
       DSupplyDonoffUni::hotter_cooler_loop();
 
-      // if (_s->hotter>=1) {
-      //   if(_s->lscheme_num>0 || _s->autooff_hours >0){
-      //       pub->publish_to_info_topic("E:ignore hotter, lschm,aofs");
-      //       _s->hotter=0;
-      //   }else{
-      //       hotter_loop();
-      //   }
-      // } else if (_s->cooler){
-      //    if(_s->lscheme_num>0 || _s->autooff_hours >0){
-      //       pub->publish_to_info_topic("E:ignore cooler, lschm,aofs");
-      //       _s->cooler=0;
-      //   }else{
-      //      cooler_loop();
-      //   }
-      // }
     };
 
-    // int virtual hotter_loop(){
-    //   if(DS1820_OUT) {
-    //    hotter1(ds_out, r[0]);
-    // };
-
-    //};
-
-   
-
-//  int virtual notifyer_loop(){
-
-//    debug("NOTIFYER_LOOP", "sensor notify");
-//  };
 
 };
 

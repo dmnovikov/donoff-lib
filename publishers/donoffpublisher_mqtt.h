@@ -18,6 +18,7 @@ protected:
   int not_configured=0;
   int time_synced=0;
   ulong m_incoming_ms=0;
+  uint attempts=0;
 
 public:
   DPublisherMQTT(WMSettings *__s, PubSubClient *__c) : DPublisher(__s){
@@ -114,6 +115,52 @@ public:
 
     int virtual try_connect(){
 
+        debug("RECONNECT", "Try attemps:" + String(attempts));
+
+        if(attempts>100) reset();
+      
+        if (WiFi.status() != WL_CONNECTED) {
+            debug("RECONNECT", "NO WIFI CONNECTION, try to Wifi.begin");
+            // WiFi.begin();
+
+
+                      // We start by connecting to a WiFi network
+            // Удаляем предыдущие конфигурации WIFI сети
+            // WiFi.disconnect(); // обрываем WIFI соединения
+            // WiFi.softAPdisconnect(); // отключаем отчку доступа(если она была
+            // WiFi.mode(WIFI_OFF); // отключаем WIFI
+            // delay(500);
+
+            // wifi_station_get_config (&stationConf);
+
+            // Serial.println(String("saved ssid:"+String((char*)stationConf.ssid)+", saved pass=" + String((char*) stationConf.password)));
+
+            // // присваиваем статичесий IP адрес
+            // WiFi.mode(WIFI_STA); // режим клиента
+            // delay(10);
+            // WiFi.begin();
+            WiFi.reconnect();
+
+            return 0;
+        }
+        
+        
+
+        //Serial.println("\nStarting connection to server...");
+
+        IPAddress result;
+        int err = WiFi.hostByName(_s->mqttServer, result) ;
+
+        if(err !=1){
+          debug("RECONNECT", "Cant resolve mqtt server");
+        }else{
+  
+          Serial.print("MQTT Ip address: ");
+          Serial.println(result);
+
+          //debug("RECONNECT", "Server IP:"+ String(result));
+        }
+
         int port = atoi(_s->mqttPort);
         _c->setServer(_s->mqttServer, port);
 
@@ -126,6 +173,7 @@ public:
         //if (client.connect(clientId.c_str(),"xvjlwxhs","_k7d9m2yt0hn")) {
         if (_c->connect(clientId.c_str(), _s->mqttUser, _s->mqttPass)){
           debug("PUBLISHER", "MQTT CONNECTED");
+          attempts=0;
           subscribe_all();
         }else{
           debug("PUBLISHER", "MQTT FAILED TO CONNECT");
@@ -160,6 +208,7 @@ public:
     int reconnect(){
         if(millis() - last_connect_attempt > reconnect_period * 1000){
           if (!is_connected()){
+            attempts++;
             try_connect();
           }
           if(!is_time_synced()){

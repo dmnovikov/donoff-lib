@@ -20,8 +20,8 @@ commands:
 #define DEFAULT_STRONG_CURRENT_SEC  3600 //1 hour before alarm off
 
 #ifdef D_MQTT
-    const char SCT013_OUT_CHANNEL[]="/out/current";
-    const char CURRENT_STRONG_TIME_CHANNEL[]="/out/strong_sec";
+    const char SCT013_OUT_CHANNEL[]="/out/sensors/current";
+    const char CURRENT_STRONG_TIME_CHANNEL[]="/out/sensors/strong_sec";
 #endif
 
 

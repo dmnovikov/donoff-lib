@@ -5,8 +5,10 @@
 #include <supplies/donoffsupply-donoff-universal.h>
 #include <sensors/donoffsensor_sct013.h>
 
+#define SCT013 1 //for SUPPLY_UNI_SCT013 
+
 #ifdef D_MQTT
-    const char  SCT013_OUT_CHANNEL[] = "/out/sensors/sct01";
+    const char  SCT013_OUT_CHANNEL[] = "/out/sensors/current";
 #endif
 
 class DSupplyDonoffUniSct013: public DSupplyDonoffUni {
@@ -23,10 +25,11 @@ class DSupplyDonoffUniSct013: public DSupplyDonoffUni {
         DSupplyDonoffUni::init(_notifyer, _pub, _q);
         init_ok = 0;
 
-        debug("SUPPLY_INIT", "SCT013_1 INIT");
-        sct013[0] = new SCT013Sensor(_s, A0);
-        sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states,SENSOR_TYPE_CURRENT,JSON_CHANNEL_YES);
-
+        if(SCT013){
+          debug("SUPPLY_INIT", "SCT013_1 INIT");
+          sct013[0] = new SCT013Sensor(_s, A0);
+          sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states,SENSOR_TYPE_CURRENT,JSON_CHANNEL_YES);
+        }
         init_ok=1;
     
     };
@@ -36,10 +39,12 @@ class DSupplyDonoffUniSct013: public DSupplyDonoffUni {
       
        DSupplyDonoffUni::sensors_loop(sensor_num);
 
+       if(SCT013){ 
         if(sensor_num==3){
           sct013[0]->sensor_loop();
           debug("SCT013_OUT", sct013[0]->get_val_Str());
         }
+       }
    };
    
    //add public sensor and relay_1 status
@@ -47,8 +52,10 @@ class DSupplyDonoffUniSct013: public DSupplyDonoffUni {
 
        DSupplyDonoffUni::service_loop();
 
-       if(pub->is_connected()){
-            pub->publish_sensor(sct013[0]);
+       if(SCT013){
+          if(pub->is_connected()){
+                pub->publish_sensor(sct013[0]);
+          }
        }
    };
 
