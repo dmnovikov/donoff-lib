@@ -4,6 +4,7 @@
 //#include <>
 #include <TZ.h>
 #include <time.h>
+#include <sys/time.h> 
 #include <donoffcommands.h>
 #include <donoffbase.h>
 #include <publishers/donoffpublisher.h>
@@ -26,7 +27,8 @@ public:
   };
 
   int init(Queue<pub_events> *_q){
-    DPublisher::init(_q);
+      DPublisher::init(_q);
+      configTime(_s->time_zone * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
       sync_time();
       try_connect();
       m_incoming_ms=millis();
@@ -62,46 +64,28 @@ public:
     int virtual sync_time(int forced=0){
         if(forced==0 && time_synced==1) return 0;
 
-        time_t t;
+        time_t tnow = time(nullptr);
+        struct tm * timeinfo;
 
-        //configTime(TZ_Europe_Tallinn, "pool.ntp.org");
-        //configTime(TZ_Europe_Moscow, "pool.ntp.org");
+        debug("TIMESYNC", "TIME FROM SERVER:"+String(ctime(&tnow)));
 
-        //TZ_Europe_Tallinn
-        //TZ_Europe_Moscow
-        
-        /*************************************************************************/
-        
-        //sntp_set_timezone_in_seconds(3*3600);
+        timeinfo=localtime(&tnow);
 
-        //  sntp_stop();
+        //setTime(tnow); //this is set wrong hour, without time zone
 
-        // setServer(0, server1);
-        // setServer(1, server2);
-        // setServer(2, server3);
+        //instead we use manual setTime
+        // debug("TIMESYNC", "SET HOUR:"+String(timeinfo->tm_hour));
+        // debug("TIMESYNC", "SET MIN:"+String(timeinfo->tm_min));
+        // debug("TIMESYNC", "SET DAY:"+String(timeinfo->tm_mday));
+        // debug("TIMESYNC", "SET YEAR:"+String(timeinfo->tm_year+1900));
 
-        // sntp_set_timezone_in_seconds(_s->time_zone * 3600;
-        // sntp_set_daylight(daylightOffset_sec);
-        // sntp_init();
+        setTime(timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, timeinfo->tm_mday, timeinfo->tm_mon, timeinfo->tm_year+1900);
 
-        /**************************************************************************/
-        
-
-        //configTime(_s->time_zone * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
-        //configTime_old(3 * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
-
-        debug("TIMESYNC", "TZ=" + String (_s->time_zone)+", "+ (year()) + ":"+ String (hour()) + ":"+ String(minute()));
-        configTime(_s->time_zone * 3600,  3600 / 2, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
-        
-        //setenv("TZ","MSK-3", 1);
-
-        t = time(NULL);
-        setTime(t);
         if(year()==1970){ //default date
           debug("TIMESYNC", "FAIL TO SYNC TIME :(");
           time_synced=0;
         }else{
-          debug("TIMESYNC", "TIME SYNCED:"+String(hour())+":"+String(minute())+":"+String(year())+"; push event");
+          debug("TIMESYNC", "TIME SYNCED:"+String(hour())+":"+String(minute())+":"+String(year())+":"+String(month())+"; push event");
           que_wanted->push(PUBLISHER_WANT_SAY_JUST_SYNCED);
           time_synced=1;
         }

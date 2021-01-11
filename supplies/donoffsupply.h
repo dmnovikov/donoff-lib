@@ -241,7 +241,7 @@ class DSupply: public DBase {
 
     int virtual service_loop() {
 
-      debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + ":" + String(second()) + " ,t_sync=" + String(pub->is_time_synced())+ 
+      debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + ", y=" + String(year()) + " ,t_sync=" + String(pub->is_time_synced())+ 
            ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected())+
            ", size_s="+String(sizeof(*_s))
        );

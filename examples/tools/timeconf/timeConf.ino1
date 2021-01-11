@@ -1,0 +1,41 @@
+#include <ESP8266WiFi.h>
+//#include <WiFiClient.h>
+#include <time.h>
+#include <TZ.h>
+
+const char ssid[] = "topwaynew2";
+const char password[] = "xxxxxxxxxxx";
+
+void setup() {
+  Serial.begin(9600);
+
+  // ESP.eraseConfig();
+  
+
+     
+  //WiFi.mode(WIFI_STA);
+  Serial.println("**************************************");
+  WiFi.begin("topwaynew1", "xxxxxx");
+  Serial.println("-------------------------------------");
+
+  //configTime(0, 0, "pool.ntp.org");  
+  configTime(3* 3600, 0,"pool.ntp.org" );
+  //setenv("TZ", "MSK-3", 0);  
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.println("Setup done");
+}
+
+void loop(void) {
+  time_t tnow = time(nullptr);
+  Serial.print(String(ctime(&tnow)));
+  delay(1000);
+}
