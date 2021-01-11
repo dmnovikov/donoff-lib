@@ -106,7 +106,7 @@ class DSupply: public DBase {
         }
 
         if(mycounter==MAX_LOOP_COUNTER) {
-          debug("VERY_SLOWLOOP", "counter="+String(mycounter2));
+          //debug("VERY_SLOWLOOP", "counter="+String(mycounter2));
           very_slow_loop(mycounter2);
           mycounter2++;
         }
@@ -241,7 +241,12 @@ class DSupply: public DBase {
 
     int virtual service_loop() {
 
-      debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + ", y=" + String(year()) + " ,t_sync=" + String(pub->is_time_synced())+ 
+      // debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + ", y=" + String(year()) + " ,t_sync=" + String(pub->is_time_synced())+ 
+      //      ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected())+
+      //      ", size_s="+String(sizeof(*_s)+", ssid="+String(WiFi.SSID(0)))
+      //  );
+
+      debug("SHEDULER", "**Service loop->TIMESTAMP=" +  s_get_timestamp('<','>') + ", t_sync=" + String(pub->is_time_synced())+ 
            ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected())+
            ", size_s="+String(sizeof(*_s))
        );
@@ -330,7 +335,7 @@ class DSupply: public DBase {
     int is_day2(int _schm_num) {
       if (!pub->is_time_synced()) return -1;
       if (_schm_num < 0 || _schm_num > 100) return -1;
-      int h = hour();
+      int h = d_hour();
       debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
       if (_schm_num == 99){
           debug("IS_DAY","on_bit="+String(_s->custom_scheme1[h]));
@@ -342,7 +347,7 @@ class DSupply: public DBase {
 
     int is_day(int _schm_num) {
 
-      int h = hour();
+      int h = d_hour();
 
       if(!pub->is_time_synced() && _schm_num==2) {  //always on sheme (2), can be without time sync
         return -2;
@@ -404,7 +409,7 @@ class DSupply: public DBase {
       if (_schm_num == 0) return -1; //error parameter
 
       int on_bit = is_day(_schm_num);
-      uint hour_curr = hour();
+      uint hour_curr = d_hour();
 
        String debugSrcStr = "LSCHM<" + String(_r->get_num()) + ">";
 
@@ -475,7 +480,7 @@ class DSupply: public DBase {
     int get_temp_settings_ver2(int _schm_num) {
       if(!pub->is_time_synced()) return _s->default_temp_level;
       
-      uint h=hour();
+      uint h=d_hour();
       return _s->temp_matrix[h];
     };
 

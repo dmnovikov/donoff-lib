@@ -132,6 +132,7 @@ enum sensor_states {
 #define DALLAS_RES_OUT 10
 #define DALLAS_RES_OUT2 9
 #define DDOS_MS 1000  //period in MS between to incoming commands
+#define MAX_CONNECT_ATTEMPTS_BEFORE_RESET 100
 
 #define FLASH_TEMPLATE1
 

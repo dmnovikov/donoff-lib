@@ -85,7 +85,7 @@ public:
           debug("TIMESYNC", "FAIL TO SYNC TIME :(");
           time_synced=0;
         }else{
-          debug("TIMESYNC", "TIME SYNCED:"+String(hour())+":"+String(minute())+":"+String(year())+":"+String(month())+"; push event");
+          debug("TIMESYNC", "TIME SYNCED:"+String(d_hour())+":"+String(minute())+":"+String(year())+":"+String(month())+"; push event");
           que_wanted->push(PUBLISHER_WANT_SAY_JUST_SYNCED);
           time_synced=1;
         }
@@ -101,7 +101,7 @@ public:
 
         debug("RECONNECT", "Try attemps:" + String(attempts));
 
-        if(attempts>100) reset();
+        if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET) reset();
       
         if (WiFi.status() != WL_CONNECTED) {
             debug("RECONNECT", "NO WIFI CONNECTION, try to Wifi.begin");
@@ -337,7 +337,7 @@ public:
     int virtual publish_sensor_json(DSensor * _sensor){
       if (!is_connected()) return 0;   
 
-      debug("JSONLOG", _sensor->get_nameStr()+":Send to json sensor");
+      //debug("JSONLOG", _sensor->get_nameStr()+":Send to json sensor");
 
       DynamicJsonBuffer jsonBuffer;
 

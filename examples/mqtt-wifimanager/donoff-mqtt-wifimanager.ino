@@ -8,7 +8,7 @@
 
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V2
+#define PINS_SET_V1
 //#define SETDEFNEW 
 
 //when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1

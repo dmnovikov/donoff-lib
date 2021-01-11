@@ -47,26 +47,45 @@ int load(){
     EEPROM.end();
 }
 
-String s_get_timestamp(){
+String virtual s_get_timestamp(char c_b='T', char c_e='Z'){
     String s_timestamp;
-    s_timestamp=String(year());
+    time_t tnow = time(nullptr);
+    struct tm * _t;
+    _t=localtime(&tnow);
+    s_timestamp=String(_t->tm_year+1900);
     s_timestamp+="-";
-    s_timestamp+= month()<10? "0"+String(month()): String(month());
+    s_timestamp+= _t->tm_mon+1<10? "0"+String(_t->tm_mon+1): String(_t->tm_mon+1);
     s_timestamp+="-";
-    s_timestamp+= day()<10? "0"+String(day()): String(day());
-    s_timestamp+="T";
-    s_timestamp+= hour()<10? "0"+String(hour()): String(hour());
+    s_timestamp+= _t->tm_mday<10? "0"+String(_t->tm_mday): String(_t->tm_mday);
+    s_timestamp+=c_b;
+    s_timestamp+=_t->tm_hour <10? "0"+String(_t->tm_hour): String(_t->tm_hour);
     s_timestamp+=":";
-    s_timestamp+= minute()<10? "0"+String(minute()): String(minute());
+    s_timestamp+= _t->tm_min<10? "0"+String(_t->tm_min): String(_t->tm_min);
     s_timestamp+=":";
-    s_timestamp+= second()<10? "0"+String(second()): String(second());
-    s_timestamp+="Z";
+    s_timestamp+=_t->tm_sec<10? "0"+String(_t->tm_sec): String(_t->tm_sec);
+    s_timestamp+=c_e;
+    //debug("TIMESTAMP", s_timestamp);
     return s_timestamp;
 };
 
 int virtual reset(){
   ESP.reset();
 }
+
+uint virtual d_hour(){
+  time_t tnow = time(nullptr);
+  struct tm * timeinfo;
+  timeinfo=localtime(&tnow);
+  return timeinfo->tm_hour;
+  //timeinfo->tm_hour, 
+  //timeinfo->tm_min, 
+  //timeinfo->tm_sec, 
+  //timeinfo->tm_mday, 
+  //timeinfo->tm_mon, 
+  //timeinfo->tm_year+1900);
+
+
+};
 
 
 };
