@@ -32,7 +32,7 @@ class DSensor: public DBase {
     
     long  NO_SENSOR_VAL = -12700;
     long NOT_READY_VAL = -12800;
-    long  START_DELAY = 0;
+    ulong  START_DELAY = 0;
     int NEED_ASKING = 0;
     int NEED_FILTERED = 0;
     int REQUEST_CIRCLE = 750;
@@ -344,6 +344,13 @@ class DSensor: public DBase {
      bool need_publish_json(){
       return need_json;
       debug("NEEDJSON", String(need_json));
+    };
+
+    void set_notready_val(){
+      sens.v[0] = NOT_READY_VAL;
+      sens.v[1] = NOT_READY_VAL;
+      sens.v[2] = NOT_READY_VAL;
+      sens.val =  NOT_READY_VAL;
     };
 
     // void set_baselog(bool v){

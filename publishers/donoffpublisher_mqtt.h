@@ -8,6 +8,7 @@
 #include <donoffcommands.h>
 #include <donoffbase.h>
 #include <publishers/donoffpublisher.h>
+#include <sensors/donoff-multisensor.h>
 
 class DPublisherMQTT : public DPublisher
 {
@@ -265,11 +266,17 @@ public:
     int virtual publish_sensor(DSensor * _sensor){
        if (!is_connected()) return 0;   
       _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
-      //debug("BASELOG", "check log, settings="+String(_s->baselog)+" sensor_baselog="+String(_sensor->need_baselog()));
-      if(_sensor->need_publish_json()){
+      if(_sensor->need_publish_json() && is_time_synced()){
          publish_sensor_json(_sensor);
       }
     };
+
+    int virtual publish_multi_sensor(DMultiSensor * _multi_sensor){
+       if (!is_connected()) return 0;   
+      _c->publish(form_full_topic(_multi_sensor->get_channelStr()).c_str(), _multi_sensor->multi_json_Str().c_str());
+      debug("PUBLISHMULTI", "publish to:"+_multi_sensor->get_channelStr()+" , json:"+_multi_sensor->multi_json_Str() );
+    };
+
 
     int virtual publish_relay_state(DRelay * _r)
     {

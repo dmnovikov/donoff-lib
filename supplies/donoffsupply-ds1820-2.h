@@ -27,7 +27,7 @@ class DSupplyDonoffDS2: public DSupplyDonoffUni {
       if (DS1820_OUT2) {
         debug("SUPPLY_INIT", "DS_OUT2 INIT");
         ds_out2 = new DigitalDS1820Sensor(_s, DS2_PIN);
-        ds_out2->init("ds_out2", DS_OUT_CHANNEL2, DS1820_FILTERED,que_sensor_states, SENSOR_TYPE_TEMPERATURE, JSON_CHANNEL_NO);
+        ds_out2->init("ds_out2", DS_OUT_CHANNEL2, DS1820_FILTERED,que_sensor_states, DONOFF_SENSOR_TYPE_TEMPERATURE, JSON_CHANNEL_NO);
       }
         init_ok=1;
     

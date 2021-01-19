@@ -83,11 +83,13 @@ enum sensor_states {
 
 /* sensors types */
 
-#define SENSOR_TYPE_TEMPERATURE 1
-#define SENSOR_TYPE_CURRENT 2
-#define SENSOR_TYPE_POWER 3
-#define SENSOR_TYPE_VOLTAGE 4
-#define SENSOR_TYPE_ENERGY 5
+#define DONOFF_SENSOR_TYPE_TEMPERATURE 1
+#define DONOFF_SENSOR_TYPE_CURRENT 2
+#define DONOFF_SENSOR_TYPE_POWER 3
+#define DONOFF_SENSOR_TYPE_VOLTAGE 4
+#define DONOFF_SENSOR_TYPE_ENERGY 5
+#define DONOFF_SENSOR_TYPE_HUMIDITY 6
+#define DONOFF_SENSOR_TYPE_DHT 7
 
 
 /* need to write to database*/
@@ -133,6 +135,7 @@ enum sensor_states {
 #define DALLAS_RES_OUT2 9
 #define DDOS_MS 1000  //period in MS between to incoming commands
 #define MAX_CONNECT_ATTEMPTS_BEFORE_RESET 100
+#define MAX_ADC_VAL 1024
 
 #define FLASH_TEMPLATE1
 

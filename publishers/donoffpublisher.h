@@ -7,6 +7,7 @@
 #include <donoffcommands.h>
 #include <donoffbase.h>
 #include <sensors/donoffsensor.h>
+#include <sensors/donoff-multisensor.h>
 #include <donoffrelay.h>
 #include <Queue.h>
 
@@ -57,6 +58,7 @@ public:
     //int virtual publish_sensor(String channelStr, String dataStr){};
     
     int virtual publish_sensor(DSensor* _sensor){};
+    int virtual publish_multi_sensor(DMultiSensor * _multi_sensor){};
 
     int virtual publish_relay_state(DRelay * _r)=0;    
 

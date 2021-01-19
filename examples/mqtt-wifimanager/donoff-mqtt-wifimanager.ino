@@ -25,24 +25,27 @@
 //#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
 //#define SUPPLY_UNI_SCT013 
-//#define SUPPLY_SCT03_SINGLE
-// #define SUPPLY_MULTI_SCT013
+//#define SUPPLY_SCT013_SINGLE
+//#define SUPPLY_MULTI_SCT013
+  #define SUPPLY_DHT
 
 
 //default we compile SUPPLY_UNIVERSAL supply
-#ifndef SUPPLY_PUMP 
- #ifndef SUPPLY_DS2
-  #ifndef SUPPLY_TEMP_ODDS
-    #ifndef SUPPLY_UNI_SCT013
-      #ifndef SUPPLY_UNI_SCT013
-        #ifndef SUPPLY_MULTI_SCT013
-          #define SUPPLY_UNIVERSAL
-        #endif
-      #endif
-    #endif
-  #endif
- #endif
-#endif
+// #ifndef SUPPLY_PUMP 
+//  #ifndef SUPPLY_DS2
+//   #ifndef SUPPLY_TEMP_ODDS
+//     #ifndef SUPPLY_SCT013_SINGLE
+//       #ifndef SUPPLY_UNI_SCT013
+//         #ifndef SUPPLY_MULTI_SCT013
+//           #ifndef SUPPLY_DHT
+//             #define SUPPLY_UNIVERSAL
+//           #endif
+//         #endif
+//       #endif
+//     #endif
+//   #endif
+//  #endif
+// #endif
 
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
@@ -84,13 +87,18 @@
   #include <supplies/donoffsupply-uni-sct013.h>
 #endif
 
-#ifdef SUPPLY_SCT03_SINGLE
+#ifdef SUPPLY_SCT013_SINGLE
   #include <supplies/donoffsupply-sct013.h>
 #endif
 
 #ifdef SUPPLY_MULTI_SCT013
   #include <supplies/donoffsupply-multi-sct013.h>
 #endif
+
+#ifdef SUPPLY_DHT
+  #include <supplies/donoffsupply-dht.h>
+#endif
+
 
 
 #include <PubSubClient.h>
@@ -136,6 +144,10 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 #ifdef SUPPLY_MULTI_SCT013
   DSupplyMultiSCT013Collector supply(&settings);
+#endif
+
+#ifdef SUPPLY_DHT
+  DSupplyDHT supply(&settings);
 #endif
 
 

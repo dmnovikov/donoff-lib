@@ -28,7 +28,7 @@ class DSupplyDonoffUniSct013: public DSupplyDonoffUni {
         if(SCT013){
           debug("SUPPLY_INIT", "SCT013_1 INIT");
           sct013[0] = new SCT013Sensor(_s, A0);
-          sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states,SENSOR_TYPE_CURRENT,JSON_CHANNEL_YES);
+          sct013[0]->init("SCT013_1", SCT013_OUT_CHANNEL, 0,que_sensor_states,DONOFF_SENSOR_TYPE_CURRENT,JSON_CHANNEL_YES);
         }
         init_ok=1;
     
