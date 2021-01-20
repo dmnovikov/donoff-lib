@@ -93,23 +93,23 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
      };
 
-    int virtual hotter_cooler_loop() {
-      if (_s->hotter>=1) {
-        if(_s->lscheme_num>0 || _s->autooff_hours >0){
-            pub->publish_to_info_topic("E:ignore hotter, lschm,aofs");
-            _s->hotter=0;
-        }else{
-            hotter_loop();
-        }
-      } else if (_s->cooler){
-         if(_s->lscheme_num>0 || _s->autooff_hours >0){
-            pub->publish_to_info_topic("E:ignore cooler, lschm,aofs");
-            _s->cooler=0;
-        }else{
-           cooler_loop();
-        }
-      }
-    };
+    // int virtual hotter_cooler_loop() {
+    //   if (_s->hotter>=1) {
+    //     if(_s->lscheme_num>0 || _s->autooff_hours >0){
+    //         pub->publish_to_info_topic("E:ignore hotter, lschm,aofs");
+    //         _s->hotter=0;
+    //     }else{
+    //         hotter_loop();
+    //     }
+    //   } else if (_s->cooler){
+    //      if(_s->lscheme_num>0 || _s->autooff_hours >0){
+    //         pub->publish_to_info_topic("E:ignore cooler, lschm,aofs");
+    //         _s->cooler=0;
+    //     }else{
+    //        cooler_loop();
+    //     }
+    //   }
+    // };
 
      int virtual hotter_loop(){
       if(DS1820_OUT) {
@@ -208,17 +208,17 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
     };
 
-     int virtual notify_sesnors_loop(){   
+    //  int virtual notify_sesnors_loop(){   
        
-      if (que_sensor_states->count()==0) return 0;
-      debug("QUE_SENS", String(que_sensor_states->count()) );
-      while(que_sensor_states->count()!=0){
-         sensor_state state=que_sensor_states->pop();
-         debug("QUE_SENS", state.ps->get_nameStr()+":"+String(state.val)+":"+String(state.curr_state)+":"+String(state.prev_state));
-         notifyer->notify_sensor_state(&state);
-      }
+    //   if (que_sensor_states->count()==0) return 0;
+    //   debug("QUE_SENS", String(que_sensor_states->count()) );
+    //   while(que_sensor_states->count()!=0){
+    //      sensor_state state=que_sensor_states->pop();
+    //      debug("QUE_SENS", state.ps->get_nameStr()+":"+String(state.val)+":"+String(state.curr_state)+":"+String(state.prev_state));
+    //      notifyer->notify_sensor_state(&state);
+    //   }
       
-    };
+    // };
 
   int virtual reset(){
     //turn off 2nd relay before relay

@@ -3,7 +3,7 @@
 //UNIVERSAL SUPPLY parameters 
 #define RELAY2 0
 #define DS1820_INT 1
-#define DS1820_OUT 0
+#define DS1820_OUT 1
 #define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
@@ -27,7 +27,9 @@
 //#define SUPPLY_UNI_SCT013 
 //#define SUPPLY_SCT013_SINGLE
 //#define SUPPLY_MULTI_SCT013
-  #define SUPPLY_DHT
+//#define SUPPLY_DHT
+
+#define SUPPLY_UNIVERSAL
 
 
 //default we compile SUPPLY_UNIVERSAL supply

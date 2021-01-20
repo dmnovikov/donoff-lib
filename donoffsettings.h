@@ -90,7 +90,7 @@ enum sensor_states {
 #define DONOFF_SENSOR_TYPE_ENERGY 5
 #define DONOFF_SENSOR_TYPE_HUMIDITY 6
 #define DONOFF_SENSOR_TYPE_DHT 7
-
+#define DONOFF_SENSOR_TYPE_TEMP 8
 
 /* need to write to database*/
 

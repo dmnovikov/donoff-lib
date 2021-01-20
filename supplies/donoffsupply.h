@@ -331,20 +331,6 @@ class DSupply: public DBase {
       else return 1;
     };
 
-
-    int is_day2(int _schm_num) {
-      if (!pub->is_time_synced()) return -1;
-      if (_schm_num < 0 || _schm_num > 100) return -1;
-      int h = d_hour();
-      debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
-      if (_schm_num == 99){
-          debug("IS_DAY","on_bit="+String(_s->custom_scheme1[h]));
-          return _s->custom_scheme1[h];
-      } 
-      if (_schm_num == 100) return _s->custom_scheme2[h];
-      return get_lschm_mode_bit(h, _schm_num);
-    }
-
     int is_day(int _schm_num) {
 
       int h = d_hour();
@@ -357,11 +343,11 @@ class DSupply: public DBase {
       
       if (_schm_num < 0 || _schm_num > 100) return -1;
       
-      debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
+      debug("IS_DAY-","lschm="+String(_schm_num)+", hour="+String(h));
       if (_schm_num == 99){
           //_s->cb_schm1=0B000000000011111111111110;
           bool br=bitRead(_s->cb_schm1,23-h); //read bit of hour in custom scheme
-          debug("IS_DAY","hour="+String(h)+", on_bit="+String(br));
+          debug("IS_DAY-","hour="+String(h)+", on_bit="+String(br));
           return br;
       } 
       if (_schm_num == 100){
@@ -472,8 +458,9 @@ class DSupply: public DBase {
     };
 
     int get_temp_settings_ver1(int _schm_num) {
-      if (is_day(_schm_num) == 0)  return _s->night_temp_level;
-      if (is_day(_schm_num) == 1)  return _s->day_temp_level;
+      int is_d=is_day(_schm_num);
+      if (is_d == 0)  return _s->night_temp_level;
+      if (is_d == 1)  return _s->day_temp_level;
       return _s->default_temp_level;
     };
 
@@ -499,7 +486,11 @@ class DSupply: public DBase {
       
      
       sensor_temp=_sensor->get_val();
-      if(_s->hotter==1) hotter_settings_temp=get_temp_settings_ver1(_s->schm_onoff_num1);
+      if(_s->hotter==1) {
+       // debug("HOTTER_GET_TEMP", "get_temp");
+        hotter_settings_temp=get_temp_settings_ver1(_s->schm_onoff_num1);
+       // debug("HOTTER_END_TEMP", "get_temp");
+      }
       if(_s->hotter==2) hotter_settings_temp=get_temp_settings_ver2(_s->schm_onoff_num1);
       delta=_s->level_delta;
 
@@ -543,7 +534,7 @@ class DSupply: public DBase {
       return 0;
 };
 
-int hotter2(DSensor* _sensor, DRelay* _r){
+int hotter2(DSensor* _sensor, DRelay* _r){  //not used
    if(!_s->hotter==2) return -1;
 
 };
