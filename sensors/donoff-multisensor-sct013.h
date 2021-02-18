@@ -1,5 +1,5 @@
-#ifndef donoffmultisensor_h
-#define donoffmultisensor_h
+#ifndef donoffmultisensorsct013_h
+#define donoffmultisensorsct013_h
 
 #include <Queue.h>
 #include <donoffbase.h>
@@ -12,8 +12,6 @@
     const char SCT013_3_OUT_CHANNEL[]="/out/sensors/sct013_3";
 #endif
 
-
-class DMultiSensorSCT013;
 
 class DMultiSensorSCT013: public DSensor {
 

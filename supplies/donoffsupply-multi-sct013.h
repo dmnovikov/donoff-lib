@@ -15,7 +15,7 @@
 class DSupplyMultiSCT013Collector: public DSupplyBase {
 
   protected:
-    DMultiSensorSCT013 *multi_sct013;
+    DMultiSensorSCT013 *multi_sct013; 
   
 
   public:

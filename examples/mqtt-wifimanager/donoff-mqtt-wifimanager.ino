@@ -24,30 +24,12 @@
 //#define SUPPLY_DS2
 //#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
-//#define SUPPLY_UNI_SCT013 
+#define SUPPLY_UNI_SCT013 
 //#define SUPPLY_SCT013_SINGLE
 //#define SUPPLY_MULTI_SCT013
 //#define SUPPLY_DHT
 
-#define SUPPLY_UNIVERSAL
-
-
-//default we compile SUPPLY_UNIVERSAL supply
-// #ifndef SUPPLY_PUMP 
-//  #ifndef SUPPLY_DS2
-//   #ifndef SUPPLY_TEMP_ODDS
-//     #ifndef SUPPLY_SCT013_SINGLE
-//       #ifndef SUPPLY_UNI_SCT013
-//         #ifndef SUPPLY_MULTI_SCT013
-//           #ifndef SUPPLY_DHT
-//             #define SUPPLY_UNIVERSAL
-//           #endif
-//         #endif
-//       #endif
-//     #endif
-//   #endif
-//  #endif
-// #endif
+//#define SUPPLY_UNIVERSAL
 
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
@@ -140,7 +122,7 @@ DPublisherMQTT pubmqtt(&settings, &client);
 #endif
 
 
-#ifdef SUPPLY_SCT03_SINGLE
+#ifdef SUPPLY_SCT013_SINGLE
   DSupplySCT013Collector supply(&settings);
 #endif
 

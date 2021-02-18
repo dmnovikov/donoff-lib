@@ -263,8 +263,12 @@ public:
 
     };
 
-    int virtual publish_sensor(DSensor * _sensor){
-       if (!is_connected()) return 0;   
+    int virtual publish_sensor(DSensor * _sensor, uint _debug=0){
+       if (!is_connected()) {
+         debug("PUB_SENSOR", "mqtt DISCONNECTED");
+         return 0;   
+       }
+       if(_debug) debug("PUB_SENSOR",form_full_topic(_sensor->get_channelStr())+_sensor->get_val_Str());
       _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
       if(_sensor->need_publish_json() && is_time_synced()){
          publish_sensor_json(_sensor);

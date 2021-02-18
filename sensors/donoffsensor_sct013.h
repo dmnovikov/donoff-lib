@@ -46,6 +46,7 @@ class SCT013Sensor: public DSensor {
     long virtual get_long_from_sensor() {
       analog_check_pre=analog_check;
       analog_check=analogRead(SENSOR_PIN); //is sensor present. if n sensor val could be 1024 (not in all versions of shield) 
+      debug("SCT013", "ANALOG="+String(analog_check));
       //if ADC_MAX_VAL or near (-1), it means that sensor is absent, hard checker present
       if(analog_check>=MAX_ADC_VAL-1){  
          debug("SCT013", "No Sensor A0="+String(analog_check));
