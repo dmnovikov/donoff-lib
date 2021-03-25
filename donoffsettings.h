@@ -162,6 +162,16 @@ enum sensor_states {
     #define RELAY2_PIN 5 //new d6 //old d8
 #endif
 
+#ifdef PINS_SET_V3
+    #define BUTTON_PIN   15      //d8
+    #define RELAY1_PIN    12   //d6  
+    #define SONOFF_LED      2  //d4
+    #define IN_WIRE_BUS    14  //d5
+    #define OUT_WIRE_BUS 13 //D7
+    #define ANALOG_A0_PIN A0
+    #define RELAY2_PIN 5 //new d6 //old d8
+#endif
+
 
 //************** DEBUG  ***************************
 
@@ -322,6 +332,11 @@ typedef struct{
   char ssid[20];
   char pass[50];
 } WifiCreds;
+
+/********** buttons types ***********/
+
+#define BUTTON_TYPE_NORMAL 0
+#define BUTTON_TYPE_REVERSE 1
 
 
 /********** blink ****************/

@@ -1,5 +1,7 @@
 /* ********** Config supply *******************/
 
+#define BUTTON_REVERSE
+
 //UNIVERSAL SUPPLY parameters 
 #define RELAY2 0
 #define DS1820_INT 1
@@ -8,7 +10,7 @@
 
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V1
+#define PINS_SET_V3
 //#define SETDEFNEW 
 
 //when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1
@@ -24,10 +26,11 @@
 //#define SUPPLY_DS2
 //#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
-#define SUPPLY_UNI_SCT013 
+//#define SUPPLY_UNI_SCT013 
 //#define SUPPLY_SCT013_SINGLE
 //#define SUPPLY_MULTI_SCT013
 //#define SUPPLY_DHT
+#define SUPPLY_6TEMP
 
 //#define SUPPLY_UNIVERSAL
 
@@ -83,6 +86,10 @@
   #include <supplies/donoffsupply-dht.h>
 #endif
 
+#ifdef SUPPLY_6TEMP
+  #include <supplies/prj_supplies/donoffsupply-6temp.h>
+#endif
+
 
 
 #include <PubSubClient.h>
@@ -132,6 +139,10 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 #ifdef SUPPLY_DHT
   DSupplyDHT supply(&settings);
+#endif
+
+#ifdef SUPPLY_6TEMP
+  DSupplyDonoff6Temp supply(&settings);
 #endif
 
 

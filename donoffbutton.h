@@ -11,6 +11,8 @@
 //#define BUTTON_DELAY 50
 #define SHORT_PRESS 1
 #define CONFIG_PRESS 2
+#define FAIL_PRESS 0
+#define START_PRESS 3
 
 class DButton: public DBase {
   private:
@@ -43,22 +45,43 @@ class DButton: public DBase {
       
       // debug("DBUTTON_LOOP", "LOOP");
       b_state=debouncer.update();
-      if ( debouncer.fell()) {
-         debug("BUTTON", "DETECT:from high to low");
+      //if ( debouncer.fell()) {
 
-        debug("BUTTON", String(millis()-start_bt));
-        start_bt = millis();
-
+     
+      if ( debouncer.rose()) {
+       #ifdef BUTTON_REVERSE
+        return button_pushed();    
+       #else
+         return button_freed();
+       #endif
        }
 
-      if ( debouncer.rose()  ) {
+      //if ( debouncer.rose()  ) {
+      if ( debouncer.fell()  ) {
+      #ifdef BUTTON_REVERSE
+        return button_freed();
+      #else
+        return button_pushed();    
+      #endif
+      }
+
+
+    };
+
+    int  button_pushed(){
+      debug("BUTTON", "DETECT:START!");
+      start_bt = millis();
+      return START_PRESS;
+    };
+
+    int button_freed(){
         long duration = millis() - start_bt;
-        debug("BUTTON", "DETECT:form low to high, up:" + String(millis())+", down="+String(start_bt));
+        debug("BUTTON", "DETECT:FREED, FREE:" + String(millis())+", PUSHED="+String(start_bt)+", DURATION="+String(duration/1000));
         if(start_bt==0) return 0;
         start_bt=0;
         if (duration < BUTTON_MIN_DELAY) {
           debug("BUTTON", "FAIL PRESS, DO NOTHING");
-          return 0;
+          return FAIL_PRESS;
         } else if (duration >= BUTTON_MIN_DELAY && duration < SHORT_PRESS_DELAY) {
           debug("BUTTON", "--->short press - toggle relay");
           return SHORT_PRESS;
@@ -72,11 +95,8 @@ class DButton: public DBase {
            reset();
         }
 
-
-      }
-    
-
     };
+    
 
 
 };

@@ -21,7 +21,7 @@ class DSupplyBase: public DSupply {
         DSupply::init(_notifyer, _pub, _q);
         init_ok = 0;
 
-        debug("SUPPLY_INIT", "DBUTTON INIT");
+        debug("SUPPLY_INIT", "DBUTTON INIT, PIN="+String(BUTTON_PIN));
         b1 = new DButton(_s);
         b1->init();
 
