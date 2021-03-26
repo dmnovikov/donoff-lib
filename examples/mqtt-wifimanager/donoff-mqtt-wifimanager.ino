@@ -10,7 +10,12 @@
 
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V3
+//#define PINS_SET_V1
+#define PINS_SET_V2
+//#define PINS_SET_V3
+
+
+
 //#define SETDEFNEW 
 
 //when PIN_SET_V1 present. we cant use this display, because pin in this set conflicts with RELAY1
@@ -20,7 +25,7 @@
   #define DDISPLAY_SSD1306 0
 #endif
 
-//Define here any specific supply 
+/**************** Define supply **************************/
 
 //#define SUPPLY_PUMP
 //#define SUPPLY_DS2
@@ -30,9 +35,12 @@
 //#define SUPPLY_SCT013_SINGLE
 //#define SUPPLY_MULTI_SCT013
 //#define SUPPLY_DHT
-#define SUPPLY_6TEMP
+//#define SUPPLY_6TEMP
+#define SUPPLY_UNI_MAX44003
 
 //#define SUPPLY_UNIVERSAL
+
+/************************************************************/
 
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
@@ -90,6 +98,13 @@
   #include <supplies/prj_supplies/donoffsupply-6temp.h>
 #endif
 
+#ifdef SUPPLY_UNI_MAX44003
+  #include <supplies/donoffsupply-uni-max44003.h>
+#endif
+
+
+
+
 
 
 #include <PubSubClient.h>
@@ -143,6 +158,10 @@ DPublisherMQTT pubmqtt(&settings, &client);
 
 #ifdef SUPPLY_6TEMP
   DSupplyDonoff6Temp supply(&settings);
+#endif
+
+#ifdef SUPPLY_UNI_MAX44003
+  DSupplyDonoffUniMAX44003 supply(&settings);
 #endif
 
 

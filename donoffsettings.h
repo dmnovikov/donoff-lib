@@ -68,6 +68,8 @@ enum pub_events {
 
 #define DS1820_NOT_FILTERED 0
 #define DS1820_FILTERED 1
+#define SENSOR_NOT_FILTERED 0
+#define SENSOR_FILTERED 1
 
 
 enum sensor_states {
@@ -91,6 +93,7 @@ enum sensor_states {
 #define DONOFF_SENSOR_TYPE_HUMIDITY 6
 #define DONOFF_SENSOR_TYPE_DHT 7
 #define DONOFF_SENSOR_TYPE_TEMP 8
+#define DONOFF_SENSOR_TYPE_LUX 9
 
 /* need to write to database*/
 
