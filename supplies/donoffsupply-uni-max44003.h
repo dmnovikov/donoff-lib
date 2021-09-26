@@ -28,7 +28,7 @@ class DSupplyDonoffUniMAX44003: public DSupplyDonoffUni {
         if(MAX44003){
           debug("SUPPLY_INIT", "MAX440033 INIT");
           lux = new MAX44003Sensor(_s);
-          lux->init("LUX", LUX_OUT_CHANNEL, SENSOR_NOT_FILTERED,que_sensor_states,DONOFF_SENSOR_TYPE_LUX,JSON_CHANNEL_NO);
+          lux->init("LUX", LUX_OUT_CHANNEL, SENSOR_NOT_FILTERED,que_sensor_states,DONOFF_SENSOR_TYPE_LUX,JSON_CHANNEL_YES);
         }
         init_ok=1;
     

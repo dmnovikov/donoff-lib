@@ -18,6 +18,7 @@ commands:
 
 #define DEFAULT_CURRENT 100; // 1.00 Amp
 #define DEFAULT_STRONG_CURRENT_SEC  3600 //1 hour before alarm off
+#define RELAY2_CURRENT 0
 
 #ifdef D_MQTT
     const char SCT013_OUT_CHANNEL[]="/out/sensors/current";
@@ -101,6 +102,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
        if (pub->is_connected()){
           pub->publish_sensor(sct013);
           pub->publish_to_topic(CURRENT_STRONG_TIME_CHANNEL,String((int) (strong_current_ms/1000)));
+          debug("CURRENT_STRONG", "Strong sec="+String((int) (strong_current_ms/1000))+"relaystate="+String(r[0]->is_on()));
        }
 
    };
@@ -110,7 +112,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
 
          DSupplyDonoffUni::slow_loop(mycounter);      
 
-         if(mycounter==8 && _s->custom_level1>0){  //id custom_level1==0 ignore this sensor
+         if(mycounter==8 && _s->custom_level1>0){  //if custom_level1==0 ignore this sensor
 
             if(strong_current_ms>0)
                debug("STRONG_CURR", "CURRENT MS="+String(strong_current_ms)+"; level="+String(_s->custom_level2*1000));
@@ -118,11 +120,18 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
              if(strong_current_ms >_s->custom_level2*1000){
                 
                 debug("STRONG_CURR", "SET lschm=1, always off");
-                _s->lscheme_num=1; //set lschm=1 (always off)
+                if(RELAY2_CURRENT==0) _s->lscheme_num=1; else _s->lscheme_num2=1; //set lschm=1 (always off)
                 pub->publish_to_info_topic("strong_curr: off, current strong time");
              } 
-
-             if(r[0]->is_off() && strong_current_ms>0){
+             uint relay_is_off;
+             if(RELAY2 && RELAY2_CURRENT) {
+               relay_is_off=r[1]->is_off();
+               debug("STRONG_CURR", "relay 1 check");
+              } else {
+                relay_is_off=r[0]->is_off();
+                debug("STRONG_CURR", "relay 0 check; relay_off="+ String(relay_is_off));
+              }
+             if(relay_is_off==1 && strong_current_ms>0){
                strong_current_ms=0;
                start_strong_current_ms=0;
                debug("STRONG_CURR", "Err: relay off but curent is big");

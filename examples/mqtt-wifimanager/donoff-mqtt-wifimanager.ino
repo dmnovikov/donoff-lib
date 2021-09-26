@@ -27,7 +27,7 @@
 
 /**************** Define supply **************************/
 
-//#define SUPPLY_PUMP
+#define SUPPLY_PUMP
 //#define SUPPLY_DS2
 //#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
@@ -36,7 +36,7 @@
 //#define SUPPLY_MULTI_SCT013
 //#define SUPPLY_DHT
 //#define SUPPLY_6TEMP
-#define SUPPLY_UNI_MAX44003
+//#define SUPPLY_UNI_MAX44003
 
 //#define SUPPLY_UNIVERSAL
 
