@@ -94,6 +94,9 @@ enum sensor_states {
 #define DONOFF_SENSOR_TYPE_DHT 7
 #define DONOFF_SENSOR_TYPE_TEMP 8
 #define DONOFF_SENSOR_TYPE_LUX 9
+#define DONOFF_SENSOR_TYPE_ADSCGANNEL 10
+#define DONOFF_SENSOR_TYPE_ADS 11
+
 
 /* need to write to database*/
 

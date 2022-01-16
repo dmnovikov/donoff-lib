@@ -5,13 +5,13 @@
 //UNIVERSAL SUPPLY parameters 
 #define RELAY2 0
 #define DS1820_INT 1
-#define DS1820_OUT 1
+#define DS1820_OUT 0
 #define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
 
-//#define PINS_SET_V1
 #define PINS_SET_V2
+//#define PINS_SET_V2
 //#define PINS_SET_V3
 
 
@@ -27,16 +27,18 @@
 
 /**************** Define supply **************************/
 
-#define SUPPLY_PUMP
+//#define SUPPLY_PUMP
 //#define SUPPLY_DS2
 //#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
-//#define SUPPLY_UNI_SCT013 
+ //#define SUPPLY_UNI_SCT013 
 //#define SUPPLY_SCT013_SINGLE
 //#define SUPPLY_MULTI_SCT013
 //#define SUPPLY_DHT
 //#define SUPPLY_6TEMP
 //#define SUPPLY_UNI_MAX44003
+#define SUPPLY_ADS11x5
+
 
 //#define SUPPLY_UNIVERSAL
 
@@ -102,8 +104,9 @@
   #include <supplies/donoffsupply-uni-max44003.h>
 #endif
 
-
-
+#ifdef SUPPLY_ADS11x5
+  #include <supplies/donoffsupply-ads.h>
+#endif
 
 
 
@@ -163,6 +166,12 @@ DPublisherMQTT pubmqtt(&settings, &client);
 #ifdef SUPPLY_UNI_MAX44003
   DSupplyDonoffUniMAX44003 supply(&settings);
 #endif
+
+#ifdef SUPPLY_ADS11x5
+  DSupplyADS supply(&settings);
+#endif
+
+
 
 
 
