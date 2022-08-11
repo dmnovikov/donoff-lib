@@ -3,9 +3,9 @@
 #define BUTTON_REVERSE
 
 //UNIVERSAL SUPPLY parameters 
-#define RELAY2 0
+#define RELAY2 1
 #define DS1820_INT 1
-#define DS1820_OUT 0
+#define DS1820_OUT 1
 #define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
@@ -27,7 +27,7 @@
 
 /**************** Define supply **************************/
 
-//#define SUPPLY_PUMP
+#define SUPPLY_PUMP
 //#define SUPPLY_DS2
 //#define SCT013 1 //for SUPPLY_UNI_SCT013 
 //#define SUPPLY_TEMP_ODDS
@@ -37,7 +37,7 @@
 //#define SUPPLY_DHT
 //#define SUPPLY_6TEMP
 //#define SUPPLY_UNI_MAX44003
-#define SUPPLY_ADS11x5
+//#define SUPPLY_ADS11x5
 
 
 //#define SUPPLY_UNIVERSAL

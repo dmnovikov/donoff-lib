@@ -18,7 +18,7 @@ commands:
 
 #define DEFAULT_CURRENT 100; // 1.00 Amp
 #define DEFAULT_STRONG_CURRENT_SEC  3600 //1 hour before alarm off
-#define RELAY2_CURRENT 0
+#define RELAY2_CURRENT 1
 
 #ifdef D_MQTT
     const char SCT013_OUT_CHANNEL[]="/out/sensors/current";
@@ -67,7 +67,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
           sct013->sensor_loop();
           debug("SCT013_OUT", sct013->get_val_Str());
           ulong current=sct013->get_val();
-          //current=160; // test
+          //current=250; // test
 
           if(sct013->is_started_and_ready()){
             if(current <= _s->custom_level1) {
@@ -115,7 +115,7 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
          if(mycounter==8 && _s->custom_level1>0){  //if custom_level1==0 ignore this sensor
 
             if(strong_current_ms>0)
-               debug("STRONG_CURR", "CURRENT MS="+String(strong_current_ms)+"; level="+String(_s->custom_level2*1000));
+               debug("STRONG_CURR", "CURRENT MS="+String(strong_current_ms)+"; sec_lvl="+String(_s->custom_level2*1000)+"; cur_lvl="+String(_s->custom_level1));
 
              if(strong_current_ms >_s->custom_level2*1000){
                 
@@ -131,12 +131,12 @@ class DSupplyDonoffUniCurr: public DSupplyDonoffUni {
                 relay_is_off=r[0]->is_off();
                 debug("STRONG_CURR", "relay 0 check; relay_off="+ String(relay_is_off));
               }
-             if(relay_is_off==1 && strong_current_ms>0){
-               strong_current_ms=0;
-               start_strong_current_ms=0;
-               debug("STRONG_CURR", "Err: relay off but curent is big");
-               // pub->publish_to_info_topic("E: relay is off, but curr");
-             }
+             //if(relay_is_off==1 && strong_current_ms>0){
+             //  strong_current_ms=0;
+             //  start_strong_current_ms=0;
+             //  debug("STRONG_CURR", "Err: relay off but curent is big");
+             //  // pub->publish_to_info_topic("E: relay is off, but curr");
+             //;}
          }
      };
   
