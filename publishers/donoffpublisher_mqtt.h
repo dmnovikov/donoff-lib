@@ -9,6 +9,7 @@
 #include <donoffbase.h>
 #include <publishers/donoffpublisher.h>
 #include <sensors/donoff-multisensor.h>
+#include <PubSubClient.h>
 
 class DPublisherMQTT : public DPublisher
 {

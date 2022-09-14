@@ -7,6 +7,11 @@
 #include <donoffrelay.h>
 #include <Queue.h>
 
+//#define CREDS_MQTT_STANDALONE_FILE
+#define GS_SERIAL_LOG_2
+//#define CREDS_EMAIL_NOTIFYER_FILE
+
+
 
 class DNotifyer : public DBase
 {
@@ -77,8 +82,6 @@ public:
   };
 };
 
-#define GS_SERIAL_LOG_2
-#define CREDS_EMAIL_NOTIFYER_FILE
 
 class DNotifyerEmail : public DNotifyer
 {
@@ -271,7 +274,7 @@ public:
 };
 
 
-#define CREDS_MQTT_STANDALONE_FILE
+
 
 class DNotifyerEmailMQTTStandalone : public DNotifyer
 {

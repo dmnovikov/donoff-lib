@@ -9,7 +9,7 @@
 #define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
-
+p
 #define PINS_SET_V2
 //#define PINS_SET_V2
 //#define PINS_SET_V3
