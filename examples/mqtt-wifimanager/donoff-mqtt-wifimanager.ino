@@ -2,19 +2,12 @@
 
 #define BUTTON_REVERSE
 
-//UNIVERSAL SUPPLY parameters 
-#define RELAY2 1
-#define DS1820_INT 1
-#define DS1820_OUT 1
-#define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
 
+//#define PINS_SET_V1
 #define PINS_SET_V2
-//#define PINS_SET_V2
 //#define PINS_SET_V3
-
-
 
 //#define SETDEFNEW 
 
@@ -24,6 +17,11 @@
   #undef DDISPLAY_SSD1306
   #define DDISPLAY_SSD1306 0
 #endif
+
+//UNIVERSAL SUPPLY parameters 
+  #define RELAY2 1
+  #define DS1820_INT 1
+  #define DS1820_OUT 1
 
 /**************** Define supply **************************/
 
@@ -63,11 +61,13 @@
 // #include <supplies/donoffsupply-common.h>
 // #include <supplies/donoffsupply-base.h>
 
+ #define DDISPLAY_SSD1306 0
 
 #ifdef SUPPLY_UNIVERSAL
     #include <supplies/donoffsupply-donoff-universal.h>
 #endif
 
+//count seconds of strong current, and turnes off relay when sec level overheaded (can work on r1 or on r2)
 #ifdef SUPPLY_PUMP
   #include <supplies/prj_supplies/pump_current_time_check_supply.h>
 #endif
