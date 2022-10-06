@@ -9,7 +9,7 @@
 #define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
-p
+
 #define PINS_SET_V2
 //#define PINS_SET_V2
 //#define PINS_SET_V3
@@ -266,8 +266,16 @@ void setup()
   }
 
   client.setCallback(callback);
+
+  Serial.println("1________________________________________");
+
   pubmqtt.init(&que_wanted);
+
+  Serial.println("2________________________________________");
+
   notifyer.init(&pubmqtt);
+
+  Serial.println("3________________________________________");
 
   #ifdef SUPPLY_UNIVERSAL
     Serial.println("UNIVERSAL SUPPLY");

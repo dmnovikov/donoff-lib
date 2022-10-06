@@ -25,7 +25,7 @@ class DPublisherBlynk: public DPublisher {
     };
 
 
-    int init( Queue<pub_events>* _q) {
+    void init( Queue<pub_events>* _q) {
       DPublisher::init(_q);
       Blynk.config(auth, "blynk-cloud.com", 80);
       Blynk.connect();

@@ -50,7 +50,7 @@ public:
   public:
     DPublisher(WMSettings * __s): DBase(__s) {};
 
-     int init( Queue<pub_events>* _q) {
+     void init( Queue<pub_events>* _q) {
       que_wanted= _q;
      }
 

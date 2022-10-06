@@ -22,7 +22,7 @@ class DSupplyPZEM004: public DSupplyBase {
   public:
     DSupplyPZEM004(WMSettings * __s): DSupplyBase(__s) {};
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupplyBase::init(_notifyer, _pub, _q);
         init_ok = 0;
       
@@ -36,7 +36,7 @@ class DSupplyPZEM004: public DSupplyBase {
     };
 
    //first sensor loop
-   int sensors_loop(int sensor_num){
+   void sensors_loop(int sensor_num){
        if(sensor_num==1){
           pzem004->pzem_current->sensor_loop();
           debug("PZEM004-Current", pzem004->pzem_current->get_val_Str());
@@ -54,7 +54,7 @@ class DSupplyPZEM004: public DSupplyBase {
 
 
    //add public sensor and relay_1 status
-   int virtual service_loop() {
+   void virtual service_loop() {
 
        DSupplyBase::service_loop();
 

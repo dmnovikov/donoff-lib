@@ -8,8 +8,8 @@
 		"files.associations": {
 			"new": "cpp"
 		},
-		"arduino.path": "/snap/bin/arduino",
-		"arduino.additionalUrls": "",
-		"arduino.defaultBaudRate": 9600
+		"arduino.path": "/home/dmn/Downloads/arduino-1.8.13",
+		"arduino.defaultBaudRate": 9600,
+		"arduino.commandPath": "arduino"
 	}
 }

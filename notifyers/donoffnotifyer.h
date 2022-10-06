@@ -30,7 +30,7 @@ public:
 
   int virtual is_connected(){};
 
-  int virtual init(DPublisher *_pub)
+  void virtual init(DPublisher *_pub)
   {
     pub = _pub;
     init_ok = 1;

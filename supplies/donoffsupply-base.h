@@ -17,7 +17,7 @@ class DSupplyBase: public DSupply {
   public:
     DSupplyBase(WMSettings * __s): DSupply(__s) {};
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupply::init(_notifyer, _pub, _q);
         init_ok = 0;
 
@@ -34,11 +34,11 @@ class DSupplyBase: public DSupply {
     };
 
 
-    int virtual native_loop() {
+    void virtual native_loop() {
         button_loop();
     };
 
-    int virtual button_loop(){
+    void virtual button_loop(){
 
          // debug("SUPPLY_LOOP", "Button loop");
         button_result = b1->button_loop(); //return button status

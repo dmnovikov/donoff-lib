@@ -36,12 +36,13 @@ class DBase {
         return get_time_str(millis());
     };
 
-int virtual save(){
+void virtual save(){
      EEPROM.begin(MEM_SIZE);
      EEPROM.put(0, *_s);
      EEPROM.end();     
 };
-int load(){
+
+void load(){
     EEPROM.begin(MEM_SIZE);
     EEPROM.get(0, *_s);
     EEPROM.end();
@@ -68,7 +69,7 @@ String virtual s_get_timestamp(char c_b='T', char c_e='Z'){
     return s_timestamp;
 };
 
-int virtual reset(){
+void virtual reset(){
   ESP.reset();
 }
 

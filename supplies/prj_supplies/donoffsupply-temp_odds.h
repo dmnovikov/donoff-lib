@@ -34,7 +34,7 @@ class DSupplyDonoffTempOdds: public DSupplyDonoffDS2 {
     };
 
    //second sensor loop
-   int sensors_loop(int sensor_num){ 
+   void sensors_loop(int sensor_num){ 
       
        DSupplyDonoffDS2::sensors_loop(sensor_num);
 
@@ -47,7 +47,7 @@ class DSupplyDonoffTempOdds: public DSupplyDonoffDS2 {
    };
    
    //add public sensor and relay_1 status
-   int virtual service_loop() {
+   void virtual service_loop() {
 
        DSupplyDonoffDS2::service_loop();
 
@@ -57,7 +57,7 @@ class DSupplyDonoffTempOdds: public DSupplyDonoffDS2 {
    };
 
   
-     int virtual cooler_loop(){
+     void virtual cooler_loop(){
       if(DS1820_OUT && DS1820_OUT2 && DS_ODDS) cooler(ds_odds,r[0]);
     };
 };

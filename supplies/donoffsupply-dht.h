@@ -21,7 +21,7 @@ class DSupplyDHT: public DSupplyDonoff{
   public:
     DSupplyDHT(WMSettings * __s): DSupplyDonoff(__s) {};
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
       
         DSupplyDonoff::init(_notifyer, _pub, _q);
         init_ok = 0;
@@ -36,7 +36,7 @@ class DSupplyDHT: public DSupplyDonoff{
     };
 
    //first sensor loop
-   int sensors_loop(int sensor_num){
+   void sensors_loop(int sensor_num){
        DSupplyDonoff::sensors_loop(sensor_num);
 
        if(sensor_num==2){
@@ -53,7 +53,7 @@ class DSupplyDHT: public DSupplyDonoff{
 
 
    //add public sensor and relay_1 status
-   int virtual service_loop() {   
+   void virtual service_loop() {   
 
        DSupplyDonoff::service_loop();
 
@@ -67,7 +67,7 @@ class DSupplyDHT: public DSupplyDonoff{
 
 
 
-     int slow_loop(int mycounter){
+     void slow_loop(int mycounter){
 
          DSupplyDonoff::slow_loop(mycounter);
 
@@ -77,12 +77,12 @@ class DSupplyDHT: public DSupplyDonoff{
 
      };
 
-    int virtual hotter_loop(){
+    void virtual hotter_loop(){
         //debug("HOTTER", "START HOTTER");
         hotter1(multi_dht->dht_temp, r[0]);
     };
 
-    int virtual cooler_loop(){
+    void virtual cooler_loop(){
         cooler(multi_dht->dht_temp,r[0]);
     };
 

@@ -28,8 +28,9 @@ public:
         _c=__c;
   };
 
-  int init(Queue<pub_events> *_q){
+  void init(Queue<pub_events> *_q){
       DPublisher::init(_q);
+      Serial.println("1-1-----------------------------------------------------------");
       configTime(_s->time_zone * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
       sync_time();
       try_connect();

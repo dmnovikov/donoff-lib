@@ -18,7 +18,7 @@ class DSupplySCT013Collector: public DSupplyBase {
   public:
     DSupplySCT013Collector(WMSettings * __s): DSupplyBase(__s) {};
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupplyBase::init(_notifyer, _pub, _q);
         init_ok = 0;
       
@@ -31,7 +31,7 @@ class DSupplySCT013Collector: public DSupplyBase {
     };
 
    //first sensor loop
-   int sensors_loop(int sensor_num){
+   void sensors_loop(int sensor_num){
        if(sensor_num==1){
           sct013[0]->sensor_loop();
           debug("SCT013_OUT", sct013[0]->get_val_Str());
@@ -40,7 +40,7 @@ class DSupplySCT013Collector: public DSupplyBase {
 
 
    //add public sensor and relay_1 status
-   int virtual service_loop() {
+   void virtual service_loop() {
 
        DSupplyBase::service_loop();
 

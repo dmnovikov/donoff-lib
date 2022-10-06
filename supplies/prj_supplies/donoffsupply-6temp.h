@@ -32,7 +32,7 @@ class DSupplyDonoff6Temp: public DSupplyBase {
   public:
     DSupplyDonoff6Temp(WMSettings * __s): DSupplyBase(__s) {};
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
 
        DSupplyBase::init(_notifyer, _pub, _q);
        init_ok = 0;
@@ -68,7 +68,7 @@ class DSupplyDonoff6Temp: public DSupplyBase {
     };
 
    //second sensor loop
-   int sensors_loop(int sensor_num){ 
+   void sensors_loop(int sensor_num){ 
       
        if(sensor_num==1){
           ds[0]->sensor_loop();
@@ -97,7 +97,7 @@ class DSupplyDonoff6Temp: public DSupplyBase {
    };
    
    //add public sensor and relay_1 status
-   int virtual service_loop() {
+   void virtual service_loop() {
        DSupplyBase::service_loop();
        if(pub->is_connected()){
             pub->publish_sensor(ds[0]);

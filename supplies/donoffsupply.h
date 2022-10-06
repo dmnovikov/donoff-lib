@@ -73,7 +73,7 @@ class DSupply: public DBase {
 
     // };
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
 
       pub = _pub;
       notifyer = _notifyer;
@@ -90,7 +90,7 @@ class DSupply: public DBase {
 
     };
 
-    int supply_loop() {
+    void supply_loop() {
 
       if ((millis() - mytimer) >= MS_LOOP_TIMING ) {
         //6 sec loop
@@ -138,12 +138,12 @@ class DSupply: public DBase {
 
     };
 
-    int virtual one_minute_loop(){};
-    int virtual ten_minutes_loop(){};
-    int virtual thirty_minutes_loop(){};
-    int virtual one_hour_loop(){};
+    void virtual one_minute_loop(){};
+    void virtual ten_minutes_loop(){};
+    void virtual thirty_minutes_loop(){};
+    void virtual one_hour_loop(){};
 
-    int virtual very_slow_loop(int counter){
+    void virtual very_slow_loop(int counter){
           
           if(counter % 10 == 0 && counter!=0){ 
               debug("SLOWLOOP", "1 MINUTE, counter="+String(counter));
@@ -168,7 +168,7 @@ class DSupply: public DBase {
 
     };
 
-    int virtual slow_loop(int mycounter){
+    void virtual slow_loop(int mycounter){
          if (mycounter == 0) {
           //debug("SUPPLY_LOOP", "Reconnect loop");
           if(!DOFFLINE) reconnect_loop();
@@ -198,7 +198,7 @@ class DSupply: public DBase {
       if(!_s->notifyer) return 0;
     };
 
-    int virtual display_loop(){};
+    void virtual display_loop(){};
 
     int virtual pub_wanted_loop(){
       //debug("SUPPLY_QUEUE", "Loop queue wanted");
@@ -213,10 +213,11 @@ class DSupply: public DBase {
       }
 
       do_want_event();
+      return 1;
       
     };
 
-    int virtual do_want_event(){
+    void virtual do_want_event(){
         if(what_to_want==PUBLISHER_WANT_SAVE){
         save();
         pub->publish_to_info_topic("N: saved");
@@ -228,18 +229,18 @@ class DSupply: public DBase {
       }
     };
     
-    int virtual sensors_loop(int mycounter){};
-    int virtual fast_loop() {};
-    int virtual native_loop() {};
+    void virtual sensors_loop(int mycounter){};
+    void virtual fast_loop() {};
+    void virtual native_loop() {};
 
 
-    int reconnect_loop() {
+    void reconnect_loop() {
       if (!pub->is_connected() || !pub->is_time_synced()) {
         pub->reconnect();
       }
     };
 
-    int virtual service_loop() {
+    void virtual service_loop() {
 
       // debug("SHEDULER", "**Service loop->Time=" + String(hour()) + ":" + String(minute()) + ", y=" + String(year()) + " ,t_sync=" + String(pub->is_time_synced())+ 
       //      ", user="+ String(_s->mqttUser)+", dev_id=" + String(_s->dev_id)+" ,online="+String(pub->is_connected())+
@@ -287,8 +288,10 @@ class DSupply: public DBase {
             pub->publish_ontime(_r);
             notifyer->notify_on(_r, reasonStr);
             sync_blink_mode();
+            return 1;
 
       } 
+      return 0;
     };
 
     int relay_off(DRelay* _r, String reasonStr) {
@@ -300,7 +303,9 @@ class DSupply: public DBase {
         pub->publish_ontime(_r);
         notifyer->notify_off(_r, reasonStr);
         sync_blink_mode();
+        return 1;
       } 
+      return 0;
     };
 
     int relay_toggle(DRelay* _r, String reasonStr) {

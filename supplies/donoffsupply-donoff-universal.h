@@ -26,7 +26,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
   public:
     DSupplyDonoffUni(WMSettings * __s): DSupplyDonoff(__s) {};
 
-    int init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
+    void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
 
         DSupplyDonoff::init(_notifyer, _pub, _q);
         init_ok = 0;
@@ -48,7 +48,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
     };
 
    //second sensor loop
-   int sensors_loop(int sensor_num){ 
+   void sensors_loop(int sensor_num){ 
       
        DSupplyDonoff::sensors_loop(sensor_num);
 
@@ -69,7 +69,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
    };
    
    //add public sensor and relay_1 status
-   int virtual service_loop() {
+   void virtual service_loop() {
 
        DSupplyDonoff::service_loop();
 
@@ -83,7 +83,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
    };
 
-     int slow_loop(int mycounter){
+     void slow_loop(int mycounter){
 
          DSupplyDonoff::slow_loop(mycounter);
 
@@ -111,18 +111,18 @@ class DSupplyDonoffUni: public DSupplyDonoff {
     //   }
     // };
 
-     int virtual hotter_loop(){
+     void virtual hotter_loop(){
       if(DS1820_OUT) {
        hotter1(ds_out, r[0]);
       }
     };
 
-    int virtual cooler_loop(){
+    void virtual cooler_loop(){
       if(DS1820_OUT) cooler(ds_out,r[0]);
     };
 
 
-    int virtual do_want_event(){
+    void virtual do_want_event(){
       DSupplyDonoff::do_want_event();
 
       //debug ("DO_WANT", "universal do want:"+String(what_to_want));
@@ -164,7 +164,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
     };
 
   
-     int virtual aofs_loop() {
+     void virtual aofs_loop() {
 
       DSupplyDonoff::aofs_loop();
 
@@ -179,7 +179,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
     
 
     //light scheme loop for relay_1
-    int virtual lschm_loop() {
+    void virtual lschm_loop() {
 
       DSupplyDonoff::lschm_loop();
 
@@ -190,7 +190,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       
     };
 
-    int virtual display_loop() {
+    void virtual display_loop() {
 
       DSupplyDonoff::display_loop();
 
@@ -220,7 +220,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
       
     // };
 
-  int virtual reset(){
+  void virtual reset(){
     //turn off 2nd relay before relay
       debug("RESET", "turn off relays before reset");
       relay_off(r[1], "off, before reset");
