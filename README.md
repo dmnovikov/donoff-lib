@@ -1,2 +1,2 @@
 # donoff-lib
-new life branch
+stable branch
