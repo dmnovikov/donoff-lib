@@ -151,7 +151,9 @@ class DConfigMQTT: public DConfig{
     //         delay(5000);
     //     }
 
-        wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, false);
+      //  ************************               wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, false);
+
+       wm.startConfigPortal(WIFI_CONFIG_AP_NAME);
 
         //wm.startConfigPortal(WIFI_CONFIG_AP_NAME, NULL, &newssid, &newpass );
         //debug("CONFIG", "GOT FROM WIFIMANAGER - newssid="+newssid+", newpass="+newpass);
