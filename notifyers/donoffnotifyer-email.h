@@ -9,7 +9,7 @@
 
 
 #define GS_SERIAL_LOG_2
-#define CREDS_EMAIL_NOTIFYER_FILE
+//#define CREDS_EMAIL_NOTIFYER_FILE
 
 class DNotifyerEmail : public DNotifyer
 {

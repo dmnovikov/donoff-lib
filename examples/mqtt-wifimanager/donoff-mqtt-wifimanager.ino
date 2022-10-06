@@ -4,8 +4,12 @@
 
 
 //#define DTIME_ZONE 3
+<<<<<<< HEAD
 
 //#define PINS_SET_V1
+=======
+p
+>>>>>>> 063d7851710f65a8de60399fa40aec01ba8a3261
 #define PINS_SET_V2
 //#define PINS_SET_V3
 
