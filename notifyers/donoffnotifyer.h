@@ -28,7 +28,7 @@ public:
 
   int virtual send_notify(String _notifySubj, String _notifyBody){};
 
-  int virtual is_connected(){};
+  int virtual is_connected(){return 0;};
 
   void virtual init(DPublisher *_pub)
   {

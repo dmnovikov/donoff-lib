@@ -11,6 +11,8 @@
     const char DS_IN_CHANNEL[] = "/out/sensors/temp_in";
 #endif
 
+#define TOGGLE_ON_BUNNON_PRESS  0
+
 class DSupplyDonoff: public DSupplyBase {
 
   protected:
@@ -100,7 +102,7 @@ class DSupplyDonoff: public DSupplyBase {
 
        DSupplyBase::button_loop();
 
-        if (button_result == SHORT_PRESS){
+        if (button_result == SHORT_PRESS && TOGGLE_ON_BUNNON_PRESS){
            debug("SUPPLY_DBUTTON", "Toggle relay");
            if(_s->hotter>=1) _s->hotter=0;
            if(_s->cooler>=1) _s->cooler=0;

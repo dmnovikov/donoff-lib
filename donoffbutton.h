@@ -2,6 +2,8 @@
 #define donoffbutton_h
 
 #include <Bounce2.h>
+#include <donoffbase.h>
+#include <donoffsettings.h>
 
 //#include <donoffrelay.h>
 //#include <donoffdisplay.h>
@@ -11,19 +13,20 @@
 //#define BUTTON_DELAY 50
 #define SHORT_PRESS 1
 #define CONFIG_PRESS 2
-#define FAIL_PRESS 0
+#define FAIL_PRESS 4
 #define START_PRESS 3
 
 class DButton: public DBase {
   private:
     // int pin;
     Bounce debouncer;
+    ulong b_duration=0;
     //Button myBtn;   
     int init_ok = 0;
     ulong start_bt = 0;
     const int SHORT_PRESS_DELAY = 1000;
-    const int CONFIG_PRESS_DELAY = 7000;
-     const int RESET_PRESS_DELAY = 8000;
+    const int CONFIG_PRESS_DELAY = 4000;
+    const int RESET_PRESS_DELAY = 8000;
     // bool b_state=HIGH;
     bool b_state;
 
@@ -31,55 +34,33 @@ class DButton: public DBase {
   public:
     DButton(WMSettings * __s): DBase(__s), debouncer() {};
 
-    int init() {
+    void init() {
       pinMode(BUTTON_PIN, INPUT);
       debouncer.attach(BUTTON_PIN, INPUT_PULLUP);
       debouncer.interval(5);
       init_ok = 1;
+      debug("BUTTON", "Init ok");
     };
 
-    int button_loop() {
-      
-      
+    int button_loop() {  
       if (!init_ok) return 0;
-      
-      // debug("DBUTTON_LOOP", "LOOP");
-      b_state=debouncer.update();
-      //if ( debouncer.fell()) {
-
-     
-      if ( debouncer.rose()) {
-       #ifdef BUTTON_REVERSE
-        return button_pushed();    
-       #else
-         return button_freed();
-       #endif
-       }
-
-      //if ( debouncer.rose()  ) {
-      if ( debouncer.fell()  ) {
-      #ifdef BUTTON_REVERSE
-        return button_freed();
-      #else
-        return button_pushed();    
-      #endif
+      debouncer.update();
+      if (debouncer.read()== LOW) {
+        b_duration=debouncer.currentDuration();
+    
       }
-
-
+  
+      if(debouncer.rose()){
+        debug("BUTTON", "Duration->"+String(b_duration));
+        return button_state(b_duration);
+      }
+      return 0;
     };
 
-    int  button_pushed(){
-      debug("BUTTON", "DETECT:START!");
-      start_bt = millis();
-      return START_PRESS;
-    };
+   
 
-    int button_freed(){
-        long duration = millis() - start_bt;
-        debug("BUTTON", "DETECT:FREED, FREE:" + String(millis())+", PUSHED="+String(start_bt)+", DURATION="+String(duration/1000));
-        if(start_bt==0) return 0;
-        start_bt=0;
-        if (duration < BUTTON_MIN_DELAY) {
+    int button_state(uint duration){
+        if (duration > 0 && duration < BUTTON_MIN_DELAY) {
           debug("BUTTON", "FAIL PRESS, DO NOTHING");
           return FAIL_PRESS;
         } else if (duration >= BUTTON_MIN_DELAY && duration < SHORT_PRESS_DELAY) {
@@ -96,7 +77,6 @@ class DButton: public DBase {
         }
 
     };
-    
 
 
 };

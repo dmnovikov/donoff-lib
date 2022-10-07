@@ -149,6 +149,7 @@ enum sensor_states {
 
 
 #ifdef PINS_SET_V1
+         //d3
     #define BUTTON_PIN   0      //d3
     #define RELAY1_PIN    5   //d1  
     #define SONOFF_LED      2  //d4

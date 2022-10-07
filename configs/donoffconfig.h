@@ -17,11 +17,11 @@ class DConfig: public DBase{
     public:
         
 
-    int init() {
+    void init() {
         init_ok = 1;
     };
 
-    int virtual config(){
+    void virtual config(){
     //    String newssid;
     //    String newpass;
     //    if (!wm.startConfigPortal("OnDemandAP", NULL, &newssid, &newpass)) {

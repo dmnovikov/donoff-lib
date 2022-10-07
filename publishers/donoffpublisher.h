@@ -57,13 +57,13 @@ public:
 
     //int virtual publish_sensor(String channelStr, String dataStr){};
     
-    int virtual publish_sensor(DSensor* _sensor, uint _debug=0){};
-    int virtual publish_multi_sensor(DMultiSensor * _multi_sensor){};
+    int virtual publish_sensor(DSensor* _sensor, uint _debug=0){return 0;};
+    int virtual publish_multi_sensor(DMultiSensor * _multi_sensor){return 0;};
 
     int virtual publish_relay_state(DRelay * _r)=0;    
 
-    int virtual publish_relay_on(DRelay * _r,String reason=""){};
-    int virtual publish_relay_off(DRelay * _r,String reason=""){};
+    int virtual publish_relay_on(DRelay * _r,String reason=""){return 0;};
+    int virtual publish_relay_off(DRelay * _r,String reason=""){return 0;};
 
     int virtual publish_uptime()=0;
     int virtual publish_ontime(DRelay * _r)=0;

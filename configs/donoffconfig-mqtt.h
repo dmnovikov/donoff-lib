@@ -29,17 +29,17 @@ class DConfigMQTT: public DConfig{
     public:
         
 
-    int init() {
+    void init() {
 
         DConfig::init();
 
         debug("CONFIG_MQTT_INIT", "CONFIG INIT");
         init_ok=0;
 
-        p1= new WiFiManagerParameter("mqtt-server", "mqtt server", _s->mqttServer, 22);
-        p2= new WiFiManagerParameter("mqtt-user", "mqtt user", _s->mqttUser, 12);
-        p3= new WiFiManagerParameter("mqtt-pass", "mqtt passw", _s->mqttPass, 22);
-        p4= new WiFiManagerParameter("mqtt-port", "mqtt port", _s->mqttPort, 6);
+        p1= new WiFiManagerParameter("mqtt_server", "mqtt server", _s->mqttServer, 22);
+        p2= new WiFiManagerParameter("mqtt_user", "mqtt user", _s->mqttUser, 12);
+        p3= new WiFiManagerParameter("mqtt_pass", "mqtt passw", _s->mqttPass, 22);
+        p4= new WiFiManagerParameter("mqtt_port", "mqtt port", _s->mqttPort, 6);
         p5= new WiFiManagerParameter("dev_id", "device id", _s->dev_id, 10);
         p6= new WiFiManagerParameter("email", "email to notify", _s->email_notify, 50);
 
@@ -55,7 +55,7 @@ class DConfigMQTT: public DConfig{
         init_ok = 1;
     };
 
-    int connect_new_creds(){
+    void connect_new_creds(){
         new_creds=0;
         char c_ssid[32];
         char c_password[64];
@@ -135,12 +135,12 @@ class DConfigMQTT: public DConfig{
 
     };
 
-    int virtual connect_with_new_creds(){
+    void virtual connect_with_new_creds(){
 
     }
 
  
-    int virtual config(){
+    void virtual config(){
       
     //   if (!wm.startConfigPortal("OnDemandAP", NULL, &newssid, &newpass )) {
     //         Serial.println("failed to connect and hit timeout");

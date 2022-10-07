@@ -28,7 +28,7 @@ class DRelay: public DBase {
   public:
     DRelay(WMSettings * __s): DBase(__s) {};
 
-    int init(int _pin, String _nStr, int _num, String _ch_onoffStr,  String _ch_ontimeStr="", String _ch_down_timeStr="") {
+    void init(int _pin, String _nStr, int _num, String _ch_onoffStr,  String _ch_ontimeStr="", String _ch_down_timeStr="") {
       pin = _pin;
       stop_ms = millis();
       start_ms = 0;

@@ -103,11 +103,14 @@ public:
     int virtual try_connect(){
 
         debug("RECONNECT", "Try attemps:" + String(attempts));
-
+        if(WiFi.status() == WL_CONNECTED){
+            debug("RECONNECT", "WIFI CONNECTED->" + String(WiFi.status()));
+        }
+       
         if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET) reset();
       
         if (WiFi.status() != WL_CONNECTED) {
-            debug("RECONNECT", "NO WIFI CONNECTION, try to Wifi.begin");
+            debug("RECONNECT", "NO WIFI CONNECTION->"+ String(WiFi.status()));
             // WiFi.begin();
 
 
@@ -126,7 +129,7 @@ public:
             // WiFi.mode(WIFI_STA); // режим клиента
             // delay(10);
             // WiFi.begin();
-            WiFi.reconnect();
+            //WiFi.reconnect();
 
             return 0;
         }
@@ -139,7 +142,7 @@ public:
         int err = WiFi.hostByName(_s->mqttServer, result) ;
 
         if(err !=1){
-          debug("RECONNECT", "Cant resolve mqtt server");
+          debug("RECONNECTMQTT", "Cant resolve mqtt server");
         }else{
   
           Serial.print("MQTT Ip address: ");
@@ -165,9 +168,7 @@ public:
         }else{
           debug("PUBLISHER", "MQTT FAILED TO CONNECT");
         }
-        
-        
-        
+        return 1;   
         
     };
 
