@@ -29,7 +29,7 @@ class DTempOddsSensor: public DSensor {
         num_of_sensors=2;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
 
       DSensor::init(_name,_chname, _filtered, _que_sensor_states, _type, _need_json);
    
@@ -49,7 +49,7 @@ class DTempOddsSensor: public DSensor {
 
     };
 
-    int virtual calculate_value(){
+    void virtual calculate_value(){
           sens.val=NO_SENSOR_VAL;
           if(sensors[0]->is_started_and_ready() && sensors[1]->is_started_and_ready()){
               sens.val=sensors[1]->get_val()-sensors[0]->get_val();

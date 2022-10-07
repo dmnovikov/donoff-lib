@@ -31,7 +31,7 @@ class ADSSensorCH: public DSensor{
       channel=__channel;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
       DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
@@ -74,7 +74,7 @@ class ADS1115Sensor: public DMultiSensor {
       //debug("DHTCONSTRUCTOR", "pin="+String(_pin1)+", type="+String(DHT_TYPE));     
     };
 
-    int virtual init(String _name, String _chname, int _type, Queue<sensor_state> *_que_sensor_states) {
+    void virtual init(String _name, String _chname, int _type, Queue<sensor_state> *_que_sensor_states) {
 
       DMultiSensor::init(_name, _chname, _type, _que_sensor_states);
 

@@ -32,7 +32,7 @@ class DMultiSensorSCT013: public DSensor {
         
     };
 
-    int virtual init(int _pin1, int _pin2, String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
+    void virtual init(int _pin1, int _pin2, String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
    
       MULTI_PIN1=_pin1;
       MULTI_PIN2=_pin2;
@@ -129,7 +129,7 @@ class DMultiSensorSCT013: public DSensor {
       
     };
 
-    int virtual calculate_value(){
+    void virtual calculate_value(){
               sens.val=0;
               for(int i=0; i<=2; i++){
                 sens.val+=sensors[i]->get_val();

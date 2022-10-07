@@ -19,7 +19,7 @@ class DMultiSensor: public DBase {
   public:
     DMultiSensor(WMSettings * __s): DBase(__s) {};
 
-    int virtual init(String _name, String _chname, int _type, Queue<sensor_state> *_que_sensor_states){
+    void virtual init(String _name, String _chname, int _type, Queue<sensor_state> *_que_sensor_states){
       nameStr=_name;
       channelStr=_chname;
       type=_type;

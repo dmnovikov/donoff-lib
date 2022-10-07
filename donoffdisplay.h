@@ -11,7 +11,7 @@
 
 class DDisplay:public DBase{
  public:
-  int virtual init(){};
+  void virtual init(){};
   DDisplay(WMSettings * __s): DBase(__s) {};
   int virtual show_sensor(int ppos, String name, long data,int mult,  bool isFirst, bool isLast){};
   int virtual show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){};
@@ -37,7 +37,7 @@ class DDisplay_SSD1306 :public DDisplay{
   public:
     DDisplay_SSD1306(WMSettings * __s): DDisplay(__s), display(0) {};
 
-    int virtual init(){
+    void virtual init(){
       
       display.begin(SSD1306_SWITCHCAPVCC, 0x3C); 
       display.display();
@@ -66,6 +66,7 @@ class DDisplay_SSD1306 :public DDisplay{
       display.println(outS);
       display.display();
       pos++;
+      return 1;
     };
 
      int virtual show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){
@@ -84,6 +85,7 @@ class DDisplay_SSD1306 :public DDisplay{
       display.println(outS);
       display.display();
       pos++;
+      return 1;
     };
 
      int virtual show_str(int ppos, String name, String data,  bool isFirst, bool isLast){
@@ -101,7 +103,7 @@ class DDisplay_SSD1306 :public DDisplay{
       display.println(outS);
       display.display();
       pos++;
-      
+      return 1;
     };
     
     

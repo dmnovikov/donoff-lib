@@ -61,6 +61,7 @@ class DPublisherBlynk: public DPublisher {
         if (is_connected()) debug("CONNECT","OK");
         last_connect_attempt = millis();
       }
+      return 1;
     };
 
     int virtual publish_sh_to_info_topic(String shStr, String _valStr) {
@@ -69,6 +70,7 @@ class DPublisherBlynk: public DPublisher {
       Blynk.virtualWrite(String(INFO_CHANNEL).toInt(), outS);
       terminal.println(outS);
       terminal.flush();
+      return 1;
     };
 
     int virtual publish_to_info_topic(String _valStr) {
@@ -76,6 +78,7 @@ class DPublisherBlynk: public DPublisher {
       Blynk.virtualWrite(String(INFO_CHANNEL).toInt(), _valStr);
       terminal.println(_valStr);
       terminal.flush();
+      return 1;
     };
 
      int virtual publish_to_log_topic(String _valStr) {
@@ -83,15 +86,18 @@ class DPublisherBlynk: public DPublisher {
       Blynk.virtualWrite(String(LOG_CHANNEL).toInt(), _valStr);
       terminal.println(_valStr);
       terminal.flush();
+      return 1;
     };
 
     int virtual publish_sensor(DSensor * _sensor) {
       Blynk.virtualWrite(_sensor->get_channelStr().toInt(), _sensor->get_val_Str());
+      return 1;
     };
 
     int virtual publish_relay(DRelay * _r) {
       if (_r->is_on()) Blynk.virtualWrite(_r->get_onoff_channel_str().toInt(), 220);
       if (_r->is_off()) Blynk.virtualWrite(_r->get_onoff_channel_str().toInt(), 0);
+      return 1;
     };
 
     int virtual publish_relay_on(DRelay * _r, String reason = "") {
@@ -99,6 +105,7 @@ class DPublisherBlynk: public DPublisher {
       Blynk.virtualWrite(_r->get_onoff_channel_str().toInt(), 220);
       //if (reason == "")  publish_to_info_topic("L:"+_r->get_nameStr() + ":ON");
       //else publish_to_info_topic("L:"+_r->get_nameStr() + ":ON, " + reason);
+      return 1;
     };
 
 
@@ -115,6 +122,7 @@ class DPublisherBlynk: public DPublisher {
       Blynk.virtualWrite(_r->get_onoff_channel_str().toInt(), 0);
       //if (reason == "")  publish_to_info_topic("L:"+_r->get_nameStr() + ":OFF");
       //else publish_to_info_topic("L:"+_r->get_nameStr() + ":OFF, " + reason);
+      return 1;
     };
 
     //  int virtual log_relay_off(DRelay * _r, String reason = "") {
@@ -126,17 +134,20 @@ class DPublisherBlynk: public DPublisher {
     int virtual publish_uptime(DRelay * _r) {
       if (!is_connected()) return 0;
       Blynk.virtualWrite(String(UPTIME_CHANNEL).toInt(), _r->get_uptime_str());
+      return 1;
     };
 
     int virtual publish_ontime(DRelay * _r) {
       if (!is_connected()) return 0;
       Blynk.virtualWrite(_r->get_ontime_channel_str().toInt(), _r->get_ontime_str());
       //debug("PUBLISH", String(_r->get_ontime_str()));
+      return 1;
     };
 
     int virtual publish_downtime(DRelay * _r) {
       if (!is_connected()) return 0;
       Blynk.virtualWrite(_r->get_downtime_channel_str().toInt(), _r->get_downtime_str());
+      return 1;
     };
 
 

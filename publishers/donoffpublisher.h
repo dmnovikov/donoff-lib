@@ -78,13 +78,14 @@ public:
     int virtual is_connected()=0;
     int virtual is_time_synced()=0;
 
-    int virtual reconnect()=0;
+    void virtual reconnect()=0;
 
 
     int virtual publish_sh_err(){
       if (!is_connected())
         return 0;    
       publish_to_info_topic("E: sh param not recognized");
+      return 1;
     };
 
     int virtual log_relay_on(DRelay * _r, String reason = "")
@@ -98,6 +99,7 @@ public:
         publish_to_log_topic("L:" + _r->get_nameStr() + ":ON");
       else
         publish_to_log_topic("L:" + _r->get_nameStr() + ":ON, " + reason);
+      return 1;
     };
 
     int virtual log_relay_off(DRelay * _r, String reason = "")
@@ -107,9 +109,10 @@ public:
         publish_to_log_topic("L:" + _r->get_nameStr() + ":OFF");
       else
         publish_to_log_topic("L:" + _r->get_nameStr() + ":OFF, " + reason);
+      return 1;
     };
 
-    int recognize_incoming_str(String _incomingStr) {
+    void recognize_incoming_str(String _incomingStr) {
       bool autosave=0;
       int index_c=_incomingStr.indexOf(";");
       if (index_c != -1) {
@@ -976,7 +979,7 @@ public:
 
     int virtual publish_to_info_topic(String _valStr) =0;
 
-    int virtual clear_info_channel(){
+    void virtual clear_info_channel(){
       publish_to_info_topic("                          ");
       
     };

@@ -24,7 +24,7 @@ class PZEM004Tv30SensorCurrent: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
       DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
@@ -64,7 +64,7 @@ class PZEM004Tv30SensorPower: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
       DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
@@ -104,7 +104,7 @@ class PZEM004Tv30SensorVoltage: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
       DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
@@ -144,7 +144,7 @@ class PZEM004Tv30SensorEnergy: public DSensor{
       pzemsensor=__pzemsensor;
     };
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
       
       
       DSensor::init(_name, _chname, _filtered, _que_sensor_states, _type, _need_json);
@@ -192,7 +192,7 @@ class PZEM004Tv30Sensor: public DBase {
     PZEM004Tv30Sensor(WMSettings* __s, int _pin1, int _pin2): DBase(__s), pzem(_pin1, _pin2) {
     };
 
-    int virtual init(String _name, String _chname, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
+    void virtual init(String _name, String _chname, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json) {
 
       nameStr=_name;
       channelName=_chname;

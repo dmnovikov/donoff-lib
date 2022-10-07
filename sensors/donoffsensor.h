@@ -72,7 +72,7 @@ class DSensor: public DBase {
 
     int virtual req_sensor() {};
 
-    int virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
+    void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
       que_states=_que_sensor_states;
       nameStr=_name;
       channelStr=_chname;
@@ -341,7 +341,7 @@ class DSensor: public DBase {
       return NEED_BASELOG;
     };
 
-     bool need_publish_json(){
+    bool need_publish_json(){
       return need_json;
       debug("NEEDJSON", String(need_json));
     };

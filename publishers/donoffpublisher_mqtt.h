@@ -181,18 +181,18 @@ public:
     };
 
 
-    int subscribe(const char* short_topic){
+    void subscribe(const char* short_topic){
         
         String formed_topic;
         formed_topic="/"+String(_s->mqttUser)+"/"+String(_s->dev_id)+String(short_topic);
         _c->subscribe(formed_topic.c_str());
     };
 
-    int subscribe_all(){
+    void subscribe_all(){
         subscribe(PARAMS_CHANNEL);
     };
 
-    int reconnect(){
+    void reconnect(){
         if(millis() - last_connect_attempt > reconnect_period * 1000){
           if (!is_connected()){
             attempts++;
@@ -245,6 +245,7 @@ public:
       String sht=form_full_topic(INFO_CHANNEL);
       debug("PUBLISH_SH_INFO","TOPIC="+sht);
       _c->publish(form_full_topic(INFO_CHANNEL).c_str(), (shStr+"="+_valStr).c_str());
+      return 1;
 
     };
 
@@ -255,6 +256,7 @@ public:
       // String sht=form_full_topic(INFO_CHANNEL);
       // debug("PUBLISH_CLEAR_INFO","TOPIC="+sht);
      _c->publish(form_full_topic(INFO_CHANNEL).c_str(), _valStr.c_str());
+     return 1;
     };
 
     int virtual publish_to_log_topic(String _valStr)
@@ -262,6 +264,7 @@ public:
       debug("PUBLISH_LOG", "Publish to log topic->"+form_full_topic(LOG_CHANNEL)+", msg:"+_valStr);
       if (!is_connected()) return 0;
       _c->publish(form_full_topic(LOG_CHANNEL).c_str(), _valStr.c_str());
+      return 1;
 
     };
 
@@ -275,12 +278,14 @@ public:
       if(_sensor->need_publish_json() && is_time_synced()){
          publish_sensor_json(_sensor);
       }
+      return 1;
     };
 
     int virtual publish_multi_sensor(DMultiSensor * _multi_sensor){
        if (!is_connected()) return 0;   
       _c->publish(form_full_topic(_multi_sensor->get_channelStr()).c_str(), _multi_sensor->multi_json_Str().c_str());
       debug("PUBLISHMULTI", "publish to:"+_multi_sensor->get_channelStr()+" , json:"+_multi_sensor->multi_json_Str() );
+      return 1;
     };
 
 
@@ -291,12 +296,14 @@ public:
         _c->publish(form_full_topic(_r->get_onoff_channel_str()).c_str(), "1");
       if (_r->is_off())
          _c->publish(form_full_topic(_r->get_onoff_channel_str()).c_str(), "0");
+      return 1;
     };
 
     int virtual publish_uptime()
     {
       if (!is_connected()) return 0;
       _c->publish(form_full_topic(UPTIME_CHANNEL).c_str(), get_time_str(millis()).c_str());
+      return 1;
 
     };
 
@@ -304,12 +311,14 @@ public:
     {
       if (!is_connected()) return 0;
       _c->publish(form_full_topic(_r->get_ontime_channel_str()).c_str(), _r->get_ontime_str().c_str());
+      return 1;
     };
 
     int virtual publish_downtime(DRelay * _r)
     {
       if (!is_connected()) return 0;
      _c->publish(form_full_topic(_r->get_downtime_channel_str()).c_str(), _r->get_downtime_str().c_str());
+     return 1;
     };
 
 
@@ -345,6 +354,7 @@ public:
       // _pub->publish(TOPIC_SENDMAIL, json_str.c_str());
 
       // _c->publish(form_full_topic(_sensor->get_channelStr()).c_str(), _sensor->get_val_Str().c_str());
+      return 1;
     };
 
     int virtual publish_sensor_json(DSensor * _sensor){
@@ -364,13 +374,13 @@ public:
 
       root.printTo(json_str);
       _c->publish(form_full_topic(_sensor->get_channelStr()+"_json").c_str(), json_str.c_str());
-
-     
+      return 1;
     };
 
 
     int virtual publish_to_topic(String _topic, String _valStr){
         _c->publish(form_full_topic(_topic).c_str(), _valStr.c_str());
+        return 1;
     };
 
   };
