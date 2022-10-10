@@ -69,7 +69,7 @@ public:
         time_t tnow = time(nullptr);
         struct tm * timeinfo;
 
-        debug("TIMESYNC", "TIME FROM SERVER:"+String(ctime(&tnow)));
+        debug("TIMESYNC", "TIME FROM SERVER:"+String(ctime(&tnow)), DINFO);
 
         timeinfo=localtime(&tnow);
 
@@ -84,7 +84,7 @@ public:
         setTime(timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, timeinfo->tm_mday, timeinfo->tm_mon, timeinfo->tm_year+1900);
 
         if(year()==1970){ //default date
-          debug("TIMESYNC", "FAIL TO SYNC TIME :(");
+          debug("TIMESYNC", "FAIL TO SYNC TIME :(", DERROR);
           time_synced=0;
         }else{
           debug("TIMESYNC", "TIME SYNCED:"+String(d_hour())+":"+String(minute())+":"+String(year())+":"+String(month())+"; push event");
@@ -103,20 +103,16 @@ public:
 
         debug("RECONNECT", "Try attemps:" + String(attempts));
         if(WiFi.status() == WL_CONNECTED){
-            debug("RECONNECT", "WIFI CONNECTED->" + String(WiFi.status()));
-            Serial.println("WIFI_CONNECTED");
-            Serial.print("LOCAL IP:");
-            Serial.println(WiFi.localIP());
-            Serial.print("GATEWAY:");
-            Serial.println(WiFi.gatewayIP());
-            Serial.print("DNS:");
-            Serial.println(WiFi.dnsIP());
+            debug("RECONNECT", "WIFI CONNECTED", DINFO);
+            debug("RECONNECT",  WiFi.localIP(), DINFO, "LOCAL IP");
+            debug("RECONNECT",  WiFi.gatewayIP(), DINFO, "GATEWAY");
+            debug("RECONNECT",  WiFi.dnsIP(), DINFO, "DNS");
         }
        
         if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET) reset();
       
         if (WiFi.status() != WL_CONNECTED) {
-            debug("RECONNECT", "NO WIFI CONNECTION->"+ String(WiFi.status()));
+            debug("RECONNECT", "NO WIFI CONNECTION->"+ String(WiFi.status()), DERROR);
             return 0;
         }
         
@@ -124,15 +120,11 @@ public:
         int err = WiFi.hostByName(_s->mqttServer, result) ;
 
         if(err !=1){
-          debug("RECONNECTMQTT", "Cant resolve mqtt server, DNS=");
-          Serial.println(WiFi.dnsIP());
+          debug("RECONNECTMQTT", "Cant resolve mqtt server");
+          debug("RECONNECTMQTT", WiFi.dnsIP(), DERROR, "DNS");
           return 0;
-        }else{
-  
-          Serial.print("MQTT Ip address: ");
-          Serial.println(result);
-
-          //debug("RECONNECT", "Server IP:"+ String(result));
+        }else{ 
+          debug("RECONNECTMQTT", result, DINFO, "MQTT_IP");
         }
 
         int port = atoi(_s->mqttPort);
@@ -146,11 +138,11 @@ public:
         debug("PUBLISHER", "Server=" + String(_s->mqttServer) + "| User:" + String(_s->mqttUser) + "| Pass:" + String(_s->mqttPass) + "| port=" + String(_s->mqttPort));
         //if (client.connect(clientId.c_str(),"xvjlwxhs","_k7d9m2yt0hn")) {
         if (_c->connect(clientId.c_str(), _s->mqttUser, _s->mqttPass)){
-          debug("PUBLISHER", "MQTT CONNECTED");
+          debug("PUBLISHER", "MQTT CONNECTED", DINFO);
           attempts=0;
           subscribe_all();
         }else{
-          debug("PUBLISHER", "MQTT FAILED TO CONNECT");
+          debug("PUBLISHER", "MQTT FAILED TO CONNECT", DERROR);
         }
         return 1;   
         

@@ -46,6 +46,12 @@ const char RELAY2_ONOFF_CHANNEL[] = "36";
 #define NTP_SERVER_2 "pool.ntp.org"
 #define NTP_SERVER_3 "time.nist.gov"
 
+enum debug_events{
+  DUNDEF,
+  DERROR,
+  DWARNING,
+  DINFO
+};
 
 enum pub_events { 
  PUBLISHER_WANT_SAVE,

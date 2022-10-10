@@ -3,14 +3,48 @@
 
 class DBase {
   protected:
-    int debug_level = 1;
+    
     WMSettings * _s;
   public:
+    int debug_level = 1;
     DBase(WMSettings * __s) {
       _s = __s;
     };
 
-    void debug(String sourceStr, String debugStr) {
+
+  template <typename T>
+  void debug(String sourceStr, T debug,  int type=0, String preStr="") {
+    //Serial.print("dl:"+String (debug_level));
+    if (debug_level > 0){
+       switch(type){
+        case 0:
+          Serial.print("<UDEF>");
+          break;
+        case 1:
+          Serial.print("<ERROR>");
+          break;
+        case 2:
+          Serial.print("<WARNING>");
+          break;
+        case 3: 
+          Serial.print("<INFO>");
+          break;
+      }
+      Serial.print("DEBUG:");
+      Serial.print(sourceStr); 
+      Serial.print(":");
+      if(preStr!="") Serial.print(preStr+"->");
+      Serial.print(debug);
+     
+      Serial.println();
+      
+     
+    }
+  };
+
+
+
+  void debug_old(String sourceStr, String debugStr) {
       String debug_outStr = "DEBUG:" + sourceStr + ":" + debugStr;
       if (debug_level > 0) Serial.println(debug_outStr);
     };

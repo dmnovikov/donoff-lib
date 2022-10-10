@@ -29,8 +29,13 @@ class DigitalDS1820Sensor: public DSensor {
       REQUEST_CIRCLE = 750;
       TYPE=_type;
       need_json=_need_json;
+      debug_level=0;
 
-      debug("DSINIT", "need json"+ String(need_json));
+      /* 
+      debug("DSINIT", "need json:"+ String(need_json));
+      debug("DSINIT", "deebug_level:"+ String(debug_level));
+      */
+
 
       //25.24C we store as 2524
       MULTIPLIER = 100;
