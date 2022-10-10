@@ -261,6 +261,13 @@ void setup()
   
  if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WIFI_CONNECTED");
+    Serial.print("LOCAL IP:");
+    Serial.println(WiFi.localIP());
+    Serial.print("GATEWAY:");
+    Serial.println(WiFi.gatewayIP());
+    Serial.print("DNS:");
+    Serial.println(WiFi.dnsIP());
+
   }else{
     Serial.println("WIFI_NOT_CONNECTED");
   }

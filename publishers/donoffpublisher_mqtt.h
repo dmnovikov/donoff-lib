@@ -30,7 +30,6 @@ public:
 
   void init(Queue<pub_events> *_q){
       DPublisher::init(_q);
-      Serial.println("1-1-----------------------------------------------------------");
       configTime(_s->time_zone * 3600,  0, NTP_SERVER_1, NTP_SERVER_2, NTP_SERVER_3);
       sync_time();
       try_connect();
@@ -105,45 +104,29 @@ public:
         debug("RECONNECT", "Try attemps:" + String(attempts));
         if(WiFi.status() == WL_CONNECTED){
             debug("RECONNECT", "WIFI CONNECTED->" + String(WiFi.status()));
+            Serial.println("WIFI_CONNECTED");
+            Serial.print("LOCAL IP:");
+            Serial.println(WiFi.localIP());
+            Serial.print("GATEWAY:");
+            Serial.println(WiFi.gatewayIP());
+            Serial.print("DNS:");
+            Serial.println(WiFi.dnsIP());
         }
        
         if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET) reset();
       
         if (WiFi.status() != WL_CONNECTED) {
             debug("RECONNECT", "NO WIFI CONNECTION->"+ String(WiFi.status()));
-            // WiFi.begin();
-
-
-                      // We start by connecting to a WiFi network
-            // Удаляем предыдущие конфигурации WIFI сети
-            // WiFi.disconnect(); // обрываем WIFI соединения
-            // WiFi.softAPdisconnect(); // отключаем отчку доступа(если она была
-            // WiFi.mode(WIFI_OFF); // отключаем WIFI
-            // delay(500);
-
-            // wifi_station_get_config (&stationConf);
-
-            // Serial.println(String("saved ssid:"+String((char*)stationConf.ssid)+", saved pass=" + String((char*) stationConf.password)));
-
-            // // присваиваем статичесий IP адрес
-            // WiFi.mode(WIFI_STA); // режим клиента
-            // delay(10);
-            // WiFi.begin();
-            //WiFi.reconnect();
-
             return 0;
         }
         
-        
-
-        //Serial.println("\nStarting connection to server...");
-
         IPAddress result;
         int err = WiFi.hostByName(_s->mqttServer, result) ;
 
         if(err !=1){
           debug("RECONNECTMQTT", "Cant resolve mqtt server, DNS=");
           Serial.println(WiFi.dnsIP());
+          return 0;
         }else{
   
           Serial.print("MQTT Ip address: ");
