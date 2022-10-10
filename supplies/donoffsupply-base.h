@@ -25,10 +25,11 @@ class DSupplyBase: public DSupply {
         b1 = new DButton(_s);
         b1->init();
 
+        /*
         debug("SUPPLY_INIT", "CONFIG INIT");
         conf = new DConfigMQTT(_s);
         conf->init();
-
+        */
         init_ok=1;
     
     };
@@ -46,7 +47,12 @@ class DSupplyBase: public DSupply {
         if (button_result == CONFIG_PRESS){
           debug("SUPPLY_DBUTTON", "Enter Config Mode...");
           set_blink(BL_CONNECTING);
+
+          debug("SUPPLY_INIT", "CONFIG INIT");
+          conf = new DConfigMQTT(_s);
+          conf->init();
           conf->config();
+          delete conf;
 
         }
 

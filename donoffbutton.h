@@ -24,8 +24,8 @@ class DButton: public DBase {
     //Button myBtn;   
     int init_ok = 0;
     ulong start_bt = 0;
-    const int SHORT_PRESS_DELAY = 1000;
-    const int CONFIG_PRESS_DELAY = 4000;
+    const int SHORT_PRESS_DELAY = 2000;
+    const int CONFIG_PRESS_DELAY = 6000;
     const int RESET_PRESS_DELAY = 8000;
     // bool b_state=HIGH;
     bool b_state;

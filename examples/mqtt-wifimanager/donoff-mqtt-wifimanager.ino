@@ -3,7 +3,7 @@
 #define BUTTON_REVERSE
 
 //UNIVERSAL SUPPLY parameters 
-#define RELAY2 0
+#define RELAY2 1
 #define DS1820_INT 1
 #define DS1820_OUT 0
 #define DDISPLAY_SSD1306 0
@@ -267,15 +267,9 @@ void setup()
 
   client.setCallback(callback);
 
-  Serial.println("1________________________________________");
-
   pubmqtt.init(&que_wanted);
 
-  Serial.println("2________________________________________");
-
   notifyer.init(&pubmqtt);
-
-  Serial.println("3________________________________________");
 
   #ifdef SUPPLY_UNIVERSAL
     Serial.println("UNIVERSAL SUPPLY");

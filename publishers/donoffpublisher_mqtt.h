@@ -142,7 +142,8 @@ public:
         int err = WiFi.hostByName(_s->mqttServer, result) ;
 
         if(err !=1){
-          debug("RECONNECTMQTT", "Cant resolve mqtt server");
+          debug("RECONNECTMQTT", "Cant resolve mqtt server, DNS=");
+          Serial.println(WiFi.dnsIP());
         }else{
   
           Serial.print("MQTT Ip address: ");
