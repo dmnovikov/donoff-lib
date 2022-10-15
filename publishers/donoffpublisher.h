@@ -359,6 +359,97 @@ public:
         return 1;
       }
 
+
+      if (shStr == C_DINFO) {
+        String dinfo="";
+
+        #ifdef SUPPLY_UNIVERSAL
+          dinfo+="SUPPLY_UNIVERSAL";
+        #endif
+
+        #ifdef SUPPLY_PUMP
+          dinfo+="SUPPLY_PUMP";
+        #endif
+
+        #ifdef SUPPLY_DS2
+          dinfo+="SUPPLY_DS2";
+        #endif
+
+        #ifdef SUPPLY_TEMP_ODDS
+          dinfo+="SUPPLY_TEMP_ODDS";
+        #endif
+
+        #ifdef SUPPLY_UNI_SCT013
+          dinfo+="SUPPLY_UNI_SCT013";
+        #endif
+
+        #ifdef SUPPLY_SCT013_SINGLE
+          dinfo+="SUPPLY_SCT013_SINGLE";
+        #endif
+
+        #ifdef SUPPLY_MULTI_SCT013
+          dinfo+="SUPPLY_MULTI_SCT013";
+        #endif
+
+        #ifdef SUPPLY_DHT
+          dinfo+="SUPPLY_DHT";
+        #endif
+
+        #ifdef SUPPLY_6TEMP
+          dinfo+="SUPPLY_6TEMP";
+        #endif
+
+        #ifdef SUPPLY_UNI_MAX44003
+          dinfo+="SUPPLY_UNI_MAX44003";
+        #endif
+
+        #ifdef SUPPLY_ADS11x5
+          dinfo+="SUPPLY_ADS11x5";
+        #endif
+
+        dinfo+=":";
+
+        #ifdef PINS_SET_V2 
+            dinfo+="V2PINS" ;
+        #endif
+
+        #ifdef PINS_SET_V1
+           dinfo+="V1PINS" ;
+        #endif
+
+        #ifdef PINS_SET_V3
+           dinfo+="V3PINS" ;
+        #endif
+
+        dinfo+=":";
+
+        #ifdef DS1820_INT
+            dinfo+="DS_IN_OK";
+        #else
+            dinfo+="DS_IN_NO";
+        #endif
+
+        dinfo+=":";
+
+        #ifdef DS1820_OUT
+            dinfo+="DS_OUT_OK";
+        #else
+            dinfo+="DS_OUT_NO";
+        #endif
+
+        dinfo+=":";
+
+        #ifdef RELAY2
+            dinfo+="R2_OK";
+        #else
+            dinfo+="R2_NO";
+        #endif
+
+        publish_to_info_topic(dinfo);
+        
+        return 1;
+      }
+
       if (shStr.startsWith(C_TEMP_MATRIX)) {
         if(shStr==C_TEMP_MATRIX){
           String outS="";

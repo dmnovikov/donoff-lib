@@ -101,6 +101,8 @@ const char* D_CLEAR="clear";
 const char* D_RESET="reset";
 const char* D_SAVE="save";
 const char* D_DEFAULT="setdefault";
+
+
 //const char* D_NOTIFY_DEF="zeronotify";
 //const char* D_ZERO_HLEVELS="zerohours";
 
@@ -117,6 +119,7 @@ const char* C_CSHM1="cschm1";
 const char* C_CSHM2="cschm2";
 const char* C_ONOFF2_MATRIX="om2";  //set 24bit matrix 0\1
 const char* C_ONOFF1_MATRIX="om1";   //set 24bit matrix 0\1
+const char* C_DINFO="dinfo";
 
 #endif
 

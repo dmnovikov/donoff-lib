@@ -3,14 +3,14 @@
 #define BUTTON_REVERSE
 
 //UNIVERSAL SUPPLY parameters 
-#define RELAY2 1
+#define RELAY2 0
 #define DS1820_INT 1
-#define DS1820_OUT 0
+#define DS1820_OUT 1
 #define DDISPLAY_SSD1306 0
 
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V1
+#define PINS_SET_V2
 //#define PINS_SET_V2
 //#define PINS_SET_V3
 
