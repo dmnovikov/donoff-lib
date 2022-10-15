@@ -57,6 +57,7 @@ const char* C_LDELTA="tdelta";
 const char* C_EMAIL="email";
 
 const char* C_HOTTER="hotter";
+const char* C_HOTTER_ALIAS="h";
 const char* C_COOLER="cooler";
 const char* C_BASELOG="baselog";
 

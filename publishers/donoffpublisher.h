@@ -203,7 +203,7 @@ public:
         return 1;
       }
 
-      if (shStr == C_HOTTER) {
+      if (shStr == C_HOTTER || shStr== C_HOTTER_ALIAS) {
         publish_sh_to_info_topic(shStr, String(_s->hotter));
         return 1;
       }
@@ -628,7 +628,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_HOTTER) {
+      if (cmdStr == C_HOTTER || cmdStr == C_HOTTER_ALIAS) {
         bool b;
         int l_hotter;
         debug("SETHOTTER", "set hotter");
