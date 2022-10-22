@@ -139,7 +139,7 @@ public:
         //debug("RECOGNIZE", "sh val=" + shStr);
         
       }else {
-        cmd_loop(_incomingStr);
+        if(!cmd_loop(_incomingStr)) publish_to_info_topic ("no command");
       }
     };
 
@@ -148,43 +148,53 @@ public:
         
           if (inS== D_SAVE) {
               que_wanted->push(PUBLISHER_WANT_SAVE);
+              return 1;
             }
             
             if (inS == D_R1_1) {
               debug("QUEUE_WANTED PUSH EVENT", "R1_1");
               que_wanted->push(PUBLISHER_WANT_R1_ON);
+              return 1;
               
             }
             
             if (inS == D_R1_0) {
               debug("QUEUE_WANTED PUSH EVENT", "R1_0");
               que_wanted->push(PUBLISHER_WANT_R1_OFF);
+              return 1;
             }
 
              
             if (inS == D_R2_1) {
               debug("QUEUE_WANTED PUSH EVENT", "R2_1");
               que_wanted->push(PUBLISHER_WANT_R2_ON);
+              return 1;
               
             }
             
             if (inS == D_R2_0) {
               debug("QUEUE_WANTED PUSH EVENT", "R2_0");
               que_wanted->push(PUBLISHER_WANT_R2_OFF);
+              return 1;
             }
           
             if (inS==D_RESET) {
               que_wanted->push(PUBLISHER_WANT_RESET);
+              return 1;
             }
 
             if (inS==D_RESET_HOUR1) {
               debug("QUEUE", "PUSHING EVENT RESET_HOUR_R1");
               que_wanted->push(PUBLISHER_WANT_RESET_HOUR_R1_M);
+              return 1;
             }
             if (inS==D_RESET_HOUR2) {
               debug("QUEUE", "PUSHING EVENT RESET_HOUR_R2");
               que_wanted->push(PUBLISHER_WANT_RESET_HOUR_R2_M);
+              return 1;
             }
+
+            return 0;
             
     };
 
