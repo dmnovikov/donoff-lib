@@ -348,11 +348,12 @@ class DSupply: public DBase {
       
       if (_schm_num < 0 || _schm_num > 100) return -1;
       
-      debug("IS_DAY-","lschm="+String(_schm_num)+", hour="+String(h));
+      debug("IS_DAY","lschm="+String(_schm_num)+", hour="+String(h));
+      
       if (_schm_num == 99){
           //_s->cb_schm1=0B000000000011111111111110;
           bool br=bitRead(_s->cb_schm1,23-h); //read bit of hour in custom scheme
-          debug("IS_DAY-","hour="+String(h)+", on_bit="+String(br));
+          debug("IS_DAY","hour="+String(h)+", on_bit="+String(br));
           return br;
       } 
       if (_schm_num == 100){

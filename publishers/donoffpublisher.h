@@ -145,7 +145,7 @@ public:
 
 
     int virtual cmd_loop(String inS){
-        
+                  
           if (inS== D_SAVE) {
               que_wanted->push(PUBLISHER_WANT_SAVE);
               return 1;
@@ -189,7 +189,7 @@ public:
               return 1;
             }
             if (inS==D_RESET_HOUR2) {
-              debug("QUEUE", "PUSHING EVENT RESET_HOUR_R2");
+              debug("QUEUE", "PUSHING EVENT RESET_HOUR_R2->"+inS);
               que_wanted->push(PUBLISHER_WANT_RESET_HOUR_R2_M);
               return 1;
             }
