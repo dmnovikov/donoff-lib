@@ -105,7 +105,6 @@ enum sensor_states {
 
 
 /* need to write to database*/
-
 #define  JSON_CHANNEL_YES 1
 #define  JSON_CHANNEL_NO 0
 
@@ -184,6 +183,17 @@ enum sensor_states {
     #define ANALOG_A0_PIN A0
     #define RELAY2_PIN 5 //new d6 //old d8
 #endif
+
+#ifdef PINS_SET_ESP32R4
+    #define BUTTON_PIN   39      //io34
+    #define RELAY1_PIN   25   //io25
+    #define SONOFF_LED    2    //d4
+  // #define IN_WIRE_BUS    14  //d5
+  //  #define OUT_WIRE_BUS 13 //D7
+  //  #define ANALOG_A0_PIN A0
+    #define RELAY2_PIN 35 //io35
+#endif
+
 
 
 //************** DEBUG  ***************************

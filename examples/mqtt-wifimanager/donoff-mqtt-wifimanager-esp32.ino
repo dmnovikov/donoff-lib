@@ -10,7 +10,8 @@
 
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V1
+//#define PINS_SET_V1
+#define PINS_SET_ESP32R4
 //#define PINS_SET_V2
 //#define PINS_SET_V3
 
@@ -38,9 +39,9 @@
 //#define SUPPLY_6TEMP
 //#define SUPPLY_UNI_MAX44003
 //#define SUPPLY_ADS11x5
+ #define SUPPLY_ESP32_4R
 
-
-#define SUPPLY_UNIVERSAL
+//#define SUPPLY_UNIVERSAL
 
 /************************************************************/
 
@@ -51,7 +52,7 @@
 
 //#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
 #include <EEPROM.h>
-
+#include <WiFi.h>
 #include <Ticker.h>
 //#include <SimpleTimer.h>
 #include <donoffsettings.h>
@@ -106,6 +107,11 @@
 #ifdef SUPPLY_ADS11x5
   #include <supplies/donoffsupply-ads.h>
 #endif
+
+#ifdef SUPPLY_ESP32_4R
+  #include <supplies/donoffsupply-esp32-4relay.h>
+#endif
+
 
 
 
@@ -170,13 +176,16 @@ DPublisherMQTT pubmqtt(&settings, &client);
   DSupplyADS supply(&settings);
 #endif
 
+#ifdef SUPPLY_ESP32_4R
+   DSupplyESP324R supply(&settings);
+#endif
 
 
 
 
-DNotifyerEmailMQTT notifyer(&settings, &client);
+DNotifyerMQTT notifyer(&settings, &client);
 
-struct station_config stationConf;
+// struct station_config stationConf;
 
 
 Ticker ticker;
@@ -194,7 +203,7 @@ void callback(char* topic, byte* payload, unsigned int length){
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   supply.load();
 
@@ -239,9 +248,9 @@ void setup()
 
   
 
-  wifi_station_get_config (&stationConf);
+  // wifi_station_get_config (&stationConf);
 
-  Serial.println(String("saved ssid:"+String((char*)stationConf.ssid)+", saved pass=" + String((char*) stationConf.password)));
+  // Serial.println(String("saved ssid:"+String((char*)stationConf.ssid)+", saved pass=" + String((char*) stationConf.password)));
   
 
   WiFi.persistent(false);

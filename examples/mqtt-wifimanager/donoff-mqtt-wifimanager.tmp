@@ -47,7 +47,7 @@
 //#define DDISPLAY 0 //oled shield 
 /*********************************************/
 
-#include <ESP8266WiFi.h>
+#//include <ESP8266WiFi.h>
 #include <TimeLib.h>
 
 //#include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager

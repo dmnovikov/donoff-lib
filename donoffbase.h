@@ -104,7 +104,7 @@ String virtual s_get_timestamp(char c_b='T', char c_e='Z'){
 };
 
 void virtual reset(){
-  ESP.reset();
+  ESP.restart();
 }
 
 uint virtual d_hour(){

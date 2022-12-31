@@ -1,7 +1,7 @@
 {
     "output": "/home/dmn/build",
-    "configuration": "PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none",
-    "board": "esp32:esp32:esp32",
+    "configuration": "FlashFreq=80,UploadSpeed=921600",
+    "board": "esp32:esp32:firebeetle32",
     "port": "/dev/ttyUSB0",
     "sketch": "examples/mqtt-wifimanager/donoff-mqtt-wifimanager-esp32.ino"
 }
