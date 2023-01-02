@@ -39,7 +39,7 @@
 //#define SUPPLY_6TEMP
 //#define SUPPLY_UNI_MAX44003
 //#define SUPPLY_ADS11x5
- #define SUPPLY_ESP32_4R
+ #define SUPPLY_ESP32_R4
 
 //#define SUPPLY_UNIVERSAL
 
@@ -56,7 +56,13 @@
 #include <Ticker.h>
 //#include <SimpleTimer.h>
 #include <donoffsettings.h>
-#include <publishers/donoffpublisher_mqtt.h>
+
+#ifdef SUPPLY_ESP32_R4
+  #include <publishers/donoffpublisher_mqtt_esp32r4.h>
+#else
+  #include <publishers/donoffpublisher_mqtt.h>
+#endif
+
 #include <donoffcommands.h>
 #include <donoffdisplay.h>
 #include <donoffrelay.h>
@@ -108,7 +114,7 @@
   #include <supplies/donoffsupply-ads.h>
 #endif
 
-#ifdef SUPPLY_ESP32_4R
+#ifdef SUPPLY_ESP32_R4
   #include <supplies/donoffsupply-esp32-4relay.h>
 #endif
 
@@ -128,56 +134,68 @@ void callback(char* topic, byte* payload, unsigned int length);
 
 Queue<pub_events> que_wanted= Queue<pub_events>(MAX_QUEUE_WANTED);
 
-DPublisherMQTT pubmqtt(&settings, &client);
+
 
 #ifdef SUPPLY_UNIVERSAL
-    DSupplyDonoffUni supply(&settings);
+  DPublisherMQTT pubmqtt(&settings, &client);
+  DSupplyDonoffUni supply(&settings);
 #endif
 
 #ifdef SUPPLY_PUMP
+    DPublisherMQTT pubmqtt(&settings, &client);
     DSupplyDonoffUniCurr supply(&settings);
 #endif
 
 #ifdef SUPPLY_DS2
+    DPublisherMQTT pubmqtt(&settings, &client);
     DSupplyDonoffDS2 supply(&settings);
 #endif
 
 #ifdef SUPPLY_TEMP_ODDS
+    DPublisherMQTT pubmqtt(&settings, &client);
     DSupplyDonoffTempOdds supply(&settings);
 #endif
 
 
 #ifdef SUPPLY_UNI_SCT013
+    DPublisherMQTT pubmqtt(&settings, &client);
     DSupplyDonoffUniSct013 supply(&settings);
 #endif
 
 
 #ifdef SUPPLY_SCT013_SINGLE
+  DPublisherMQTT pubmqtt(&settings, &client);
   DSupplySCT013Collector supply(&settings);
 #endif
 
 #ifdef SUPPLY_MULTI_SCT013
+  DPublisherMQTT pubmqtt(&settings, &client);
   DSupplyMultiSCT013Collector supply(&settings);
 #endif
 
 #ifdef SUPPLY_DHT
+  DPublisherMQTT pubmqtt(&settings, &client);
   DSupplyDHT supply(&settings);
 #endif
 
 #ifdef SUPPLY_6TEMP
+  DPublisherMQTT pubmqtt(&settings, &client);
   DSupplyDonoff6Temp supply(&settings);
 #endif
 
 #ifdef SUPPLY_UNI_MAX44003
+  DPublisherMQTT pubmqtt(&settings, &client);
   DSupplyDonoffUniMAX44003 supply(&settings);
 #endif
 
 #ifdef SUPPLY_ADS11x5
+  DPublisherMQTT pubmqtt(&settings, &client);
   DSupplyADS supply(&settings);
 #endif
 
-#ifdef SUPPLY_ESP32_4R
-   DSupplyESP324R supply(&settings);
+#ifdef SUPPLY_ESP32_R4
+   DSupplyESP32R4 supply(&settings);
+   DPublisherMQTTESP32R4 pubmqtt(&settings, &client);
 #endif
 
 
@@ -253,7 +271,7 @@ void setup()
   // Serial.println(String("saved ssid:"+String((char*)stationConf.ssid)+", saved pass=" + String((char*) stationConf.password)));
   
 
-  WiFi.persistent(false);
+  //WiFi.persistent(false);  //COMMENT FOR ESP32, need check for esp8266
   WiFi.mode(WIFI_STA);
   WiFi.setAutoReconnect(true);
 

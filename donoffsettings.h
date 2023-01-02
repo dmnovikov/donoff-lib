@@ -191,7 +191,7 @@ enum sensor_states {
   // #define IN_WIRE_BUS    14  //d5
   //  #define OUT_WIRE_BUS 13 //D7
   //  #define ANALOG_A0_PIN A0
-    #define RELAY2_PIN 35 //io35
+    #define RELAY2_PIN 26 //io35
 #endif
 
 

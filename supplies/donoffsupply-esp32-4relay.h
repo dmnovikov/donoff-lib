@@ -1,19 +1,46 @@
-#ifndef donoffsupplyesp324relays_h
-#define donoffsupplyesp324relays_h
+#ifndef donoffsupplyesp32r4_h
+#define donoffsupplyesp32r4_h
 
 #include <supplies/donoffsupply-base.h>
 //#include <sensors/donoffsensor_ds1820.h>
 
+enum pub_events_extra { 
+ PUBLISHER_WANT_R3_ON=100,
+ PUBLISHER_WANT_R3_OFF=101,
+ PUBLISHER_WANT_R4_ON=102,
+ PUBLISHER_WANT_R4_OFF=103,
+ 
+ PUBLISHER_WANT_SH_R3=104,
+ PUBLISHER_WANT_SH_R4=105
+};
+
+#define RELAY3_PIN  33
+#define RELAY4_PIN  32
+
 #ifdef D_MQTT
     const char RELAY1_ONOFF_CHANNEL[] = "/out/relays/r1";
+    const char RELAY2_ONOFF_CHANNEL[] = "/out/relays/r2";
+    const char RELAY3_ONOFF_CHANNEL[] = "/out/relays/r3";
+    const char RELAY4_ONOFF_CHANNEL[] = "/out/relays/r4";
+
     const char RELAY1_ONTIME_CHANNEL[] = "/out/time_comm";
     const char RELAY1_DOWNTIME_CHANNEL[] = "/out/time_down";
+
+    const char RELAY2_ONTIME_CHANNEL[] = "/out/time_comm2";
+    const char RELAY2_DOWNTIME_CHANNEL[] = "/out/time_down2";
+
+    const char RELAY3_ONTIME_CHANNEL[] = "/out/time_comm3";
+    const char RELAY3_DOWNTIME_CHANNEL[] = "/out/time_down3";
+
+    const char RELAY4_ONTIME_CHANNEL[] = "/out/time_comm4";
+    const char RELAY4_DOWNTIME_CHANNEL[] = "/out/time_down4";
+    
     const char DS_IN_CHANNEL[] = "/out/sensors/temp_in";
 #endif
 
 #define TOGGLE_ON_BUNNON_PRESS  0
 
-class DSupplyESP324R: public DSupplyBase {
+class DSupplyESP32R4: public DSupplyBase {
 
   protected:
 
@@ -23,16 +50,31 @@ class DSupplyESP324R: public DSupplyBase {
     String outStr;
 
   public:
-    DSupplyESP324R(WMSettings * __s): DSupplyBase(__s) {};
+    DSupplyESP32R4(WMSettings * __s): DSupplyBase(__s) {};
 
     void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupplyBase::init(_notifyer, _pub, _q);
         init_ok = 0;
 
-        numrelays++;
+        
         debug("SUPPLY_INIT", "R1 INIT, PIN:"+String(RELAY1_PIN));
         r[0] = new DRelay(_s);
         r[0]->init(RELAY1_PIN, "r1", 1, String(RELAY1_ONOFF_CHANNEL), String(RELAY1_ONTIME_CHANNEL), String(RELAY1_DOWNTIME_CHANNEL));
+        
+        debug("SUPPLY_INIT", "R2 INIT, PIN:"+String(RELAY2_PIN));
+        r[1] = new DRelay(_s);
+        r[1]->init(RELAY2_PIN, "r2", 2, String(RELAY2_ONOFF_CHANNEL), String(RELAY2_ONTIME_CHANNEL), String(RELAY2_DOWNTIME_CHANNEL));
+        
+        debug("SUPPLY_INIT", "R3 INIT, PIN:"+String(RELAY3_PIN));
+        r[2] = new DRelay(_s);
+        r[2]->init(RELAY3_PIN, "r3", 3, String(RELAY3_ONOFF_CHANNEL), String(RELAY3_ONTIME_CHANNEL), String(RELAY3_DOWNTIME_CHANNEL));
+        
+        debug("SUPPLY_INIT", "R4 INIT, PIN:"+String(RELAY4_PIN));
+        r[3] = new DRelay(_s);
+        r[3]->init(RELAY4_PIN, "r4", 4, String(RELAY4_ONOFF_CHANNEL), String(RELAY4_ONTIME_CHANNEL), String(RELAY4_DOWNTIME_CHANNEL));
+
+        numrelays=4;
+        
         //debug("SUPPLYINIT", "r1name="+r1->get_nameStr());
 
         if(_s->start_on && _s->custom_scheme1==0){
@@ -63,7 +105,11 @@ class DSupplyESP324R: public DSupplyBase {
 
             pub->publish_ontime(r[0]);
             pub->publish_downtime(r[0]);
+
             pub->publish_relay_state(r[0]);
+            pub->publish_relay_state(r[1]);
+            pub->publish_relay_state(r[2]);
+            pub->publish_relay_state(r[3]);
        }
    };
 
@@ -117,6 +163,17 @@ class DSupplyESP324R: public DSupplyBase {
          else pub->publish_to_info_topic("I:R1=DISABLED");
       }
 
+      if(what_to_want==PUBLISHER_WANT_R2_ON) {
+          if(r[1]!=NULL) relay_on(r[1],"from publisher");
+          else pub->publish_to_info_topic("I:R2=DISABLED");
+      }
+
+       if(what_to_want==PUBLISHER_WANT_R2_OFF) {
+         if(r[1]!=NULL) relay_off(r[1],"from publisher");
+         else pub->publish_to_info_topic("I:R2=DISABLED");
+      }
+
+    
       if(what_to_want==PUBLISHER_WANT_R1_OFF_LSCHM0) {
         if(r[0]!=NULL) relay_off(r[0],"lschm or hotter=0");
         else pub->publish_to_info_topic("I:R1=DISABLED");
@@ -128,6 +185,36 @@ class DSupplyESP324R: public DSupplyBase {
             else pub->publish_to_info_topic("I:R1=OFF");
         }else{
            pub->publish_to_info_topic("I:R1=DISABLED");
+        
+        }
+      }
+
+       if(what_to_want==PUBLISHER_WANT_SH_R2) {
+        if(r[1]!=NULL){
+            if(r[1]->is_on()) pub->publish_to_info_topic("I:R2=ON");
+            else pub->publish_to_info_topic("I:R2=OFF");
+        }else{
+           pub->publish_to_info_topic("I:R2=DISABLED");
+        
+        }
+      }
+
+       if(what_to_want==PUBLISHER_WANT_SH_R3) {
+        if(r[2]!=NULL){
+            if(r[2]->is_on()) pub->publish_to_info_topic("I:R3=ON");
+            else pub->publish_to_info_topic("I:R3=OFF");
+        }else{
+           pub->publish_to_info_topic("I:R3=DISABLED");
+        
+        }
+      }
+
+      if(what_to_want==PUBLISHER_WANT_SH_R4) {
+        if(r[3]!=NULL){
+            if(r[3]->is_on()) pub->publish_to_info_topic("I:R4=ON");
+            else pub->publish_to_info_topic("I:R4=OFF");
+        }else{
+           pub->publish_to_info_topic("I:R4=DISABLED");
         
         }
       }
