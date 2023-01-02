@@ -53,6 +53,7 @@ enum debug_events{
   DINFO
 };
 
+
 enum pub_events { 
  PUBLISHER_WANT_SAVE,
  PUBLISHER_WANT_R1_ON,
@@ -69,8 +70,55 @@ enum pub_events {
  PUBLISHER_WANT_SH_R1,
  PUBLISHER_WANT_SH_R2,
  PUBLISHER_WANT_SAY_JUST_SYNCED,
- PUBLISHER_WANT_SH_HOTTER
+ PUBLISHER_WANT_SH_HOTTER,
+ PUBLISHER_WANT_R3_ON=100,
+ PUBLISHER_WANT_R3_OFF=101,
+ PUBLISHER_WANT_R4_ON=102,
+ PUBLISHER_WANT_R4_OFF=103,
+ 
+ PUBLISHER_WANT_SH_R3=104,
+ PUBLISHER_WANT_SH_R4=105
 };
+
+// class pub_events {
+//   public:
+//         enum { 
+//             PUBLISHER_WANT_SAVE,
+//             PUBLISHER_WANT_R1_ON,
+//             PUBLISHER_WANT_R1_OFF,
+//             PUBLISHER_WANT_R2_ON,
+//             PUBLISHER_WANT_R2_OFF,
+//             PUBLISHER_WANT_RESET,
+//             PUBLISHER_WANT_RESET_HOUR_R1,
+//             PUBLISHER_WANT_RESET_HOUR_R2,
+//             PUBLISHER_WANT_R1_OFF_LSCHM0,
+//             PUBLISHER_WANT_R2_OFF_LSCHM0,
+//             PUBLISHER_WANT_RESET_HOUR_R1_M,
+//             PUBLISHER_WANT_RESET_HOUR_R2_M,
+//             PUBLISHER_WANT_SH_R1,
+//             PUBLISHER_WANT_SH_R2,
+//             PUBLISHER_WANT_SAY_JUST_SYNCED,
+//             PUBLISHER_WANT_SH_HOTTER,
+//             PUBLISHER_WANT_R3_ON=100,
+//             PUBLISHER_WANT_R3_OFF=101,
+//             PUBLISHER_WANT_R4_ON=102,
+//             PUBLISHER_WANT_R4_OFF=103,
+            
+//             PUBLISHER_WANT_SH_R3=104,
+//             PUBLISHER_WANT_SH_R4=105
+//         };
+// };
+
+
+// enum pub_events_extra { 
+//  PUBLISHER_WANT_R3_ON=100,
+//  PUBLISHER_WANT_R3_OFF=101,
+//  PUBLISHER_WANT_R4_ON=102,
+//  PUBLISHER_WANT_R4_OFF=103,
+ 
+//  PUBLISHER_WANT_SH_R3=104,
+//  PUBLISHER_WANT_SH_R4=105
+// };
 
 #define DS1820_NOT_FILTERED 0
 #define DS1820_FILTERED 1

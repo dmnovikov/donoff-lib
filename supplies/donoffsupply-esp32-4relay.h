@@ -4,16 +4,6 @@
 #include <supplies/donoffsupply-base.h>
 //#include <sensors/donoffsensor_ds1820.h>
 
-enum pub_events_extra { 
- PUBLISHER_WANT_R3_ON=100,
- PUBLISHER_WANT_R3_OFF=101,
- PUBLISHER_WANT_R4_ON=102,
- PUBLISHER_WANT_R4_OFF=103,
- 
- PUBLISHER_WANT_SH_R3=104,
- PUBLISHER_WANT_SH_R4=105
-};
-
 #define RELAY3_PIN  33
 #define RELAY4_PIN  32
 
@@ -171,6 +161,26 @@ class DSupplyESP32R4: public DSupplyBase {
        if(what_to_want==PUBLISHER_WANT_R2_OFF) {
          if(r[1]!=NULL) relay_off(r[1],"from publisher");
          else pub->publish_to_info_topic("I:R2=DISABLED");
+      }
+
+       if(what_to_want==PUBLISHER_WANT_R3_ON) {
+          if(r[2]!=NULL) relay_on(r[2],"from publisher");
+          else pub->publish_to_info_topic("I:R3=DISABLED");
+      }
+
+       if(what_to_want==PUBLISHER_WANT_R3_OFF) {
+         if(r[2]!=NULL) relay_off(r[2],"from publisher");
+         else pub->publish_to_info_topic("I:R3=DISABLED");
+      }
+
+       if(what_to_want==PUBLISHER_WANT_R4_ON) {
+          if(r[3]!=NULL) relay_on(r[3],"from publisher");
+          else pub->publish_to_info_topic("I:R4=DISABLED");
+      }
+
+       if(what_to_want==PUBLISHER_WANT_R4_OFF) {
+         if(r[3]!=NULL) relay_off(r[3],"from publisher");
+         else pub->publish_to_info_topic("I:R4=DISABLED");
       }
 
     
