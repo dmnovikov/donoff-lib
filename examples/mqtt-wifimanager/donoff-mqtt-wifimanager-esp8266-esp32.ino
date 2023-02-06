@@ -1,6 +1,6 @@
 /* ********** Config supply *******************/
 
-//  #define ESP32 //Uncomment this if you use ESP32 chip
+#define ESP32 //Uncomment this if you use ESP32 chip
 
 #ifdef ESP32 
   #include <WiFi.h>
@@ -47,9 +47,10 @@
 //#define SUPPLY_6TEMP
 //#define SUPPLY_UNI_MAX44003
 //#define SUPPLY_ADS11x5
-// #define SUPPLY_ESP32_R4
 
-#define SUPPLY_UNIVERSAL
+#define SUPPLY_ESP32_R4
+
+//#define SUPPLY_UNIVERSAL
 
 /************************************************************/
 

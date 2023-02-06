@@ -5,13 +5,13 @@ const char* C_AUTO_STOP_SEC="aofs";
 const char* C_AUTO_STOP_SEC2="a2ofs";  
 const char* C_AUTO_STOP_SEC2T="aofs2";
 
-const char* C_LIGHT_SCHEME_NUM="lschm";
-const char* C_LIGHT_SCHEME_NUM_ALIAS1="schm";
-const char* C_LIGHT_SCHEME_NUM_ALIAS2="schm1";
+const char* C_LSCHM="lschm";
+const char* C_LSCHM_ALIAS1="schm";
+const char* C_LSCHM_ALIAS2="schm1";
 
-const char* C_LIGHT_SCHEME_NUM2="l2schm";
-const char* C_LIGHT_SCHEME_NUM2T="lschm2";
-const char* C_LIGHT_SCHEME_NUM2T_ALIAS1="schm2";
+const char* C_LSCHM2="l2schm";
+const char* C_LSCHM2T="lschm2";
+const char* C_LSCHM2T_ALIAS1="schm2";
 
 
 const char* C_SCHEME_AOS="schma";

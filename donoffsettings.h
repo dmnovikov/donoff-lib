@@ -329,8 +329,8 @@ typedef struct {
   uint      time_zone=3; //3 for Moscow //2 for Riga
   bool      start_on=0;
 //                             0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-  bool     custom_scheme1[24]={0,0,0,0,0,0,0,0,0,0,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-  bool     custom_scheme2[24]={1,1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  bool     custom_array1[24]={0,0,0,0,0,0,0,0,0,0,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
+  bool     custom_array2[24]={1,1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   //uint      custom_scheme2=0B101010101010101010101010;
   int      custom_level_notify1=-128;
   bool     baselog=1;

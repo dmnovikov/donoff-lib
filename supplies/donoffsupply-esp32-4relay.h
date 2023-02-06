@@ -40,7 +40,13 @@ class DSupplyESP32R4: public DSupplyBase {
     String outStr;
 
   public:
-    DSupplyESP32R4(WMSettings * __s): DSupplyBase(__s) {};
+    DSupplyESP32R4(WMSettings * __s): DSupplyBase(__s) {
+      /* rewrite fefault -128 to 0 for our custom parameters */
+      _s->custom_level1=0;
+      _s->custom_level2=0;
+      _s->custom_level3=0;
+      _s->custom_level4=0;
+    };
 
     void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
         DSupplyBase::init(_notifyer, _pub, _q);
@@ -66,11 +72,6 @@ class DSupplyESP32R4: public DSupplyBase {
         numrelays=4;
         
         //debug("SUPPLYINIT", "r1name="+r1->get_nameStr());
-
-        if(_s->start_on && _s->custom_scheme1==0){
-          relay_on(r[0],"on, start on");
-        }
-        
         // debug("SUPPLY_INIT", "DS_IN INIT");
         // ds_in = new DigitalDS1820Sensor(_s, IN_WIRE_BUS);
         // ds_in->init("ds_in", DS_IN_CHANNEL, DS1820_NOT_FILTERED,que_sensor_states,DONOFF_SENSOR_TYPE_TEMPERATURE,JSON_CHANNEL_NO);
@@ -275,6 +276,12 @@ class DSupplyESP32R4: public DSupplyBase {
       }
       if (_s->lscheme_num2> 0 ) {
         lschm_on_off(r[1], _s->lscheme_num2);
+      }
+      if (_s->custom_level1 > 0) {
+        lschm_on_off(r[2], _s->custom_level1);
+      }
+      if (_s->custom_level2> 0 ) {
+        lschm_on_off(r[1], _s->custom_level2);
       }
     };
 

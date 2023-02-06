@@ -234,11 +234,11 @@ public:
         publish_sh_to_info_topic( shStr, String(_s->autostop_sec2));
         return 1;
       }
-      if (shStr == C_LIGHT_SCHEME_NUM || shStr == C_LIGHT_SCHEME_NUM_ALIAS1 || shStr ==  C_LIGHT_SCHEME_NUM_ALIAS2) {
+      if (shStr == C_LSCHM || shStr == C_LSCHM_ALIAS1 || shStr ==  C_LSCHM_ALIAS2) {
         publish_sh_to_info_topic( shStr, String(_s->lscheme_num));
         return 1;
       }
-      if (shStr == C_LIGHT_SCHEME_NUM2 || shStr == C_LIGHT_SCHEME_NUM2T || shStr == C_LIGHT_SCHEME_NUM2T_ALIAS1) {
+      if (shStr == C_LSCHM2 || shStr == C_LSCHM2T || shStr == C_LSCHM2T_ALIAS1) {
         publish_sh_to_info_topic( shStr, String(_s->lscheme_num2));
         return 1;
       }
@@ -438,39 +438,9 @@ public:
       }
 
 
-
-
       if (shStr.startsWith (I_BSCHM)) {
-        String outS = "";
-        //debug("PUBLISHER",shStr);
-        int point = shStr.indexOf(":");
-        String testVal = shStr.substring(point + 1, shStr.length());
-        int numschm = testVal.toInt();
-        //debug("PUBLISHER",String(numschm));
-        if (numschm != 0 && numschm != 99 && numschm != 100) {
-          for (int h = 0; h < 24; h++) {
-            if (h == 4 || h == 8 || h == 12 || h == 16 || h == 20) outS += " ";
-            uint l_p1 = lamp_modes[numschm - 1] & (1 << ((24 - h - 1) & 0xFFF));
-            if (l_p1 == 0) outS += "0"; else outS += "1";
-          }
-          publish_to_info_topic(outS);
-          return 1;
-        }
-        if (numschm == 99 || numschm == 100) {
-          for (int i = 0; i <= 23; i++) {
-            if (i == 4 || i == 8 || i == 12 || i == 16 || i == 20) outS += " ";
-            if (numschm == 99) {
-              if (_s->custom_scheme1[i]) outS += "1";
-              else outS += "0";
-            } else {
-              if (_s->custom_scheme2[i]) outS += "1";
-              else outS += "0";
-            }
-          }
-          debug("PUBLISHER", outS);
-          publish_to_info_topic(outS);
-          return 1;
-        }
+        publish_to_info_topic("depricated!");
+        return 1;
       }
 
       if (shStr == I_TEMP_LEVELS || shStr == I_TEMP_LEVELS_ALIAS) {
@@ -627,7 +597,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_LIGHT_SCHEME_NUM || cmdStr == C_LIGHT_SCHEME_NUM_ALIAS1 || cmdStr == C_LIGHT_SCHEME_NUM_ALIAS2) {
+      if (cmdStr == C_LSCHM || cmdStr == C_LSCHM_ALIAS1 || cmdStr == C_LSCHM_ALIAS2) {
         if (set_settings_val_int( cmdStr, valStr, (int*) &_s->lscheme_num, 0, MAX_LSCHM_NUM)) {
           if (_s->lscheme_num > 0) {
             _s->hotter = 0; // not together !
@@ -646,7 +616,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_LIGHT_SCHEME_NUM2 || cmdStr == C_LIGHT_SCHEME_NUM2T || cmdStr ==C_LIGHT_SCHEME_NUM2T_ALIAS1 ) {
+      if (cmdStr == C_LSCHM2 || cmdStr == C_LSCHM2T || cmdStr ==C_LSCHM2T_ALIAS1 ) {
         set_settings_val_int(cmdStr, valStr, (int*) &_s->lscheme_num2, 0, MAX_LSCHM_NUM);
         if(_s->lscheme_num2==0) que_wanted->push(PUBLISHER_WANT_R2_OFF_LSCHM0);
         //supply.r2.reset_lschm_hour();
