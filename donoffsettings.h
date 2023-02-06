@@ -1,4 +1,3 @@
- 
 #ifndef donoffsettings_h
 #define donoffsettings_h
 
@@ -155,24 +154,6 @@ enum sensor_states {
 /* need to write to database*/
 #define  JSON_CHANNEL_YES 1
 #define  JSON_CHANNEL_NO 0
-
-
-
-/* 
-#define MAX_QUEUE_WANTED 12
-#define PUBLISHER_WANT_SAVE 1
-#define PUBLISHER_WANT_R1_ON 2
-#define PUBLISHER_WANT_R1_OFF 3
-#define PUBLISHER_WANT_R2_ON  4
-#define PUBLISHER_WANT_R2_OFF 5
-#define PUBLISHER_WANT_RESET 6
-#define PUBLISHER_WANT_RESET_HOUR_R1 7
-#define PUBLISHER_WANT_RESET_HOUR_R2 8
-#define PUBLISHER_WANT_R1_OFF_LSCHM0 9
-#define PUBLISHER_WANT_R2_OFF_LSCHM0 10
-#define PUBLISHER_WANT_RESET_HOUR_R1_M 7
-#define PUBLISHER_WANT_RESET_HOUR_R2_M 8
-*/
 
 
 /******** config defines *******/

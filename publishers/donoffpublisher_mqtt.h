@@ -106,7 +106,7 @@ public:
             debug("RECONNECT", "WIFI CONNECTED", DINFO);
             debug("RECONNECT",  WiFi.localIP(), DINFO, "LOCAL IP");
             debug("RECONNECT",  WiFi.gatewayIP(), DINFO, "GATEWAY");
-            debug("RECONNECT",  WiFi.dnsIP(), DINFO, "DNS");
+            //debug("RECONNECT",  WiFi.dnsIP(), DINFO, "DNS");
         }
        
         if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET) reset();

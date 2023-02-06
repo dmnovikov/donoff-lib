@@ -273,6 +273,9 @@ class DSupplyESP32R4: public DSupplyBase {
       if (_s->lscheme_num > 0 &&  _s->hotter==0 && _s->cooler==0) {
         lschm_on_off(r[0], _s->lscheme_num);
       }
+      if (_s->lscheme_num2> 0 ) {
+        lschm_on_off(r[1], _s->lscheme_num2);
+      }
     };
 
     void virtual display_loop() {

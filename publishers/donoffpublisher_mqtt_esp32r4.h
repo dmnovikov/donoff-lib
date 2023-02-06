@@ -16,6 +16,9 @@ const char* D_R3_0="r30";
 const char* D_R4_1="r41";
 const char* D_R4_0="r40";
 
+const char* C_CSHM3="lschm3";
+const char* C_CSHM4="lschm4";
+
 class DPublisherMQTTESP32R4 : public DPublisherMQTT
 {
 protected:
@@ -37,28 +40,29 @@ public:
       if (inS == D_R3_1) {
               debug("QUEUE_WANTED PUSH EVENT", "R3_1");
               que_wanted->push(PUBLISHER_WANT_R3_ON);
+              return 1;
               
       }
 
       if (inS == D_R3_0) {
               debug("QUEUE_WANTED PUSH EVENT", "R3_0");
               que_wanted->push(PUBLISHER_WANT_R3_OFF);
-              
+              return 1;
       }
 
 
       if (inS == D_R4_1) {
               debug("QUEUE_WANTED PUSH EVENT", "R4_1");
               que_wanted->push(PUBLISHER_WANT_R4_ON);
-              
+              return 1;
       }
 
       if (inS == D_R4_0) {
               debug("QUEUE_WANTED PUSH EVENT", "R3_0");
               que_wanted->push(PUBLISHER_WANT_R4_OFF);
-              
+              return 1;
       }
-    
+    return 0;
   };
 
   };
