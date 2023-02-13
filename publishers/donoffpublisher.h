@@ -129,13 +129,17 @@ public:
       if (is_val_present) {
         cmdStr = _incomingStr.substring(0, index_val);
         valStr = _incomingStr.substring(index_val + 1, _incomingStr.length());
-        set_parameters_loop();
+
+        if(!set_parameters_loop()) publish_to_info_topic("E:Varable error");
+
         //debug("RECOGNIZE", "command=" + cmdStr + "; value=" + valStr);
         if(autosave) que_wanted->push(PUBLISHER_WANT_SAVE);
       }
       else if (is_sh_present) {
+
         shStr = _incomingStr.substring(3, _incomingStr.length());
-        show_parameters_loop();
+
+        if(!show_parameters_loop()) publish_sh_err();
         //debug("RECOGNIZE", "sh val=" + shStr);
         
       }else {
@@ -198,7 +202,7 @@ public:
     };
 
 
-    int show_parameters_loop() {
+    int virtual show_parameters_loop() {
 
       if (is_sh_present == 0) {
         debug("SHOWPARAMSLOOP", "no sh recognized");
@@ -226,7 +230,7 @@ public:
         return 1;
       }
 
-      if (shStr == C_AUTO_STOP_SEC) {
+      if (shStr == C_AUTO_STOP_SEC || shStr == C_AUTO_STOP_SEC_ALIAS1) {
         publish_sh_to_info_topic( shStr, String(_s->autostop_sec));
         return 1;
       }
@@ -474,12 +478,11 @@ public:
          return 1;
       }
       
-      publish_sh_err();
       return 0;
 
     };
 
-    int set_parameters_loop() {
+    int virtual set_parameters_loop() {
 
       if (is_val_present == 0) {
         debug("SETPARAMSLOOP", "no cmd=val recognized");
@@ -501,7 +504,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_AUTO_STOP_SEC) {
+      if (cmdStr == C_AUTO_STOP_SEC || cmdStr == C_AUTO_STOP_SEC_ALIAS1) {
         if (set_settings_val_int(cmdStr, valStr, (int*) &_s->autostop_sec, MIN_AUTOSTOP_SEC, MAX_AUTOSTOP_SEC)) {
           return 2;
         }
@@ -737,7 +740,7 @@ public:
 
       if (cmdStr == C_ONOFF1_VAL || cmdStr == C_ONOFF2_VAL) {
         publish_to_info_topic("E:use cschm1, cschm2");
-        return 0;
+        return 1;
       }
 
       /*
@@ -787,7 +790,6 @@ public:
             return 1;
         }
 
-        publish_to_info_topic("E:params error");
         return 0;
       }
 
@@ -893,11 +895,10 @@ public:
 
         }
 
-        publish_to_info_topic("E:params error");
+        publish_to_info_topic("E:Var error");
         return 0;
       }
 
-      publish_to_info_topic("E:param not found");
       return 0;
 
     };

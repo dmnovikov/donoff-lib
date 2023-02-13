@@ -18,8 +18,8 @@
 
 //#define DTIME_ZONE 3
 
-#define PINS_SET_V1
-//#define PINS_SET_ESP32R4
+//#define PINS_SET_V1
+#define PINS_SET_ESP32R4
 //#define PINS_SET_V2
 //#define PINS_SET_V3
 

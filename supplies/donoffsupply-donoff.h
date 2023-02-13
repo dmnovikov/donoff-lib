@@ -199,7 +199,7 @@ class DSupplyDonoff: public DSupplyBase {
     //light scheme loop for relay_1
     void virtual lschm_loop() {
       if (_s->lscheme_num > 0 &&  _s->hotter==0 && _s->cooler==0) {
-        lschm_on_off(r[0], _s->lscheme_num);
+        lschm_on_off(r[0], _s->lscheme_num, _s->autostop_sec);
       }
     };
 

@@ -38,6 +38,7 @@ public:
     };
 
   int virtual cmd_loop(String inS){
+      
       DPublisherMQTT::cmd_loop(inS);
 
       if (inS == D_R3_1) {
@@ -68,9 +69,11 @@ public:
     return 0;
   };
 
-  int show_parameters_loop() {
+  int virtual show_parameters_loop() {
 
-        DPublisherMQTT::show_parameters_loop();
+        if(DPublisherMQTT::show_parameters_loop()) return 1;
+
+        //debug("ESP32R4", "SH PARAMS="+shStr);
 
         if (shStr == C_LSCHM3) {
           publish_sh_to_info_topic( shStr, String(_s->custom_level1));
@@ -83,28 +86,22 @@ public:
         }
 
         if (shStr == C_AOFS3) {
-          publish_sh_to_info_topic( shStr, String(_s->custom_level1)+":"+String(_s->custom_level3));
+          publish_sh_to_info_topic( shStr, String(_s->custom_level3));
           return 1;
         }
 
         if (shStr == C_AOFS4) {
-          publish_sh_to_info_topic( shStr, String(_s->custom_level2)+":"+String(_s->custom_level4));
+          publish_sh_to_info_topic( shStr, String(_s->custom_level4));
           return 1;
         }
 
-         return 1;
+         return 0;
   };
 
-   int set_parameters_loop() {
+   int virtual set_parameters_loop() {
 
-      DPublisherMQTT::set_parameters_loop();
+      if(DPublisherMQTT::set_parameters_loop()) return 1;
 
-      if (cmdStr == C_TEST_B) {
-        bool a;
-        set_settings_val_bool(cmdStr, valStr, &a);
-        return 1;
-
-      }
       if (cmdStr == C_LSCHM3) {
         set_settings_val_int(cmdStr, valStr, (int*) &_s->custom_level1, 0, MAX_LSCHM_NUM);
         if(_s->custom_level1==0) que_wanted->push(PUBLISHER_WANT_R3_OFF);
@@ -131,7 +128,7 @@ public:
         return 1;
       }
 
-      return 1;
+      return 0;
    };
 
   };

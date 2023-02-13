@@ -42,10 +42,10 @@ class DSupplyESP32R4: public DSupplyBase {
   public:
     DSupplyESP32R4(WMSettings * __s): DSupplyBase(__s) {
       /* rewrite fefault -128 to 0 for our custom parameters */
-      _s->custom_level1=0;
-      _s->custom_level2=0;
-      _s->custom_level3=0;
-      _s->custom_level4=0;
+      if(_s->custom_level1==-128) _s->custom_level1=0;
+      if(_s->custom_level2==-128) _s->custom_level2=0;
+      if(_s->custom_level3==-128) _s->custom_level3=0;
+      if(_s->custom_level4==-128) _s->custom_level4=0;
     };
 
     void init(DNotifyer * _notifyer, DPublisher* _pub, Queue<pub_events>* _q) {
@@ -258,6 +258,18 @@ class DSupplyESP32R4: public DSupplyBase {
         //debug("AOFS", String(_s->autostop_sec));
         aofs_off(r[0], _s->autostop_sec);
       }
+      
+      if (_s->autostop_sec2 > 0 ) {
+        aofs_off(r[1], _s->autostop_sec2);
+      }
+
+      if (_s->custom_level3 > 0 ) {
+        aofs_off(r[2], _s->custom_level3);
+      }
+
+      if (_s->custom_level4 > 0 ) {
+        aofs_off(r[3], _s->custom_level4);
+      }
 
     };
     
@@ -272,16 +284,16 @@ class DSupplyESP32R4: public DSupplyBase {
     //light scheme loop for relay_1
     void virtual lschm_loop() {
       if (_s->lscheme_num > 0 &&  _s->hotter==0 && _s->cooler==0) {
-        lschm_on_off(r[0], _s->lscheme_num);
+        lschm_on_off(r[0], _s->lscheme_num, _s->autostop_sec);
       }
       if (_s->lscheme_num2> 0 ) {
-        lschm_on_off(r[1], _s->lscheme_num2);
+        lschm_on_off(r[1], _s->lscheme_num2, _s->autostop_sec2);
       }
-      if (_s->custom_level1 > 0) {
-        lschm_on_off(r[2], _s->custom_level1);
+      if (_s->custom_level1 > 0) {     
+        lschm_on_off(r[2], _s->custom_level1, _s->custom_level3);
       }
       if (_s->custom_level2> 0 ) {
-        lschm_on_off(r[1], _s->custom_level2);
+        lschm_on_off(r[3], _s->custom_level2, _s->custom_level4);
       }
     };
 

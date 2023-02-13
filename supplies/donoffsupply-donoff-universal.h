@@ -185,7 +185,7 @@ class DSupplyDonoffUni: public DSupplyDonoff {
 
       if (RELAY2 && _s->lscheme_num2 > 0) {
         debug("LSCHM_LOOP", "r[1] lschm2="+String(_s->lscheme_num2));
-        lschm_on_off(r[1], _s->lscheme_num2);
+        lschm_on_off(r[1], _s->lscheme_num2, _s->autostop_sec2);
       }
       
     };

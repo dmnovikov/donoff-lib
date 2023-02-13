@@ -2,11 +2,13 @@
 #define dcommands_h
 
 const char* C_AUTO_STOP_SEC="aofs";  
+const char* C_AUTO_STOP_SEC_ALIAS1="aofs1";  
+
 const char* C_AUTO_STOP_SEC2="a2ofs";  
 const char* C_AUTO_STOP_SEC2T="aofs2";
 
 const char* C_LSCHM="lschm";
-const char* C_LSCHM_ALIAS1="schm";
+const char* C_LSCHM_ALIAS1="lschm1";
 const char* C_LSCHM_ALIAS2="schm1";
 
 const char* C_LSCHM2="l2schm";
