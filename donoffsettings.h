@@ -321,7 +321,7 @@ typedef struct {
   uint      autostop_sec=0;
   uint      autostop_sec2=0;
   uint      autooff_hours=0;
-  bool      reverse=0;
+  bool      autoreboot_on_max_attempts=0; //reboot on MAX_CONNECT_ATTEMPTS_BEFORE_RESET (default 0)
   bool      notifyer_onoff=0;
   bool      current_check=1;
   uint      lscheme_num=0;
@@ -384,12 +384,6 @@ typedef struct{
   char ssid[20];
   char pass[50];
 } WifiCreds;
-
-/********** buttons types ***********/
-
-#define BUTTON_TYPE_NORMAL 0
-#define BUTTON_TYPE_REVERSE 1
-
 
 /********** blink ****************/
 

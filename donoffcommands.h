@@ -20,11 +20,6 @@ const char* C_SCHEME_AOS="schma";
 const char* C_SCHEME_AOS1="schma1";
 const char* C_SCHEME_AOS2="schma2";
 
-
-const char* C_CHECK_CURRENT="ccheck";
-const char* C_ON_START="strton";   // forgotten 
-const char* C_AUTO_STOP_HOURS="aofh";
-
 const char* C_ONOFF_SCHEME1="onoffschm1"; 
 const char* C_ONOFF_SCHEME2="onoffschm2";
 
@@ -77,6 +72,8 @@ const char* C_TEST_B="testbool";
 const char* C_TEST_I="testint";
 
 const char* C_TIME_ZONE="tz";
+
+const char* C_AUTO_REBOOT="autoreboot";
 
 
 const char* I_TEMP_LEVELS="tlevels"; 

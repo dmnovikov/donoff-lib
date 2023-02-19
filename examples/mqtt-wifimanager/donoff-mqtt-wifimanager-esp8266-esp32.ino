@@ -8,8 +8,6 @@
   #include <ESP8266WiFi.h>
 #endif
 
-#define BUTTON_REVERSE
-
 //UNIVERSAL SUPPLY parameters 
 #define RELAY2 1
 #define DS1820_INT 1

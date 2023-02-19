@@ -257,14 +257,11 @@ public:
         return 1;
       }
 
-      if (shStr == C_ON_START) {
-        publish_sh_to_info_topic( shStr, String(_s->start_on));
+       if (shStr == C_AUTO_REBOOT) {
+        publish_sh_to_info_topic( shStr, String(_s->autoreboot_on_max_attempts));
         return 1;
       }
-      if (shStr == C_AUTO_STOP_HOURS) {
-        publish_sh_to_info_topic( shStr, String(_s->autooff_hours));
-        return 1;
-      }
+
       if (shStr == C_ONOFF_SCHEME1) {
         publish_sh_to_info_topic( shStr, String(_s->schm_onoff_num1));
         return 1;
@@ -566,8 +563,9 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_ON_START) {
-        set_settings_val_bool( cmdStr, valStr, &_s->start_on);
+
+      if (cmdStr == C_AUTO_REBOOT) {
+        set_settings_val_bool( cmdStr, valStr, &_s->autoreboot_on_max_attempts);
         return 1;
       }
 
@@ -588,17 +586,6 @@ public:
         return 1;
       }
 */
-
-      if (cmdStr == C_AUTO_STOP_HOURS) {
-        if (set_settings_val_int( cmdStr, valStr, (int*) &_s->autooff_hours, 0, MAX_AUTOOFF_HOURS)) {
-          if (_s->autooff_hours > 0) {
-            _s->lscheme_num = 0;
-            _s->hotter = 0; // not together !
-            _s->cooler = 0;
-          }
-        }
-        return 1;
-      }
 
       if (cmdStr == C_LSCHM || cmdStr == C_LSCHM_ALIAS1 || cmdStr == C_LSCHM_ALIAS2) {
         if (set_settings_val_int( cmdStr, valStr, (int*) &_s->lscheme_num, 0, MAX_LSCHM_NUM)) {
