@@ -319,14 +319,17 @@ public:
       return 0;
     }
     debug("NOTIFYER", "connected");
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject &root = jsonBuffer.createObject();
+
+    StaticJsonDocument <1024> root;
+
     String json_str;
     root["dev"] = _s->dev_id;
     root["email"] = _s->email_notify;
     root["subj"] = _notifySubj;
     root["body"] = _notifyBody;
-    root.printTo(json_str);
+    
+    serializeJson(root, json_str);
+
     int len = json_str.length();
     client.publish(TOPIC_SENDMAIL, json_str.c_str());
     //client.publish(TOPIC, "hh");
@@ -362,14 +365,17 @@ public:
       return 0;
     }
     debug("NOTIFYER", "connected");
-    DynamicJsonBuffer jsonBuffer;
-    JsonObject &root = jsonBuffer.createObject();
+
+    StaticJsonDocument <1024> root;
+   
     String json_str;
     root["dev"] = _s->dev_id;
     root["email"] = _s->email_notify;
     root["subj"] = _notifySubj;
     root["body"] = _notifyBody;
-    root.printTo(json_str);
+
+    serializeJson(root, json_str);
+
     int len = json_str.length();
     _c->publish(TOPIC_SENDMAIL, json_str.c_str());
     //client.publish(TOPIC, "hh");

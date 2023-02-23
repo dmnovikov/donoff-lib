@@ -157,6 +157,16 @@ class DSupplyDonoff: public DSupplyBase {
         }
       }
 
+      if(what_to_want==PUBLISHER_WANT_SH_R2) {
+        if(r[1]!=NULL){
+            if(r[1]->is_on()) pub->publish_to_info_topic("I:R1=ON");
+            else pub->publish_to_info_topic("I:R2=OFF");
+        }else{
+           pub->publish_to_info_topic("I:R2=DISABLED");
+        
+        }
+      }
+
       if(what_to_want==PUBLISHER_WANT_RESET_HOUR_R1_M) {
         if(r[0]!=NULL){
           r[0]->reset_lschm_hour();

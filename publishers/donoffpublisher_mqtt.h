@@ -307,9 +307,8 @@ public:
 
       debug("BASELOG", _sensor->get_nameStr()+":Send to database sensor");
 
-      DynamicJsonBuffer jsonBuffer;
+      StaticJsonDocument <200> root;
 
-      JsonObject &root = jsonBuffer.createObject();
       String json_str;
       root["timestamp"] = s_get_timestamp();
       root["dev"] = _s->dev_id;
@@ -319,7 +318,7 @@ public:
       root["val"] = _sensor->get_longval_Str();
       root["mult"] = _sensor->get_multiplier();
 
-      root.printTo(json_str);
+       serializeJson(root, json_str);
       _c->publish(TOPIC_SENSOR_BASELOG, json_str.c_str());
 
       //debug("BASELOG",json_str);
@@ -338,9 +337,8 @@ public:
 
       //debug("JSONLOG", _sensor->get_nameStr()+":Send to json sensor");
 
-      DynamicJsonBuffer jsonBuffer;
+      StaticJsonDocument <200> root;
 
-      JsonObject &root = jsonBuffer.createObject();
       String json_str;
       root["timestamp"] = s_get_timestamp();
       root["s_type"] = String(_sensor->get_type());
@@ -348,7 +346,9 @@ public:
       root["val"] = _sensor->get_longval_Str();
       root["mult"] = _sensor->get_multiplier();
 
-      root.printTo(json_str);
+      serializeJson(root, json_str);
+
+      //root.printTo(json_str);
       _c->publish(form_full_topic(_sensor->get_channelStr()+"_json").c_str(), json_str.c_str());
       return 1;
     };
