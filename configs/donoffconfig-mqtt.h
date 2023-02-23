@@ -105,6 +105,7 @@ class DConfigMQTT: public DConfig{
         save();
 
         debug("CONFIG", "Delete WifiParameters objects");
+    
 
         delete mqtt_server;
         delete mqtt_pass;
@@ -112,6 +113,13 @@ class DConfigMQTT: public DConfig{
         delete mqtt_port;
         delete dev_id;
         delete email;
+
+         Serial.println("[WIFI] WIFI INFO DEBUG");
+        // WiFi.printDiag(Serial);
+        Serial.println("[WIFI] SAVED: " + (String)(wm.getWiFiIsSaved() ? "YES" : "NO"));
+        Serial.println("[WIFI] SSID: " + (String)wm.getWiFiSSID());
+        Serial.println("[WIFI] PASS: " + (String)wm.getWiFiPass());
+        Serial.println("[WIFI] HOSTNAME: " + (String)WiFi.getHostname());
 
     };
 

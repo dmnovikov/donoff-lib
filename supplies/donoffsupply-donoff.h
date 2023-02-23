@@ -47,11 +47,13 @@ class DSupplyDonoff: public DSupplyBase {
         r[0] = new DRelay(_s);
         r[0]->init(RELAY1_PIN, "r1", 1, String(RELAY1_ONOFF_CHANNEL), String(RELAY1_ONTIME_CHANNEL), String(RELAY1_DOWNTIME_CHANNEL));
         //debug("SUPPLYINIT", "r1name="+r1->get_nameStr());
-
+        
+//depricated
+/*
         if(_s->start_on && _s->custom_scheme1==0){
           relay_on(r[0],"on, start on");
         }
-        
+*/     
        
         debug("SUPPLY_INIT", "DS_IN INIT");
         ds_in = new DigitalDS1820Sensor(_s, IN_WIRE_BUS);
@@ -207,7 +209,7 @@ class DSupplyDonoff: public DSupplyBase {
     //light scheme loop for relay_1
     void virtual lschm_loop() {
       if (_s->lscheme_num > 0 &&  _s->hotter==0 && _s->cooler==0) {
-        lschm_on_off(r[0], _s->lscheme_num);
+        lschm_on_off(r[0], _s->lscheme_num, _s->autostop_sec);
       }
     };
 

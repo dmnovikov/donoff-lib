@@ -1,8 +1,7 @@
 #ifndef dpublishermqtt_h
 #define dpublishermqtt_h
 
-//#include <>
-#include <TZ.h>
+//#include <TZ.h>
 #include <time.h>
 #include <sys/time.h> 
 #include <donoffcommands.h>
@@ -106,10 +105,10 @@ public:
             debug("RECONNECT", "WIFI CONNECTED", DINFO);
             debug("RECONNECT",  WiFi.localIP(), DINFO, "LOCAL IP");
             debug("RECONNECT",  WiFi.gatewayIP(), DINFO, "GATEWAY");
-            debug("RECONNECT",  WiFi.dnsIP(), DINFO, "DNS");
+            //debug("RECONNECT",  WiFi.dnsIP(), DINFO, "DNS");
         }
        
-        if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET) reset();
+        if(attempts>MAX_CONNECT_ATTEMPTS_BEFORE_RESET && _s->autoreboot_on_max_attempts) reset();
       
         if (WiFi.status() != WL_CONNECTED) {
             debug("RECONNECT", "NO WIFI CONNECTION->"+ String(WiFi.status()), DERROR);

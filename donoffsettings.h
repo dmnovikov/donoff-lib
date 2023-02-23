@@ -1,4 +1,3 @@
- 
 #ifndef donoffsettings_h
 #define donoffsettings_h
 
@@ -53,6 +52,7 @@ enum debug_events{
   DINFO
 };
 
+
 enum pub_events { 
  PUBLISHER_WANT_SAVE,
  PUBLISHER_WANT_R1_ON,
@@ -69,8 +69,55 @@ enum pub_events {
  PUBLISHER_WANT_SH_R1,
  PUBLISHER_WANT_SH_R2,
  PUBLISHER_WANT_SAY_JUST_SYNCED,
- PUBLISHER_WANT_SH_HOTTER
+ PUBLISHER_WANT_SH_HOTTER,
+ PUBLISHER_WANT_R3_ON=100,
+ PUBLISHER_WANT_R3_OFF=101,
+ PUBLISHER_WANT_R4_ON=102,
+ PUBLISHER_WANT_R4_OFF=103,
+ 
+ PUBLISHER_WANT_SH_R3=104,
+ PUBLISHER_WANT_SH_R4=105
 };
+
+// class pub_events {
+//   public:
+//         enum { 
+//             PUBLISHER_WANT_SAVE,
+//             PUBLISHER_WANT_R1_ON,
+//             PUBLISHER_WANT_R1_OFF,
+//             PUBLISHER_WANT_R2_ON,
+//             PUBLISHER_WANT_R2_OFF,
+//             PUBLISHER_WANT_RESET,
+//             PUBLISHER_WANT_RESET_HOUR_R1,
+//             PUBLISHER_WANT_RESET_HOUR_R2,
+//             PUBLISHER_WANT_R1_OFF_LSCHM0,
+//             PUBLISHER_WANT_R2_OFF_LSCHM0,
+//             PUBLISHER_WANT_RESET_HOUR_R1_M,
+//             PUBLISHER_WANT_RESET_HOUR_R2_M,
+//             PUBLISHER_WANT_SH_R1,
+//             PUBLISHER_WANT_SH_R2,
+//             PUBLISHER_WANT_SAY_JUST_SYNCED,
+//             PUBLISHER_WANT_SH_HOTTER,
+//             PUBLISHER_WANT_R3_ON=100,
+//             PUBLISHER_WANT_R3_OFF=101,
+//             PUBLISHER_WANT_R4_ON=102,
+//             PUBLISHER_WANT_R4_OFF=103,
+            
+//             PUBLISHER_WANT_SH_R3=104,
+//             PUBLISHER_WANT_SH_R4=105
+//         };
+// };
+
+
+// enum pub_events_extra { 
+//  PUBLISHER_WANT_R3_ON=100,
+//  PUBLISHER_WANT_R3_OFF=101,
+//  PUBLISHER_WANT_R4_ON=102,
+//  PUBLISHER_WANT_R4_OFF=103,
+ 
+//  PUBLISHER_WANT_SH_R3=104,
+//  PUBLISHER_WANT_SH_R4=105
+// };
 
 #define DS1820_NOT_FILTERED 0
 #define DS1820_FILTERED 1
@@ -105,27 +152,8 @@ enum sensor_states {
 
 
 /* need to write to database*/
-
 #define  JSON_CHANNEL_YES 1
 #define  JSON_CHANNEL_NO 0
-
-
-
-/* 
-#define MAX_QUEUE_WANTED 12
-#define PUBLISHER_WANT_SAVE 1
-#define PUBLISHER_WANT_R1_ON 2
-#define PUBLISHER_WANT_R1_OFF 3
-#define PUBLISHER_WANT_R2_ON  4
-#define PUBLISHER_WANT_R2_OFF 5
-#define PUBLISHER_WANT_RESET 6
-#define PUBLISHER_WANT_RESET_HOUR_R1 7
-#define PUBLISHER_WANT_RESET_HOUR_R2 8
-#define PUBLISHER_WANT_R1_OFF_LSCHM0 9
-#define PUBLISHER_WANT_R2_OFF_LSCHM0 10
-#define PUBLISHER_WANT_RESET_HOUR_R1_M 7
-#define PUBLISHER_WANT_RESET_HOUR_R2_M 8
-*/
 
 
 /******** config defines *******/
@@ -184,6 +212,17 @@ enum sensor_states {
     #define ANALOG_A0_PIN A0
     #define RELAY2_PIN 5 //new d6 //old d8
 #endif
+
+#ifdef PINS_SET_ESP32R4
+    #define BUTTON_PIN   39      //io34
+    #define RELAY1_PIN   25   //io25
+    #define SONOFF_LED    2    //d4
+  // #define IN_WIRE_BUS    14  //d5
+  //  #define OUT_WIRE_BUS 13 //D7
+  //  #define ANALOG_A0_PIN A0
+    #define RELAY2_PIN 26 //io35
+#endif
+
 
 
 //************** DEBUG  ***************************
@@ -282,7 +321,7 @@ typedef struct {
   uint      autostop_sec=0;
   uint      autostop_sec2=0;
   uint      autooff_hours=0;
-  bool      reverse=0;
+  bool      autoreboot_on_max_attempts=0; //reboot on MAX_CONNECT_ATTEMPTS_BEFORE_RESET (default 0)
   bool      notifyer_onoff=0;
   bool      current_check=1;
   uint      lscheme_num=0;
@@ -290,8 +329,8 @@ typedef struct {
   uint      time_zone=3; //3 for Moscow //2 for Riga
   bool      start_on=0;
 //                             0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-  bool     custom_scheme1[24]={0,0,0,0,0,0,0,0,0,0,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
-  bool     custom_scheme2[24]={1,1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  bool     custom_array1[24]={0,0,0,0,0,0,0,0,0,0,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0};
+  bool     custom_array2[24]={1,1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   //uint      custom_scheme2=0B101010101010101010101010;
   int      custom_level_notify1=-128;
   bool     baselog=1;
@@ -345,12 +384,6 @@ typedef struct{
   char ssid[20];
   char pass[50];
 } WifiCreds;
-
-/********** buttons types ***********/
-
-#define BUTTON_TYPE_NORMAL 0
-#define BUTTON_TYPE_REVERSE 1
-
 
 /********** blink ****************/
 

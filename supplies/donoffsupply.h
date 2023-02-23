@@ -397,7 +397,7 @@ class DSupply: public DBase {
       return 0;
     };
 
-    int lschm_on_off(DRelay* _r, int _schm_num) {
+    int lschm_on_off(DRelay* _r, int _schm_num, int _schm_aotoff_sec=0) {
       if (_schm_num == 0) return -1; //error parameter
 
       int on_bit = is_day(_schm_num);
@@ -433,7 +433,7 @@ class DSupply: public DBase {
           return 0;
         }
         //relay is off, can we turn on ?
-        if (_r->is_off() && _r->get_last_hour_when_on() != hour_curr) {
+        if (_r->is_off() && (_r->get_last_hour_when_on() != hour_curr || _schm_aotoff_sec==0)) { //if aofs==0, we will turn on intead of prevous on in this hour
           debug(debugSrcStr, "turn on, h=" + String(hour_curr) + "; relay_h=" + String(_r->get_last_hour_when_on()));
           _r->set_hour_lschm_on(hour_curr);
           relay_on(_r, "lschm,on");

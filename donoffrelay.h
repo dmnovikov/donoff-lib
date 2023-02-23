@@ -40,7 +40,7 @@ class DRelay: public DBase {
       num=_num;
       init_ok=1;
       //debug("INITR1","name="+nameStr);
-       debug("RELAY:"+nameStr, "PIN:"+String(RELAY1_PIN));
+       debug("RELAY:"+nameStr, "PIN:"+String(pin));
     };
 
     int is_notifyed_h(){

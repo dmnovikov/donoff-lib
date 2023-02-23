@@ -82,6 +82,7 @@ public:
   };
 };
 
+/*
 
 class DNotifyerEmail : public DNotifyer
 {
@@ -382,5 +383,6 @@ public:
   };
 };
 
+*/
 
 #endif

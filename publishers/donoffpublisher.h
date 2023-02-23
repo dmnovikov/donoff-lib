@@ -129,13 +129,17 @@ public:
       if (is_val_present) {
         cmdStr = _incomingStr.substring(0, index_val);
         valStr = _incomingStr.substring(index_val + 1, _incomingStr.length());
-        set_parameters_loop();
+
+        if(!set_parameters_loop()) publish_to_info_topic("E:Varable error");
+
         //debug("RECOGNIZE", "command=" + cmdStr + "; value=" + valStr);
         if(autosave) que_wanted->push(PUBLISHER_WANT_SAVE);
       }
       else if (is_sh_present) {
+
         shStr = _incomingStr.substring(3, _incomingStr.length());
-        show_parameters_loop();
+
+        if(!show_parameters_loop()) publish_sh_err();
         //debug("RECOGNIZE", "sh val=" + shStr);
         
       }else {
@@ -155,8 +159,7 @@ public:
               debug("QUEUE_WANTED PUSH EVENT", "R1_1");
               que_wanted->push(PUBLISHER_WANT_R1_ON);
               return 1;
-              
-            }
+           }
             
             if (inS == D_R1_0) {
               debug("QUEUE_WANTED PUSH EVENT", "R1_0");
@@ -199,7 +202,7 @@ public:
     };
 
 
-    int show_parameters_loop() {
+    int virtual show_parameters_loop() {
 
       if (is_sh_present == 0) {
         debug("SHOWPARAMSLOOP", "no sh recognized");
@@ -227,7 +230,7 @@ public:
         return 1;
       }
 
-      if (shStr == C_AUTO_STOP_SEC) {
+      if (shStr == C_AUTO_STOP_SEC || shStr == C_AUTO_STOP_SEC_ALIAS1) {
         publish_sh_to_info_topic( shStr, String(_s->autostop_sec));
         return 1;
       }
@@ -235,11 +238,11 @@ public:
         publish_sh_to_info_topic( shStr, String(_s->autostop_sec2));
         return 1;
       }
-      if (shStr == C_LIGHT_SCHEME_NUM || shStr == C_LIGHT_SCHEME_NUM_ALIAS1 || shStr ==  C_LIGHT_SCHEME_NUM_ALIAS2) {
+      if (shStr == C_LSCHM || shStr == C_LSCHM_ALIAS1 || shStr ==  C_LSCHM_ALIAS2) {
         publish_sh_to_info_topic( shStr, String(_s->lscheme_num));
         return 1;
       }
-      if (shStr == C_LIGHT_SCHEME_NUM2 || shStr == C_LIGHT_SCHEME_NUM2T || shStr == C_LIGHT_SCHEME_NUM2T_ALIAS1) {
+      if (shStr == C_LSCHM2 || shStr == C_LSCHM2T || shStr == C_LSCHM2T_ALIAS1) {
         publish_sh_to_info_topic( shStr, String(_s->lscheme_num2));
         return 1;
       }
@@ -254,14 +257,11 @@ public:
         return 1;
       }
 
-      if (shStr == C_ON_START) {
-        publish_sh_to_info_topic( shStr, String(_s->start_on));
+       if (shStr == C_AUTO_REBOOT) {
+        publish_sh_to_info_topic( shStr, String(_s->autoreboot_on_max_attempts));
         return 1;
       }
-      if (shStr == C_AUTO_STOP_HOURS) {
-        publish_sh_to_info_topic( shStr, String(_s->autooff_hours));
-        return 1;
-      }
+
       if (shStr == C_ONOFF_SCHEME1) {
         publish_sh_to_info_topic( shStr, String(_s->schm_onoff_num1));
         return 1;
@@ -530,39 +530,9 @@ public:
       }
 
 
-
-
       if (shStr.startsWith (I_BSCHM)) {
-        String outS = "";
-        //debug("PUBLISHER",shStr);
-        int point = shStr.indexOf(":");
-        String testVal = shStr.substring(point + 1, shStr.length());
-        int numschm = testVal.toInt();
-        //debug("PUBLISHER",String(numschm));
-        if (numschm != 0 && numschm != 99 && numschm != 100) {
-          for (int h = 0; h < 24; h++) {
-            if (h == 4 || h == 8 || h == 12 || h == 16 || h == 20) outS += " ";
-            uint l_p1 = lamp_modes[numschm - 1] & (1 << ((24 - h - 1) & 0xFFF));
-            if (l_p1 == 0) outS += "0"; else outS += "1";
-          }
-          publish_to_info_topic(outS);
-          return 1;
-        }
-        if (numschm == 99 || numschm == 100) {
-          for (int i = 0; i <= 23; i++) {
-            if (i == 4 || i == 8 || i == 12 || i == 16 || i == 20) outS += " ";
-            if (numschm == 99) {
-              if (_s->custom_scheme1[i]) outS += "1";
-              else outS += "0";
-            } else {
-              if (_s->custom_scheme2[i]) outS += "1";
-              else outS += "0";
-            }
-          }
-          debug("PUBLISHER", outS);
-          publish_to_info_topic(outS);
-          return 1;
-        }
+        publish_to_info_topic("depricated!");
+        return 1;
       }
 
       if (shStr == I_TEMP_LEVELS || shStr == I_TEMP_LEVELS_ALIAS) {
@@ -596,12 +566,11 @@ public:
          return 1;
       }
       
-      publish_sh_err();
       return 0;
 
     };
 
-    int set_parameters_loop() {
+    int virtual set_parameters_loop() {
 
       if (is_val_present == 0) {
         debug("SETPARAMSLOOP", "no cmd=val recognized");
@@ -623,7 +592,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_AUTO_STOP_SEC) {
+      if (cmdStr == C_AUTO_STOP_SEC || cmdStr == C_AUTO_STOP_SEC_ALIAS1) {
         if (set_settings_val_int(cmdStr, valStr, (int*) &_s->autostop_sec, MIN_AUTOSTOP_SEC, MAX_AUTOSTOP_SEC)) {
           return 2;
         }
@@ -685,8 +654,9 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_ON_START) {
-        set_settings_val_bool( cmdStr, valStr, &_s->start_on);
+
+      if (cmdStr == C_AUTO_REBOOT) {
+        set_settings_val_bool( cmdStr, valStr, &_s->autoreboot_on_max_attempts);
         return 1;
       }
 
@@ -699,27 +669,16 @@ public:
         set_settings_val_bool( cmdStr, valStr, &_s->notifyer_onoff);
         return 1;
       }
-
+/*
       if (cmdStr == C_TIME_ZONE) {
        if (set_settings_val_int(cmdStr, valStr, (int*) &_s->time_zone, -15, 15)) {
           return 2;
         }
         return 1;
       }
+*/
 
-
-      if (cmdStr == C_AUTO_STOP_HOURS) {
-        if (set_settings_val_int( cmdStr, valStr, (int*) &_s->autooff_hours, 0, MAX_AUTOOFF_HOURS)) {
-          if (_s->autooff_hours > 0) {
-            _s->lscheme_num = 0;
-            _s->hotter = 0; // not together !
-            _s->cooler = 0;
-          }
-        }
-        return 1;
-      }
-
-      if (cmdStr == C_LIGHT_SCHEME_NUM || cmdStr == C_LIGHT_SCHEME_NUM_ALIAS1 || cmdStr == C_LIGHT_SCHEME_NUM_ALIAS2) {
+      if (cmdStr == C_LSCHM || cmdStr == C_LSCHM_ALIAS1 || cmdStr == C_LSCHM_ALIAS2) {
         if (set_settings_val_int( cmdStr, valStr, (int*) &_s->lscheme_num, 0, MAX_LSCHM_NUM)) {
           if (_s->lscheme_num > 0) {
             _s->hotter = 0; // not together !
@@ -738,7 +697,7 @@ public:
         return 1;
       }
 
-      if (cmdStr == C_LIGHT_SCHEME_NUM2 || cmdStr == C_LIGHT_SCHEME_NUM2T || cmdStr ==C_LIGHT_SCHEME_NUM2T_ALIAS1 ) {
+      if (cmdStr == C_LSCHM2 || cmdStr == C_LSCHM2T || cmdStr ==C_LSCHM2T_ALIAS1 ) {
         set_settings_val_int(cmdStr, valStr, (int*) &_s->lscheme_num2, 0, MAX_LSCHM_NUM);
         if(_s->lscheme_num2==0) que_wanted->push(PUBLISHER_WANT_R2_OFF_LSCHM0);
         //supply.r2.reset_lschm_hour();
@@ -859,7 +818,7 @@ public:
 
       if (cmdStr == C_ONOFF1_VAL || cmdStr == C_ONOFF2_VAL) {
         publish_to_info_topic("E:use cschm1, cschm2");
-        return 0;
+        return 1;
       }
 
       /*
@@ -909,7 +868,6 @@ public:
             return 1;
         }
 
-        publish_to_info_topic("E:params error");
         return 0;
       }
 
@@ -1015,11 +973,10 @@ public:
 
         }
 
-        publish_to_info_topic("E:params error");
+        publish_to_info_topic("E:Var error");
         return 0;
       }
 
-      publish_to_info_topic("E:param not found");
       return 0;
 
     };
