@@ -68,9 +68,9 @@ class DSensor: public DBase {
   public:
     DSensor(WMSettings * __s): DBase(__s) {};
 
-    long virtual get_long_from_sensor(){};
+    long virtual get_long_from_sensor()=0;
 
-    int virtual req_sensor() {};
+    int virtual req_sensor() =0;
 
     void virtual init(String _name, String _chname, int _filtered, Queue<sensor_state> *_que_sensor_states, int _type, int _need_json){
       que_states=_que_sensor_states;

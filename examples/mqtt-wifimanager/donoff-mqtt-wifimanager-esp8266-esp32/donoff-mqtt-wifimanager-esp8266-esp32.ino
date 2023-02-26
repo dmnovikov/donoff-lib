@@ -1,6 +1,6 @@
 /* ********** Config supply *******************/
 
-#define ESP32 //Uncomment this if you use ESP32 chip
+// #define ESP32 //Uncomment this if you use ESP32 chip
 
 #ifdef ESP32 
   #include <WiFi.h>

@@ -74,7 +74,10 @@ class DButton: public DBase {
         }else if (duration >=  RESET_PRESS_DELAY) {
            debug("BUTTON", "--->long press - reset");
            reset();
+           return -1;
         }
+
+        return 0;
 
     };
 

@@ -90,6 +90,7 @@ public:
           que_wanted->push(PUBLISHER_WANT_SAY_JUST_SYNCED);
           time_synced=1;
         }
+        return 1;
     };
 
     int virtual is_time_synced()

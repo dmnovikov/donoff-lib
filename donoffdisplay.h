@@ -13,9 +13,9 @@ class DDisplay:public DBase{
  public:
   void virtual init(){};
   DDisplay(WMSettings * __s): DBase(__s) {};
-  int virtual show_sensor(int ppos, String name, long data,int mult,  bool isFirst, bool isLast){};
-  int virtual show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast){};
-  int virtual show_str(int ppos, String name, String data,  bool isFirst, bool isLast){};
+  int virtual show_sensor(int ppos, String name, long data,int mult,  bool isFirst, bool isLast)=0;
+  int virtual show_sensor(int ppos, String short_name, DSensor* _ps,  bool isFirst, bool isLast)=0;
+  int virtual show_str(int ppos, String name, String data,  bool isFirst, bool isLast)=0;
 };
 
 class DDisplay_SSD1306 :public DDisplay{

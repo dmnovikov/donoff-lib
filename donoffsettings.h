@@ -165,7 +165,7 @@ enum sensor_states {
 #define RESET_DEFAULT_DELAY 10
 #define ANALOG_PWR_PERIOD 600
 #define ALARM_TEMP1_MAX 80
-#define  BUTTON_MIN_DELAY 5
+// #define  BUTTON_MIN_DELAY 5 #defined in donoffbutton
 #define PR_DIFF 317
 #define MAX_LSCHEME_MODES 25
 #define MAX_SLOW_LOOP_COUNTER 600
@@ -304,7 +304,7 @@ typedef struct {
 //#define EEPROM_SALT 1205
 //#define EEPROM_SALT 1206
 
-#define MEM_SIZE 512
+//#define MEM_SIZE 512
 
 typedef struct {
   

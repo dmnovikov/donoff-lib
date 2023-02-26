@@ -26,7 +26,7 @@ protected:
 public:
   DNotifyer(WMSettings *__s) : DBase(__s){};
 
-  int virtual send_notify(String _notifySubj, String _notifyBody){};
+  int virtual send_notify(String _notifySubj, String _notifyBody)=0;
 
   int virtual is_connected(){return 0;};
 
@@ -75,10 +75,11 @@ public:
     BodyStr = "sensor value=" + String(state->val) + ", " + "sensor level=" + String(state->level);
     debug("NOTIFYER", SubjStr + ":::" + BodyStr);
     send_notify(SubjStr, BodyStr);
+    return 1;
   };
 
   int notify_working_hours(DRelay *r){
-
+    return 1;
   };
 };
 

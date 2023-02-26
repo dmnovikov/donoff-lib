@@ -80,12 +80,14 @@ class DSupply: public DBase {
       que_wanted=_q;
       que_sensor_states = new Queue<sensor_state>(10);
       mytimer = millis();
-
+      
+// Init display here if it is
+/*
       if (DDISPLAY_SSD1306) {
         D = new DDisplay_SSD1306(_s);
         D->init();
       }
-
+*/
       init_ok = 1;
 
     };
@@ -196,6 +198,7 @@ class DSupply: public DBase {
 
     int virtual notifyer_loop(){
       if(!_s->notifyer) return 0;
+      return 1;
     };
 
     void virtual display_loop(){};
@@ -403,8 +406,7 @@ class DSupply: public DBase {
       int on_bit = is_day(_schm_num);
       uint hour_curr = d_hour();
 
-       String debugSrcStr = "LSCHM<" + String(_r->get_num()) + ">";
-
+      String debugSrcStr = "LSCHM<" + String(_r->get_num()) + ">";
 
       //debug(debugSrcStr, "just_synced="+String(m_just_synced));
 
@@ -414,7 +416,6 @@ class DSupply: public DBase {
          debug(debugSrcStr, "JUST SYNCED, set lschm_hour="+String(hour_curr));
       }
 
-     
       debug(debugSrcStr, "on_bit=" + String(on_bit) + "; schm_num=" + String(_schm_num));
 
       if (on_bit == -1 ) { //not synced
@@ -444,7 +445,6 @@ class DSupply: public DBase {
           return 0;
         }
 
-       
       }
 
       //********  must be off  ************************
@@ -460,7 +460,7 @@ class DSupply: public DBase {
         }
 
       }
-
+       return -1;  //new ?
     };
 
     int get_temp_settings_ver1(int _schm_num) {

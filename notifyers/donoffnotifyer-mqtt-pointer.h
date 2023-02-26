@@ -46,6 +46,7 @@ public:
     _pub->publish(TOPIC_SENDMAIL, json_str.c_str());
     //client.publish(TOPIC, "hh");
     debug("NOTIFYER", "PUBLISHED:" + json_str + ";" + String(len) + ";" + String(MQTT_MAX_PACKET_SIZE));
+    return 1;
   };
   
 };
