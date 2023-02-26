@@ -1,3 +1,6 @@
 credentials_blynk.h
 credentials_mqtt.h
 credentials_email.h
+.vscode/arduino.json
+.vscode/c_cpp_properties.json
+.vscode/settings.json
