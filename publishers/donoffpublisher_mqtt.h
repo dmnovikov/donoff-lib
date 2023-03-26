@@ -185,7 +185,7 @@ public:
       
     };
 
-    void callback(char* topic, byte* payload, unsigned int length){
+    void callback(char* topic, uint8_t* payload, unsigned int length){
         //debug("CALLBACK", String(topic)+"::"+String((char*)payload));
         char message[100];
         

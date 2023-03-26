@@ -1,7 +1,6 @@
 #ifndef donoffmultisensor_h
 #define donoffmultisensor_h
 
-#include <Queue.h>
 #include <donoffbase.h>
 #include <sensors/donoffsensor.h>
 #include <donoffsettings.h>

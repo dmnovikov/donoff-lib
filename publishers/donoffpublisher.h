@@ -9,7 +9,7 @@
 #include <sensors/donoffsensor.h>
 #include <sensors/donoff-multisensor.h>
 #include <donoffrelay.h>
-#include <Queue.h>
+#include "dqueue.h"
 
 
 class DPublisher: public DBase {
@@ -612,7 +612,7 @@ public:
         int l_hotter;
         debug("SETHOTTER", "set hotter");
         if (set_settings_val_int( cmdStr, valStr,  &l_hotter, 0, 255)) {
-           _s->hotter=(byte) l_hotter;
+           _s->hotter=(uint8_t) l_hotter;
            if (_s->hotter==1 || _s->hotter==2) {
              //debug("SETHOTTER:", "set hotter to 1");
             _s->lscheme_num = 0;

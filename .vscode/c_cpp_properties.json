@@ -2,6 +2,19 @@
     "version": 4,
     "configurations": [
         {
+            "name": "Linux",
+            "compilerPath": "/usr/bin/gcc",
+            "compilerArgs": [],
+            "intelliSenseMode": "linux-gcc-x64",
+            "includePath": [
+                "/home/dmn/Arduino/libraries/**"
+            ],
+            "forcedInclude": [],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "defines": []
+        },
+        {
             "name": "Arduino",
             "compilerPath": "@/home/dmn/.arduino15/packages/esp8266/hardware/esp8266/3.1.0/tools/warnings/none-g++",
             "compilerArgs": [
@@ -28,7 +41,6 @@
                 "/home/dmn/.arduino15/packages/esp8266/hardware/esp8266/3.1.0/libraries/Ticker/src",
                 "/home/dmn/Arduino/libraries/donoff-lib",
                 "/home/dmn/Arduino/libraries/ArduinoJson-6.x/src",
-                "/home/dmn/Arduino/libraries/Arduino-Queue-master",
                 "/home/dmn/Arduino/libraries/pubsubclient-master/src",
                 "/home/dmn/Arduino/libraries/Adafruit-GFX-Library-master",
                 "/home/dmn/Arduino/libraries/Adafruit_SSD1306-master",
@@ -58,10 +70,10 @@
                 "LWIP_FEATURES=1",
                 "LWIP_IPV6=0",
                 "ARDUINO=10607",
-                "ARDUINO_ESP8266_WEMOS_D1MINI",
+                "ARDUINO_ESP8266_WEMOS_D1MINIPRO",
                 "ARDUINO_ARCH_ESP8266",
-                "ARDUINO_BOARD=\"ESP8266_WEMOS_D1MINI\"",
-                "ARDUINO_BOARD_ID=\"d1_mini\"",
+                "ARDUINO_BOARD=\"ESP8266_WEMOS_D1MINIPRO\"",
+                "ARDUINO_BOARD_ID=\"d1_mini_pro\"",
                 "FLASHMODE_DIO",
                 "USBCON"
             ]

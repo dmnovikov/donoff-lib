@@ -70,7 +70,7 @@ WifiCreds wcreds;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-void callback(char* topic, byte* payload, unsigned int length);
+void callback(char* topic, uint8_t* payload, unsigned int length);
 
 Queue<pub_events> que_wanted= Queue<pub_events>(MAX_QUEUE_WANTED);
 
@@ -112,7 +112,7 @@ void tick(){
 
 // ********************************** SETUP ***************************************************
 
-void callback(char* topic, byte* payload, unsigned int length){
+void callback(char* topic, uint8_t* payload, unsigned int length){
   // Serial.println("nature callback");
   pubmqtt.callback(topic,payload,length);
 }

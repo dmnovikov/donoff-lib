@@ -1,7 +1,7 @@
 #ifndef donoffmultisensorsct013_h
 #define donoffmultisensorsct013_h
 
-#include <Queue.h>
+
 #include <donoffbase.h>
 #include <donoffsettings.h>
 #include <sensors/donoffsensor_sct013.h>

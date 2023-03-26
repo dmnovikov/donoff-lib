@@ -12,7 +12,7 @@ class DRelay: public DBase {
 
   protected:
     int num = 1;
-    byte pin = 0;
+    uint8_t pin = 0;
     unsigned long start_ms = 0;
     unsigned long stop_ms = 0;
     String nameStr="";
@@ -136,7 +136,7 @@ class DRelay: public DBase {
       Serial.println(debugStr);
       };
     */
-    byte get_last_hour_when_on() {
+    uint8_t get_last_hour_when_on() {
       return lschm_hour_on ;
     };
     void set_hour_lschm_on(int _h) {

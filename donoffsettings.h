@@ -336,7 +336,7 @@ typedef struct {
   bool     baselog=1;
   
 // ** hotter \ cooler 
-  byte      hotter=0;
+  uint8_t      hotter=0;
   bool      cooler=0;
 
 // ** temp level
@@ -361,7 +361,7 @@ typedef struct {
   int      custom_level_notify2=-128;
   int      custom_level_notify3=-128;
   int      custom_level_notify4=-128;
-  byte      urgent_off=75;
+  uint8_t      urgent_off=75;
   uint      tariff=500;      // копееек \ центов за 1квт\ч
   unsigned long      ucounter=0;  //счетчик потребления в рублях\долл\евр
   uint weekschm[7]={99,99,99,99,99,99,99};

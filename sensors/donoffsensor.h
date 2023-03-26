@@ -1,9 +1,8 @@
 #ifndef donoffsensor_h
 #define donoffsensor_h
 
-#include <Queue.h>
+#include "dqueue.h"
 #include <donoffbase.h>
-
 
 class DSensor;
 
@@ -59,8 +58,8 @@ class DSensor: public DBase {
     int started_ok = 0;
 
     //int sensor_not_ready_millis=10000; //10 sec
-
-    Queue<sensor_state> *que_states;
+    
+    Queue <sensor_state> *que_states;
 
     sensor_state state;
     int state_changed=0;

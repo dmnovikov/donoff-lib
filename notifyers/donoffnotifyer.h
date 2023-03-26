@@ -5,7 +5,7 @@
 #include <donoffbase.h>
 #include <sensors/donoffsensor.h>
 #include <donoffrelay.h>
-#include <Queue.h>
+#include "dqueue.h"
 
 //#define CREDS_MQTT_STANDALONE_FILE
 #define GS_SERIAL_LOG_2
