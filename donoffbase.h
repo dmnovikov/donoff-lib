@@ -1,6 +1,8 @@
 #ifndef donoffbase_h
 #define donoffbase_h
 
+#include <WString.h>
+
 class DBase {
   protected:
     

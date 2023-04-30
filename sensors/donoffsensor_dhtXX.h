@@ -5,6 +5,7 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+#include <ArduinoJson.h>
 
 #ifdef D_MQTT
     const char DHT_HUMIDITY_OUT_CHANNEL[]="/out/sensors/dht_humidity";
@@ -129,21 +130,18 @@ class DHTSensor: public DMultiSensor {
     };
 
     virtual String multi_json_Str(){
-      DynamicJsonBuffer jsonBuffer;
-      JsonObject &root = jsonBuffer.createObject();
-      String json_str;
-      root["timestamp"] = s_get_timestamp();
-      root["humidity"] = dht_humidity->get_val_Str();
-      root["temp"] = dht_temp->get_val_Str();
-      root.printTo(json_str);
-      return json_str;
-      
+      String json_str1;
+      DynamicJsonDocument root1(1024);
+      root1["timestamp"] = s_get_timestamp();
+      root1["humidity"] = dht_humidity->get_val_Str();
+      root1["temp"] = dht_temp->get_val_Str();
+      serializeJson(root, json_str1);
+      return json_str1;
+
     };
 
 
+
 };
-
-
-
 
 #endif
